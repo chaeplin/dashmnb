@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-
+# -*- coding: utf-8 -*-
 # mnb.py
 
 # codes form code from https://github.com/dashpay/electrum-dash
@@ -20,47 +20,35 @@ from mnb_start import *
 
 from bitcoinrpc.authproxy import AuthServiceProxy, JSONRPCException    
 
-def check_unspent_ismine(account_list, unspent):
-    unspent_address   = unspent['address']
-    unspent_txidtxidn = get_txidtxidn(unspent['txid'], unspent['vout'])
-    unspent_amount    = unspent['amount']
-
-    if unspent_address in account_list:
-        if (account_list.get(unspent_address) != unspent_txidtxidn) and (unspent_amount < 100):
-            return True
-    else:
-        return False
-
-def check_listunspent(mn_config, access):
-    account_list = {}
-    for uniqalias in mn_config:
-        account_list[mn_config[uniqalias]['collateral_address']] = get_txidtxidn(mn_config[uniqalias]['collateral_txid'], mn_config[uniqalias]['collateral_txidn'])
-        if not validateaddress(mn_config[uniqalias]['collateral_address'], access, False):
-            importaddress(mn_config[uniqalias]['collateral_address'], access)
+def checking_mn_config(access, signing):
     
-    try:
-        unspent_mine = []
-        listunspent = access.listunspent(min_conf)
-        for unspent in listunspent:
-            if check_unspent_ismine(account_list, unspent):
-                unspent_mine.append(unspent)
+    print('\n---> checking masternode config')
+    lines =[]
+    if os.path.exists(masternode_conf_file):
+        with open(masternode_conf_file) as mobj:
+            for line in mobj:            
+                lines.append(line.strip())
+   
+        mn_config, signing = parse_masternode_conf(lines, access, signing)
+    
+    else:
+        sys.exit('no %s file' % masternode_conf_file)
 
-        return unspent_mine
+    check_wallet_lock(access)
+    mns = check_masternodelist(access)
+    mna = check_masternodeaddr(access)
 
-    except Exception as e:
-        print(e.args)
-        sys.exit("\n\nDash-QT or dashd running ?\n")
+    return mn_config, signing, mns, mna
 
+def main(args):
 
-def main():
-
-    clear_screen()
+    #clear_screen()
     logo_show()
 
     serverURL = 'http://' + rpcuser + ':' + rpcpassword + '@' + rpcbindip + ':' + str(rpcport)
     access = AuthServiceProxy(serverURL) 
 
-    if TYPE_HW_WALLET == 'Keepkey':
+    if TYPE_HW_WALLET == 'keepkey':
         from keepkeylib.client import KeepKeyClient
         from keepkeylib.transport_hid import HidTransport
         
@@ -82,76 +70,74 @@ def main():
     if len(xpub) == 0:
         sys.exit('please configure bip32 xpub')
     
-    spinner = Spinner('---> checking dashd syncing status ')
-    while(not checksynced(access)):
-        try:
-            spinner.next()
-            time.sleep(1)
+    check_dashd_syncing(access)  
+
+
+    if args.check or args.status or args.anounce:
+        mn_config, signing, mns, mna = checking_mn_config(access, signing)
+
+    if args.status or args.anounce:
+        print_mnstatus(mn_config, mns, mna)
+
+    if args.anounce:
+        mns_to_start = {}
+        for x in sorted(list(mn_config.keys())):
+            txidtxidn = get_txidtxidn(mn_config[x].get('collateral_txid'), str(mn_config[x].get('collateral_txidn')))
+            if (mns.get(txidtxidn, None) != 'ENABLED' and mns.get(txidtxidn, None) != 'PRE_ENABLED'):
+                mns_to_start[x] = mn_config[x]
     
-        except:
-            sys.exit()    
+        if len(mns_to_start) > 0 and signing:
+            start_masternode(mns_to_start, access, client, args.anounce)
 
-    print('\n---> checking masternode config')
-    lines =[]
-    if os.path.exists(masternode_conf_file):
-        with open(masternode_conf_file) as mobj:
-            for line in mobj:            
-                lines.append(line.strip())
-   
-        mn_config, signing = parse_masternode_conf(lines, access, signing)
-        # to test invalid masternode config, need hw wallet
-        # signing  = True
-    
-    else:
-        sys.exit('no %s file' % masternode_conf_file)
-
-    check_wallet_lock(access)
-    mns = check_masternodelist(access)
-    mna = check_masternodeaddr(access)
-
-    print_mnstatus(mn_config, mns, mna)
-
-    #if args.l:
-    #    sys.exit()
-
-    mns_to_start = {}
-    for x in sorted(list(mn_config.keys())):
-        txidtxidn = get_txidtxidn(mn_config[x].get('collateral_txid'), str(mn_config[x].get('collateral_txidn')))
-        if (mns.get(txidtxidn, None) != 'ENABLED' and mns.get(txidtxidn, None) != 'PRE_ENABLED'):
-            mns_to_start[x] = mn_config[x]
-
-    if len(mns_to_start) > 0 and signing:
-        start_masternode(mns_to_start, access, client)
-
+#    # MOVE 
+#    ####################
 #    unspent_mine = check_listunspent(mn_config, access)
-#    print(json.dumps(unspent_mine, sort_keys=True, indent=4, separators=(',', ': ')))
+#
+#    # make txs list
+#    for x in sorted(list(mn_config.keys())):
+#        mn_config[x]["txs"] = make_txlist_for_mn(unspent_mine, mn_config.get(x))
+#
+#    # make tx for keepkey
+#    if signing:
+#        for x in sorted(list(mn_config.keys())):
+#            make_txs_for_keepkey(mn_config[x], client)
+
 
 def parse_args():
 
     parser = argparse.ArgumentParser()
-    parser.add_argument('-a','--anounce', 
+
+    parser.add_argument('-c','--check',
+                        dest = 'check',
+                        action = 'store_true',
+                        help='check masternode config') 
+
+    parser.add_argument('-s','--status',
+                        dest = 'status',
+                        action = 'store_true',
+                        help='show masternode status') 
+
+    parser.add_argument('-a','--anounce',
+                        dest = 'anounce',
+                        action = 'store_true',
                         help='anounce missing masternodes')                        
 
-    parser.add_argument("-l",
-                        help='print masternode status')   
+
+    if len(sys.argv) < 2:
+        parser.print_help()
+        sys.exit(1)
 
     return parser.parse_args()
 
 
-
 if __name__ == "__main__":
-    
-#    args = parse_args()
-#    main(args)
 
-    main()
+    if (sys.version_info < (3, 0)):
+        sys.exit('need python3')
 
-
+    args = parse_args()
+    main(args)
 
 
 # end
 
-
-
-
-# end of mnb.py

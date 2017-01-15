@@ -8,6 +8,7 @@ from tx import *
 from mnb_misc import *
 from mnb_signing import *
 from mnb_rpc import *
+from mnb_maketx import *
 
 def make_mnb(alias, mn_conf, access, client):
     print('---> making mnb for %s' % alias)
@@ -60,7 +61,7 @@ def make_mnb(alias, mn_conf, access, client):
 
     last_ping_serialize_for_sig  = serialize_input_str(mn_conf['collateral_txid'], mn_conf['collateral_txidn'], sequence, scriptSig) + block_hash + str(sig_time)
 
-    if not validateaddress(mn_conf['masternode_address'], access):
+    if validateaddress(mn_conf['masternode_address'], access) == None:
         keyalias = alias + '-' + ip
         importprivkey(mn_conf['masternode_privkey'], keyalias, access)
 
@@ -74,4 +75,7 @@ def make_mnb(alias, mn_conf, access, client):
         + last_ping_block_hash + work_sig_time \
         + num_to_varint(len(sig2)/2).hex() + sig2
 
-    return work      
+    print('---> mnb hex for %s : %s\n' % (mn_conf.get('alias'), work))
+    return work 
+
+# end     

@@ -3,9 +3,10 @@ sys.path.append( os.path.join( os.path.dirname(__file__), '..' ) )
 sys.path.append( os.path.join( os.path.dirname(__file__), '..', 'dashlib' ) )
 
 import collections
+
 from config import *
-from mnb_rpc import *
 from mnb_misc import *
+from mnb_rpc import *
 from mnb_bip32 import *
 
 def parse_masternode_conf(lines, access, signing):
@@ -36,6 +37,11 @@ def parse_masternode_conf(lines, access, signing):
         txid          = s[3]
         txidn         = s[4]
 
+        if len(s) == 6:
+            raddr     = s[5]
+        elif len(s) == 5:
+            raddr     = default_receiving_address
+
         lineno        = lno
 
         i += 1
@@ -45,6 +51,7 @@ def parse_masternode_conf(lines, access, signing):
         mn_v_ipport.append(ipport)
         mn_v_mnprivkey_wif.append(mnprivkey_wif)
 
+        
         txidtxidn = get_txidtxidn(txid, txidn)
         mn_v_txidtxidn.append(txidtxidn)
 
@@ -71,6 +78,10 @@ def parse_masternode_conf(lines, access, signing):
 
         masternode_address = pubkey_to_address(masternode_pubkey)
 
+        if (validateaddress(mnaddr, access, False) == None): sys.exit('collateral_address error on ' + get_function_name())
+        if (validateaddress(masternode_address, access, False) == None): sys.exit('masternode_address error on ' + get_function_name())
+        if (validateaddress(raddr, access, False) == None): sys.exit('masternode_address error on ' + get_function_name())
+
         mn_conf[lineno] = {
             "alias": alias,
             "lineno": str(lineno),
@@ -82,7 +93,8 @@ def parse_masternode_conf(lines, access, signing):
             "collateral_txidn": int(txidn),
             "collateral_spath": collateral_spath,
             "collateral_pubkey": collateral_pubkey,
-            "collateral_address": mnaddr
+            "collateral_address": mnaddr,
+            "receiving_address": raddr
         }
             
     ###########################################
@@ -100,7 +112,7 @@ def parse_masternode_conf(lines, access, signing):
 
     ############################################
 
-    print('\n[masternodes]')
+    print('\n[masternodes config]')
     print('\tconfigured : %s' % i)
     print('\tpassed     : %s' % len(mn_conf))
     if len(errorsnprogress) > 0:
@@ -135,5 +147,7 @@ def parse_masternode_conf(lines, access, signing):
         for x in errorinconf:
             print('\t %s' % x)
 
+    print()
     return mn_conf, signing
 
+# end

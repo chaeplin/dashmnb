@@ -35,6 +35,18 @@ def checksynced(access):
         print('can\'t connect using rpc, is Dash-QT or dashd running ?')
         sys.exit()
 
+
+def check_dashd_syncing(access):
+    from progress.spinner import Spinner
+    spinner = Spinner('---> checking dashd syncing status ')
+    while(not checksynced(access)):
+        try:
+            spinner.next()
+            time.sleep(1)
+    
+        except:
+            sys.exit()
+            
 def check_wallet_lock(access):
     try:
         getinfo = access.getinfo()
@@ -77,10 +89,10 @@ def validateaddress(address, access, checkismine=True):
         else:
             return r['iswatchonly']
     else:
-        return False
+        return None
+
 def importaddress(address, access):
     try:
-        print('importing watch only address without rescaning the wallet\tRestart dashd with -rescan')
         r = access.importaddress(address, address, False)
 
     except Exception as e:
@@ -94,4 +106,5 @@ def importprivkey(privkey, alias, access):
     except Exception as e:
         print(e.args)
         sys.exit("\n\nPlease enter the wallet passphrase with walletpassphrase first\n")
-        
+
+# end

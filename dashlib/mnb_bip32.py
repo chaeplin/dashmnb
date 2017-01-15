@@ -7,7 +7,6 @@ from mnb_misc import *
 from bip32utils import BIP32Key
 
 def process_chain(collateral_address, txid, txidn, alias):
-    
     acc_node = BIP32Key.fromExtendedKey(xpub)
     i = 0
     while True:
@@ -37,3 +36,5 @@ def chain_path():
 
     else:
         sys.exit('\ncheck bip32 mpath\n')
+
+# end

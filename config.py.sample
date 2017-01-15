@@ -1,0 +1,52 @@
+# config.py
+
+# start of config
+# network
+# MAINNET = True  # mainnet
+MAINNET = False  # testnet
+
+# rpc
+rpcuser     = 'rpcuser'
+rpcpassword = 'rpcuser-password'
+rpcbindip   = '127.0.0.1'
+rpcport     = 19998
+
+# HW WALLET TYPE
+TYPE_HW_WALLET = 'Keepkey'           # keepkey, trezor(not yet) 
+#
+# tDash :  44'/165'/xxx'/0
+# Dash  :  44'/5'/xxx'/0
+#
+#mpath          = "44'/165'/1990'/0" # (1990 is sample number) parent path used on hw wallet to store 1K Dash/tDash
+mpath          = ""                  # extended pubkey of parent path used on hw wallet to store 1K Dash/tDash
+#
+
+# extended pubkey of parent path used on hw wallet to store 1K Dash/tDash
+xpub           = ""
+max_gab        = 20                  # number of keys used on mn config(or number of mns)
+
+# mnb announce, False : generate mnb and decode, True : generate mnb and decode, plus relay
+announce = False
+
+# masternode_config
+masternode_conf_file = 'masternode.conf'
+
+#
+if MAINNET:
+    # dash mainnet
+    wif_prefix  = 204  # cc
+    addr_prefix = 76   # 4c
+    coin_name   = 'Dash'
+    min_conf    = 100
+
+else:
+    # dash testnet
+    wif_prefix  = 239 # ef
+    addr_prefix = 140 # 8c
+    coin_name   = 'tDash'
+    min_conf    = 10
+
+#
+errorsnprogress = []
+# end of config.py
+

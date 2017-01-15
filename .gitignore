@@ -1,0 +1,10 @@
+
+*.pyc
+
+masternode.conf
+
+config.py
+
+no_sync
+
+*.swp

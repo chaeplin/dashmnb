@@ -1,0 +1,49 @@
+import sys, os
+sys.path.append( os.path.join( os.path.dirname(__file__), '..' ) )
+sys.path.append( os.path.join( os.path.dirname(__file__), '..', 'dashlib' ) )
+
+from config import *
+from mnb_bip32 import *
+
+def serialize_input_str(tx, prevout_n, sequence, scriptSig):
+
+    """Used by MasternodePing in its serialization for signing."""
+    s = ['CTxIn(']
+    s.append('COutPoint(%s, %s)' % (tx, prevout_n))
+    s.append(', ')
+    if tx == '00'*32 and prevout_n == 0xffffffff:
+        s.append('coinbase %s' % scriptSig)
+    else:
+        scriptSig2 = scriptSig
+        if len(scriptSig2) > 24:
+            scriptSig2 = scriptSig2[0:24]
+        s.append('scriptSig=%s' % scriptSig2)
+
+    if sequence != 0xffffffff:
+        s.append(', nSequence=%d' % sequence)
+    s.append(')')
+    return ''.join(s)
+
+def signmessage(last_ping_serialize_for_sig, address, access):
+    
+    import base64
+    try:
+        r = access.signmessage(address, last_ping_serialize_for_sig)
+        return(base64.b64decode(r).hex())
+
+    except Exception as e:
+        print(e.args)
+        sys.exit("\n\nPlease enter the wallet passphrase with walletpassphrase first\n")
+
+def keepkeysign(serialize_for_sig, spath, address, client):
+
+    print('---> check keepkey and press button')
+    purpose, coin_type, account, change = chain_path()
+
+    sig = client.sign_message(coin_name, [purpose | 0x80000000, coin_type | 0x80000000, account | 0x80000000, change, int(spath)], serialize_for_sig)
+    if sig.address != address:
+        sys.exit('**** ----> check key path')
+
+    return sig.signature.hex()
+
+# end

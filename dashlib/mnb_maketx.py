@@ -8,46 +8,49 @@ from mnb_rpc import *
 from mnb_mnconf import *
 from mnb_bip32 import *
 
-def check_unspent_ismine(account_list, unspent):
-    unspent_address   = unspent['address']
-    unspent_txidtxidn = get_txidtxidn(unspent['txid'], unspent['vout'])
-    unspent_amount    = unspent['amount']
 
-    if unspent_address in account_list:
-        if (account_list.get(unspent_address) != unspent_txidtxidn) and (unspent_amount < max_amounts):
-            return True
-    else:
-        return False
+def print_balance(mn_config):
+    print('[masternodes balance]')
+    print('alias\tcnt\tbalance')
 
-def check_listunspent(mn_config, access):
-    account_list = {}
-    wallet_rescan = False
-    for uniqalias in mn_config:
-        account_list[mn_config[uniqalias]['collateral_address']] = get_txidtxidn(mn_config[uniqalias]['collateral_txid'], mn_config[uniqalias]['collateral_txidn'])
-        if validateaddress(mn_config[uniqalias]['collateral_address'], access, False) == None:
-            importaddress(mn_config[uniqalias]['collateral_address'], access)
-            wallet_rescan = True
+    for m in sorted(list(mn_config.keys())):
+        alias   = mn_config[m].get('alias')
+        unspent = mn_config[m].get('unspent')
+        cnt     = len(unspent)
 
-    if wallet_rescan == True:
-        sys.exit('to spend mn payments in keepkey, wallet restarting with -rescan needed')
-    
+        amount_total = 1000
+        for x in unspent:
+            amount = x.get('amount', 0)
+            amount_total += amount
+
+        print(alias + '\t' + str(cnt) + '\t' + str(amount_total))
+
+    print()
+
+
+def get_unspent_txs(mnconfig, access):
+    collateral_address   = mnconfig.get('collateral_address')
+    collateral_txidtxidn = mnconfig.get('collateral_txidtxidn')
+
     try:
-        unspent_mine = []
-        listunspent = access.listunspent(min_conf)
-        for unspent in listunspent:
-            if check_unspent_ismine(account_list, unspent):
-                unspent_mine.append(unspent)
-
-        return unspent_mine
-
+        listunspent = access.listunspent(min_conf, 999999999, [collateral_address])
+    
     except Exception as e:
         print(e.args)
         sys.exit("\n\nDash-QT or dashd running ?\n")
 
-def make_txlist_for_mn(unspent_mine, mnconfig):
+    unspent_mine = []
+    for m in listunspent:
+        unspent_txidtxidn = get_txidtxidn(m['txid'], m['vout'])
+        unspent_amount    = m['amount']
+
+        if (unspent_txidtxidn != collateral_txidtxidn) and (unspent_amount < max_amounts):
+            unspent_mine.append(m)    
+
+
     txs = []
     for x in unspent_mine:
-        if x.get('address') == mnconfig.get('collateral_address'):
+        if x.get('address') == collateral_address:
             tx = {
                 "amount": x.get('amount'),
                 "txid": x.get('txid'),
@@ -57,11 +60,11 @@ def make_txlist_for_mn(unspent_mine, mnconfig):
 
     sublist = [txs[i:i+max_unspent] for i  in range(0, len(txs), max_unspent)]
 
-    return sublist
-
+    return unspent_mine, sublist
 
 def make_inputs_for_keepkey(tx, receiving_address, collateral_spath, client):
     import binascii
+    from decimal import Decimal
 
     import keepkeylib.messages_pb2 as proto
     import keepkeylib.types_pb2 as proto_types    
@@ -105,7 +108,16 @@ def make_inputs_for_keepkey(tx, receiving_address, collateral_spath, client):
                       script_type=proto_types.PAYTOADDRESS,
                       ) )
 
-    (signatures, serialized_tx) = client.sign_tx(coin_name, inputs, outputs)
+
+    feetohuman = round(Decimal(txsizefee / 1e8), 4)
+    print('send %s, %s txs to %s with fee of %s : total amount : %s' % (amount_total - feetohuman, len(tx), receiving_address, feetohuman, amount_total))
+    
+    try:
+        (signatures, serialized_tx) = client.sign_tx(coin_name, inputs, outputs)
+
+    except KeyboardInterrupt:
+        client.close()
+        sys.exit()
 
     return serialized_tx.hex()
 
@@ -123,9 +135,9 @@ def make_txs_for_keepkey(mnconfig, client):
         for tx in txs:
             if (len(tx)) > min_unspent:
                 serialized_tx = make_inputs_for_keepkey(tx, receiving_address, collateral_spath, client)
-                #serialized_txs.append(serialized_tx)
+                serialized_txs.append(serialized_tx)
 
-    #print(serialized_txs)
+    return serialized_txs
 
 
 # end

@@ -9,12 +9,63 @@ from mnb_misc import *
 from mnb_rpc import *
 from mnb_bip32 import *
 
+def checking_wallet_rescan(mn_config, access):
+    
+    need_wallet_rescan = False
+    listunspent = []
+
+    try:
+        get_listunspent = access.listunspent(0)
+    
+    except Exception as e:
+        print(e.args)
+        sys.exit("\n\nDash-QT or dashd running ?\n")
+
+    for x in get_listunspent:
+        unspent_address = x.get('address')
+        unspent_txid    = x.get('txid')
+        unspent_txidn   = str(x.get('vout'))
+        unspent_amount  = str(x.get('amount'))
+        unspent_ = unspent_address + ':' + unspent_txid + ':' + unspent_txidn + ':' + unspent_amount
+        listunspent.append(unspent_)
+
+    for m in mn_config:
+        collateral_address = mn_config.get(m).get('collateral_address')
+        collateral_txid    = mn_config.get(m).get('collateral_txid')
+        collateral_txidn   = mn_config.get(m).get('collateral_txidn')
+        collateral_ = collateral_address + ':' + collateral_txid  + ':' + str(collateral_txidn) + ':' + '1000.00000000'
+
+        if collateral_ not in listunspent:
+            need_wallet_rescan = True
+
+    return need_wallet_rescan
+
+def checking_mn_config(access, signing):
+    
+    print('\n---> checking masternode config')
+    lines =[]
+    if os.path.exists(masternode_conf_file):
+        with open(masternode_conf_file) as mobj:
+            for line in mobj:            
+                lines.append(line.strip())
+   
+        mn_config, signing = parse_masternode_conf(lines, access, signing)
+    
+    else:
+        sys.exit('no %s file' % masternode_conf_file)
+
+    check_wallet_lock(access)
+    mns = check_masternodelist(access)
+    mna = check_masternodeaddr(access)
+
+    return mn_config, signing, mns, mna
+
 def parse_masternode_conf(lines, access, signing):
 
     i = 0
     lno = 0
 
-    mn_conf = {}
+    mn_config = {}
     errorinconf = []
 
     mn_v_alias         = []
@@ -82,7 +133,17 @@ def parse_masternode_conf(lines, access, signing):
         if (validateaddress(masternode_address, access, False) == None): sys.exit('masternode_address error on ' + get_function_name())
         if (validateaddress(raddr, access, False) == None): sys.exit('masternode_address error on ' + get_function_name())
 
-        mn_conf[lineno] = {
+        # import mnprivkey_wif
+        validate_masternode_address = validateaddress(masternode_address, access)
+        if validate_masternode_address == None or validate_masternode_address == False:
+            importprivkey(mnprivkey_wif, masternode_address, access)
+
+        # import watch only address
+        validate_collateral_address = validateaddress(mnaddr, access, False)
+        if validate_collateral_address == None or validate_collateral_address == False:
+            importaddress(mnaddr, access)
+
+        mn_config[lineno] = {
             "alias": alias,
             "lineno": str(lineno),
             "ipport": ipport,
@@ -91,6 +152,7 @@ def parse_masternode_conf(lines, access, signing):
             "masternode_address": masternode_address,
             "collateral_txid": txid,
             "collateral_txidn": int(txidn),
+            "collateral_txidtxidn": txidtxidn,
             "collateral_spath": collateral_spath,
             "collateral_pubkey": collateral_pubkey,
             "collateral_address": mnaddr,
@@ -98,25 +160,24 @@ def parse_masternode_conf(lines, access, signing):
         }
             
     ###########################################
-    if len(mn_conf) != i:
+    if len(mn_config) != i:
         errorsnprogress.append('alias')
 
-    if len(mn_conf) != len(mn_v_ipport):
+    if len(mn_config) != len(mn_v_ipport):
         errorsnprogress.append('ip:port')        
 
-    if len(mn_conf) != len(mn_v_mnprivkey_wif):
+    if len(mn_config) != len(mn_v_mnprivkey_wif):
         errorsnprogress.append('mn_private_key')
 
-    if len(mn_conf) != len(mn_v_txidtxidn):
+    if len(mn_config) != len(mn_v_txidtxidn):
         errorsnprogress.append('txid_index')    
 
     ############################################
 
     print('\n[masternodes config]')
     print('\tconfigured : %s' % i)
-    print('\tpassed     : %s' % len(mn_conf))
+    print('\tpassed     : %s' % len(mn_config))
     if len(errorsnprogress) > 0:
-        announce = False
         signing  = False
         print('\tdups       : %s' % errorsnprogress)
 
@@ -141,13 +202,12 @@ def parse_masternode_conf(lines, access, signing):
             print('\t %s' % x)
 
     if len(errorinconf) > 0:
-        announce = False
         signing  = False
         print('\n[errors in config]')
         for x in errorinconf:
             print('\t %s' % x)
 
     print()
-    return mn_conf, signing
+    return mn_config, signing
 
 # end

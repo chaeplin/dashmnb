@@ -17,7 +17,6 @@ def get_rawtxid(alias, txid, txidn, access):
                 return voutaddr
 
         return None
-        #sys.exit(alias + ' has wrong txid and nout, check masternode_conf')
 
     except Exception as e:
         print(e.args)
@@ -106,5 +105,28 @@ def importprivkey(privkey, alias, access):
     except Exception as e:
         print(e.args)
         sys.exit("\n\nPlease enter the wallet passphrase with walletpassphrase first\n")
+
+def decoderawtransaction(signedrawtx, access):
+    try:
+        r = access.decoderawtransaction(signedrawtx)
+        return r
+
+    except Exception as e:
+        print("\n")
+        print('%s - %s' % (get_function_name(), e.args))
+        print('can\'t connect using rpc, is Dash-QT or dashd running ?')
+        sys.exit()    
+
+def sendrawtransaction(signedrawtx, access):
+    try:
+        r = access.sendrawtransaction(signedrawtx)
+        return r
+
+    except Exception as e:
+        print("\n")
+        print('%s - %s' % (get_function_name(), e.args))
+        print('can\'t connect using rpc, is Dash-QT or dashd running ?')
+        sys.exit()  
+
 
 # end

@@ -12,7 +12,7 @@ rpcbindip   = '127.0.0.1'
 rpcport     = 19998
 
 # HW WALLET TYPE
-TYPE_HW_WALLET = 'Keepkey'           # keepkey, trezor(not yet) 
+TYPE_HW_WALLET = 'keepkey'           # keepkey, trezor(not yet) 
 #
 # tDash :  44'/165'/xxx'/0
 # Dash  :  44'/5'/xxx'/0
@@ -25,11 +25,11 @@ mpath          = ""                  # extended pubkey of parent path used on hw
 xpub           = ""
 max_gab        = 20                  # number of keys used on mn config(or number of mns)
 
-# mnb announce, False : generate mnb and decode, True : generate mnb and decode, plus relay
-announce = False
-
 # masternode_config
 masternode_conf_file = 'masternode.conf'
+
+# fee per KB
+min_fee = 10000         # fee for tx
 
 #
 if MAINNET:
@@ -37,16 +37,27 @@ if MAINNET:
     wif_prefix  = 204  # cc
     addr_prefix = 76   # 4c
     coin_name   = 'Dash'
-    min_conf    = 100
+
+    min_conf    = 100   # 
+    max_amounts = 10    # max amounts of each unspent tx 
+    max_unspent = 10
+    min_unspent = 3
+    default_receiving_address = ''
 
 else:
     # dash testnet
     wif_prefix  = 239 # ef
     addr_prefix = 140 # 8c
     coin_name   = 'tDash'
-    min_conf    = 10
+
+    min_conf    = 10    # 
+    max_amounts = 20    # max amounts of each unspent tx 
+    max_unspent = 50
+    min_unspent = 3
+
+    default_receiving_address = 'yUGY5tjeu51tLkZFRVdut2kJVVBA2ZEL3Z' # default address to send coins in hw wallet if reveiving_address in masternode.conf is blank
+                                                                     # this is not chaing payment address of mn
 
 #
 errorsnprogress = []
 # end of config.py
-

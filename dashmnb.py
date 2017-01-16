@@ -59,6 +59,9 @@ def main(args):
     if args.status or args.anounce or args.balance or args.maketx or args.xfer:
         print_mnstatus(mn_config, mns, mna)
 
+    if need_wallet_rescan:
+        sys.exit('\n1) to spend mn payments in HW Wallet, restart Dash-QT or dashd with -rescan\n2) if did -rescan and still see this messge, check if 1K was spent\n')
+
     if args.anounce:
         mns_to_start = {}
         for x in sorted(list(mn_config.keys())):

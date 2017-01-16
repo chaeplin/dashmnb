@@ -10,7 +10,7 @@ from mnb_signing import *
 from mnb_rpc import *
 from mnb_maketx import *
 
-def make_mnb(alias, mn_conf, access, client):
+def make_mnb(alias, mnconfig, access, client):
     print('---> making mnb for %s' % alias)
 
     # ------ some default config
@@ -22,12 +22,12 @@ def make_mnb(alias, mn_conf, access, client):
     cur_block_height = access.getblockcount()
     block_hash = access.getblockhash(cur_block_height - 12)
 
-    vintx  = bytes.fromhex(mn_conf['collateral_txid'])[::-1].hex()
-    vinno  = mn_conf['collateral_txidn'].to_bytes(4, byteorder='big')[::-1].hex()
+    vintx  = bytes.fromhex(mnconfig['collateral_txid'])[::-1].hex()
+    vinno  = mnconfig['collateral_txidn'].to_bytes(4, byteorder='big')[::-1].hex()
     vinsig = num_to_varint(len(scriptSig)/2).hex() + bytes.fromhex(scriptSig)[::-1].hex()
     vinseq = sequence.to_bytes(4, byteorder='big')[::-1].hex()
 
-    ip, port = mn_conf['ipport'].split(':')
+    ip, port = mnconfig['ipport'].split(':')
 
     ipv6map = '00000000000000000000ffff'
     ipdigit = map(int, ip.split('.'))
@@ -36,15 +36,15 @@ def make_mnb(alias, mn_conf, access, client):
 
     ipv6map += int(port).to_bytes(2, byteorder='big').hex()
 
-    collateral_in = num_to_varint(len(mn_conf['collateral_pubkey'])/2).hex() + mn_conf['collateral_pubkey']
-    delegate_in   = num_to_varint(len(mn_conf['masternode_pubkey'])/2).hex() + mn_conf['masternode_pubkey']
+    collateral_in = num_to_varint(len(mnconfig['collateral_pubkey'])/2).hex() + mnconfig['collateral_pubkey']
+    delegate_in   = num_to_varint(len(mnconfig['masternode_pubkey'])/2).hex() + mnconfig['masternode_pubkey']
 
-    serialize_for_sig = str(mn_conf['ipport']) + str(sig_time) \
-                      + format_hash(Hash160(bytes.fromhex(mn_conf['collateral_pubkey']))) \
-                      + format_hash(Hash160(bytes.fromhex(mn_conf['masternode_pubkey']))) + str(protocol_version)
+    serialize_for_sig = str(mnconfig['ipport']) + str(sig_time) \
+                      + format_hash(Hash160(bytes.fromhex(mnconfig['collateral_pubkey']))) \
+                      + format_hash(Hash160(bytes.fromhex(mnconfig['masternode_pubkey']))) + str(protocol_version)
 
     try:
-        sig1 = keepkeysign(serialize_for_sig, mn_conf['collateral_spath'], mn_conf['collateral_address'], client)
+        sig1 = keepkeysign(serialize_for_sig, mnconfig['collateral_spath'], mnconfig['collateral_address'], client)
 
     except Exception as e:
         print("\n")
@@ -59,13 +59,9 @@ def make_mnb(alias, mn_conf, access, client):
 
     last_ping_block_hash = bytes.fromhex(block_hash)[::-1].hex() 
 
-    last_ping_serialize_for_sig  = serialize_input_str(mn_conf['collateral_txid'], mn_conf['collateral_txidn'], sequence, scriptSig) + block_hash + str(sig_time)
+    last_ping_serialize_for_sig  = serialize_input_str(mnconfig['collateral_txid'], mnconfig['collateral_txidn'], sequence, scriptSig) + block_hash + str(sig_time)
 
-    if validateaddress(mn_conf['masternode_address'], access) == None:
-        keyalias = alias + '-' + ip
-        importprivkey(mn_conf['masternode_privkey'], keyalias, access)
-
-    sig2 = signmessage(last_ping_serialize_for_sig, mn_conf['masternode_address'], access)
+    sig2 = signmessage(last_ping_serialize_for_sig, mnconfig['masternode_address'], access)
 
     work = vintx + vinno + vinsig + vinseq \
         + ipv6map + collateral_in + delegate_in \
@@ -75,7 +71,7 @@ def make_mnb(alias, mn_conf, access, client):
         + last_ping_block_hash + work_sig_time \
         + num_to_varint(len(sig2)/2).hex() + sig2
 
-    print('---> mnb hex for %s : %s\n' % (mn_conf.get('alias'), work))
+    print('---> mnb hex for %s : %s\n' % (mnconfig.get('alias'), work))
     return work 
 
 # end     

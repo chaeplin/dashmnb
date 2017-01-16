@@ -19,7 +19,6 @@ def process_chain(collateral_address, txid, txidn, alias):
 
         if i > max_gab:
             return None
-            #sys.exit("Can't find mpath and publickey of " + alias + ", " + collateral_address + " , check masternode_conf, txid " + get_txidtxidn(txid, txidn))
 
         i += 1
 

@@ -3,7 +3,10 @@ Run Dash Masternode with Hardware Wallet
 
 #### TESTNET ONLY ####
 
-![1](./pics/dashmnb3.png)
+![1](./pics/dashmnb1.png)
+
+
+![2](./pics/dashmnb3.png)
 
 #### requirement
 - Dash-QT or dashd

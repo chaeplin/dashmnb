@@ -6,25 +6,15 @@ Run Dash Masternode with Hardware Wallet
 ```
 $ python dashmnb.py
 usage: dashmnb.py [-h] [-c] [-s] [-a] [-b] [-m] [-x]
-                  [masternode_alias [masternode_alias ...]]
-
-positional arguments:
-  masternode_alias
 
 optional arguments:
-  -h, --help        show this help message and exit
-  -c, --check       check masternode config
-  -s, --status      show masternode status
-  -a, --anounce     anounce missing masternodes
-  -b, --balance     show masternodes balance
-  -m, --maketx      make signed raw tx
-  -x, --xfer        broadcast signed raw tx
-```
-
-```
-    start mn3 and mn4(sorted), then show balance
-     python dashmnb.py -b mn4 mn3
-
+  -h, --help     show this help message and exit
+  -c, --check    check masternode config
+  -s, --status   show masternode status
+  -a, --anounce  anounce missing masternodes
+  -b, --balance  show masternodes balance
+  -m, --maketx   make signed raw tx
+  -x, --xfer     broadcast signed raw tx
 ```
 
 ```

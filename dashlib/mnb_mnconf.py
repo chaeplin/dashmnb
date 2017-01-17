@@ -8,38 +8,7 @@ from config import *
 from mnb_misc import *
 from mnb_rpc import *
 from mnb_bip32 import *
-
-def checking_wallet_rescan(mn_config, access):
-    
-    need_wallet_rescan = False
-    listunspent = []
-
-    # todo : use listunspent 0 9999999999 address, get unspent for each address, not all unspent
-    try:
-        get_listunspent = access.listunspent(0)
-    
-    except Exception as e:
-        err_msg = 'Dash-QT or dashd running ?'
-        print_err_exit(get_caller_name(), get_function_name(), err_msg, e.args)
-
-    for x in get_listunspent:
-        unspent_address = x.get('address')
-        unspent_txid    = x.get('txid')
-        unspent_txidn   = str(x.get('vout'))
-        unspent_amount  = str(x.get('amount'))
-        unspent_ = unspent_address + ':' + unspent_txid + ':' + unspent_txidn + ':' + unspent_amount
-        listunspent.append(unspent_)
-
-    for m in mn_config:
-        collateral_address = mn_config.get(m).get('collateral_address')
-        collateral_txid    = mn_config.get(m).get('collateral_txid')
-        collateral_txidn   = mn_config.get(m).get('collateral_txidn')
-        collateral_ = collateral_address + ':' + collateral_txid  + ':' + str(collateral_txidn) + ':' + '1000.00000000'
-
-        if collateral_ not in listunspent:
-            need_wallet_rescan = True
-
-    return need_wallet_rescan
+from mnb_explorer import *
 
 def checking_mn_config(access, signing):
     
@@ -113,6 +82,11 @@ def parse_masternode_conf(lines, access, signing):
             errorinconf.append('line: %d / %s : no matching txid in blockchain' % (lno, alias))
             continue
 
+        collateral_exp_balance = float(get_explorer_balance(mnaddr))
+        if collateral_exp_balance < 1000:
+            errorinconf.append('line: %d / %s : collateral_address has less than 1K balance' % (lno, alias))
+            continue
+
         check_mpath = process_chain(mnaddr, txid, txidn, alias)
         if check_mpath == None:
             errorinconf.append('line: %d / %s : can\'t find spath and publickey' % (lno, alias))
@@ -157,6 +131,7 @@ def parse_masternode_conf(lines, access, signing):
             "collateral_spath": collateral_spath,
             "collateral_pubkey": collateral_pubkey,
             "collateral_address": mnaddr,
+            "collateral_exp_balance": collateral_exp_balance,
             "receiving_address": raddr
         }
             

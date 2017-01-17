@@ -37,8 +37,12 @@ def check_dashd_syncing(access):
     from progress.spinner import Spinner
     spinner = Spinner('---> checking dashd syncing status ')
     while(not checksynced(access)):
-        spinner.next()
-        time.sleep(1)
+        try:
+            spinner.next()
+            time.sleep(1)
+
+        except KeyboardInterrupt:
+            print_err_exit(get_caller_name(), get_function_name(), 'KeyboardInterrupt')
             
 def check_wallet_lock(access):
     try:
@@ -112,5 +116,41 @@ def sendrawtransaction(signedrawtx, access):
         err_msg = 'Dash-QT or dashd running ?'
         print_err_exit(get_caller_name(), get_function_name(), err_msg, e.args)
 
+def get_listunspent(min, max, addsress, access):
+    try:
+        r = access.listunspent(min, max, [addsress])
+        return r
+        
+    except Exception as e:
+        err_msg = 'Dash-QT or dashd running ?'
+        print_err_exit(get_caller_name(), get_function_name(), err_msg, e.args)
+
+def get_getblockcount(access):
+    try:
+        r = access.getblockcount()
+        return r
+        
+    except Exception as e:
+        err_msg = 'Dash-QT or dashd running ?'
+        print_err_exit(get_caller_name(), get_function_name(), err_msg, e.args)    
+
+def get_block_hash_for_mnb(access):
+    try:
+        r = access.getblockhash(get_getblockcount(access) - 12)
+        return r
+        
+    except Exception as e:
+        err_msg = 'Dash-QT or dashd running ?'
+        print_err_exit(get_caller_name(), get_function_name(), err_msg, e.args)    
+
+def rpc_masternode(what, hexto, access):
+    try:
+        r = access.masternodebroadcast(what, hexto)
+        return r
+        
+    except Exception as e:
+        err_msg = 'Dash-QT or dashd running ?'
+        print_err_exit(get_caller_name(), get_function_name(), err_msg, e.args)
+        
 
 # end

@@ -19,8 +19,10 @@ def make_mnb(alias, mnconfig, access, client):
     protocol_version = 70204
     sig_time = int(time.time())
 
-    cur_block_height = access.getblockcount()
-    block_hash = access.getblockhash(cur_block_height - 12)
+    #cur_block_height = access.getblockcount()
+    #block_hash = access.getblockhash(cur_block_height - 12)
+
+    block_hash = get_block_hash_for_mnb(access)
 
     vintx  = bytes.fromhex(mnconfig['collateral_txid'])[::-1].hex()
     vinno  = mnconfig['collateral_txidn'].to_bytes(4, byteorder='big')[::-1].hex()
@@ -51,8 +53,7 @@ def make_mnb(alias, mnconfig, access, client):
         print_err_exit(get_caller_name(), get_function_name(), err_msg)
 
     except KeyboardInterrupt:
-        err_msg = e.args
-        print_err_exit(get_caller_name(), get_function_name(), err_msg)
+        print_err_exit(get_caller_name(), get_function_name(), 'KeyboardInterrupt')
         
     work_sig_time     = sig_time.to_bytes(8, byteorder='big')[::-1].hex() 
     work_protoversion = protocol_version.to_bytes(4, byteorder='big')[::-1].hex()

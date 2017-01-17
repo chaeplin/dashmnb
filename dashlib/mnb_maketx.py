@@ -8,43 +8,39 @@ from mnb_rpc import *
 from mnb_mnconf import *
 from mnb_bip32 import *
 
-
 def print_balance(mn_config):
     print('[masternodes balance]')
-    print('alias\tcnt\tbalance')
-
+    print('alias\tcnt\tbalance(dashd)\tbalance(explorer)')
+    
     for m in sorted(list(mn_config.keys())):
-        alias   = mn_config[m].get('alias')
-        unspent = mn_config[m].get('unspent')
-        cnt     = len(unspent)
+        alias         = mn_config[m].get('alias')
+        exp_balance   = mn_config[m].get('collateral_exp_balance')
+        if exp_balance == None:
+            exp_balance = '---'
+        unspent       = mn_config[m].get('collateral_dashd_balance')
+        sumofunspent  = sum(unspent)
+        cnt           = len(unspent)
 
-        amount_total = 1000
-        for x in unspent:
-            amount = x.get('amount', 0)
-            amount_total += amount
-
-        print(alias + '\t' + str(cnt) + '\t' + str(amount_total))
-
-    print()
-
+        print(alias + '\t' + str(cnt) + '\t' + str(sumofunspent)  + '\t' + str(exp_balance))
+    print('\n* count / balance of dashd is spendable(over 100 confirmation)')
 
 def get_unspent_txs(mnconfig, access):
     collateral_address   = mnconfig.get('collateral_address')
     collateral_txidtxidn = mnconfig.get('collateral_txidtxidn')
 
-    try:
-        listunspent = access.listunspent(min_conf, 999999999, [collateral_address])
-    
-    except Exception as e:
-        err_msg = 'Dash-QT or dashd running ?'
-        print_err_exit(get_caller_name(), get_function_name(), err_msg, e.args)
+    listunspent = get_listunspent(0, 999999999, collateral_address, access)
 
     unspent_mine = []
+    balance_mine = []
+  
     for m in listunspent:
-        unspent_txidtxidn = get_txidtxidn(m['txid'], m['vout'])
-        unspent_amount    = m['amount']
+        unspent_txidtxidn     = get_txidtxidn(m['txid'], m['vout'])
+        unspent_amount        = m['amount']
+        unspent_confirmations = m['confirmations']
 
-        if (unspent_txidtxidn != collateral_txidtxidn) and (unspent_amount < max_amounts):
+        balance_mine.append(unspent_amount)
+
+        if (unspent_txidtxidn != collateral_txidtxidn) and (unspent_amount < max_amounts) and unspent_confirmations > min_conf:
             unspent_mine.append(m)    
 
 
@@ -60,7 +56,7 @@ def get_unspent_txs(mnconfig, access):
 
     sublist = [txs[i:i+max_unspent] for i  in range(0, len(txs), max_unspent)]
 
-    return unspent_mine, sublist
+    return unspent_mine, sublist, balance_mine
 
 def make_inputs_for_keepkey(tx, receiving_address, collateral_spath, client):
     import binascii
@@ -115,9 +111,8 @@ def make_inputs_for_keepkey(tx, receiving_address, collateral_spath, client):
     try:
         (signatures, serialized_tx) = client.sign_tx(coin_name, inputs, outputs)
 
-    except KeyboardInterrupt as e:
-        err_msg = e.args
-        print_err_exit(get_caller_name(), get_function_name(), err_msg)
+    except KeyboardInterrupt:
+        print_err_exit(get_caller_name(), get_function_name(), 'KeyboardInterrupt')
 
     return serialized_tx.hex()
 

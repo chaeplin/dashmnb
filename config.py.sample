@@ -38,7 +38,7 @@ if MAINNET:
     addr_prefix = 76   # 4c
     coin_name   = 'Dash'
 
-    min_conf    = 100   # 
+    #min_conf    = 100   # 
     max_amounts = 10    # max amounts of each unspent tx 
     max_unspent = 10
     min_unspent = 3
@@ -50,12 +50,13 @@ else:
     addr_prefix = 140 # 8c
     coin_name   = 'tDash'
 
-    min_conf    = 10    # 
+    #min_conf    = 10    # 
     max_amounts = 20    # max amounts of each unspent tx 
     max_unspent = 50
     min_unspent = 3
 
-    default_receiving_address = 'yUGY5tjeu51tLkZFRVdut2kJVVBA2ZEL3Z' # default address to send coins in hw wallet if reveiving_address in masternode.conf is blank
+    default_receiving_address = 'yUGY5tjeu51tLkZFRVdut2kJVVBA2ZEL3Z' # default address to send coins in hw wallet 
+                                                                     # if reveiving_address in masternode.conf is blank
                                                                      # this is not chaing payment address of mn
 
 #

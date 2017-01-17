@@ -36,11 +36,11 @@ def get_unspent_txs(mnconfig, access):
     for m in listunspent:
         unspent_txidtxidn     = get_txidtxidn(m['txid'], m['vout'])
         unspent_amount        = m['amount']
-        unspent_confirmations = m['confirmations']
+        #unspent_confirmations = m['confirmations'] # dashd listunspent will not show unmatured coinbase transaction
 
         balance_mine.append(unspent_amount)
 
-        if (unspent_txidtxidn != collateral_txidtxidn) and (unspent_amount < max_amounts) and unspent_confirmations > min_conf:
+        if (unspent_txidtxidn != collateral_txidtxidn) and (unspent_amount < max_amounts): # and unspent_confirmations > min_conf: # dashd listunspent will not show unmatured coinbase transaction
             unspent_mine.append(m)    
 
 

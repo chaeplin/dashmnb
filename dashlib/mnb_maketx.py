@@ -36,8 +36,8 @@ def get_unspent_txs(mnconfig, access):
         listunspent = access.listunspent(min_conf, 999999999, [collateral_address])
     
     except Exception as e:
-        print(e.args)
-        sys.exit("\n\nDash-QT or dashd running ?\n")
+        err_msg = 'Dash-QT or dashd running ?'
+        print_err_exit(get_caller_name(), get_function_name(), err_msg, e.args)
 
     unspent_mine = []
     for m in listunspent:
@@ -115,9 +115,9 @@ def make_inputs_for_keepkey(tx, receiving_address, collateral_spath, client):
     try:
         (signatures, serialized_tx) = client.sign_tx(coin_name, inputs, outputs)
 
-    except KeyboardInterrupt:
-        client.close()
-        sys.exit()
+    except KeyboardInterrupt as e:
+        err_msg = e.args
+        print_err_exit(get_caller_name(), get_function_name(), err_msg)
 
     return serialized_tx.hex()
 

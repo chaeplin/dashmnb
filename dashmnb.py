@@ -45,11 +45,13 @@ def main(args):
             signing  = True
     
     if len(mpath) == 0:
-        sys.exit('please configure bip49 path')
+        err_msg = 'please configure bip49 path'
+        print_err_exit(get_caller_name(), get_function_name(), err_msg)
     
     if len(xpub) == 0:
-        sys.exit('please configure bip32 xpub')
-    
+        err_msg = 'please configure bip32 xpub/tpub'
+        print_err_exit(get_caller_name(), get_function_name(), err_msg)
+
     check_dashd_syncing(access)  
 
     if args.check or args.status or args.anounce or args.balance or args.maketx or args.xfer:
@@ -60,7 +62,8 @@ def main(args):
         print_mnstatus(mn_config, mns, mna)
 
     if need_wallet_rescan:
-        sys.exit('\n1) to spend mn payments in HW Wallet, restart Dash-QT or dashd with -rescan\n2) if did -rescan and still see this messge, check if 1K was spent\n')
+        err_msg = '1) to spend mn payments in HW Wallet, restart Dash-QT or dashd with -rescan\n2) if did -rescan and still see this messge, check if 1K was spent'
+        print_err_exit(get_caller_name(), get_function_name(), err_msg)
 
     if args.anounce:
         mns_to_start = {}
@@ -75,7 +78,8 @@ def main(args):
     # wallet rescan
     if args.balance or args.maketx or args.xfer:
         if need_wallet_rescan:
-            sys.exit('to spend mn payments in HW Wallet, restart Dash-QT or dashd with -rescan')
+            err_msg = '1) to spend mn payments in HW Wallet, restart Dash-QT or dashd with -rescan\n2) if did -rescan and still see this messge, check if 1K was spent'
+            print_err_exit(get_caller_name(), get_function_name(), err_msg)
 
         for m in sorted(list(mn_config.keys())):
             mn_config[m]["unspent"], mn_config[m]["txs"] = get_unspent_txs(mn_config.get(m), access)

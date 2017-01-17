@@ -32,8 +32,8 @@ def signmessage(last_ping_serialize_for_sig, address, access):
         return(base64.b64decode(r).hex())
 
     except Exception as e:
-        print(e.args)
-        sys.exit("\n\nPlease enter the wallet passphrase with walletpassphrase first\n")
+        err_msg = 'Please enter the wallet passphrase with walletpassphrase first'
+        print_err_exit(get_caller_name(), get_function_name(), err_msg, e.args)
 
 def keepkeysign(serialize_for_sig, spath, address, client):
 

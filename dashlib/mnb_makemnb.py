@@ -47,13 +47,13 @@ def make_mnb(alias, mnconfig, access, client):
         sig1 = keepkeysign(serialize_for_sig, mnconfig['collateral_spath'], mnconfig['collateral_address'], client)
 
     except Exception as e:
-        print("\n")
-        print('%s - %s' % (get_function_name(), e.args))
-        sys.exit()
+        err_msg = e.args
+        print_err_exit(get_caller_name(), get_function_name(), err_msg)
 
     except KeyboardInterrupt:
-        sys.exit()
-
+        err_msg = e.args
+        print_err_exit(get_caller_name(), get_function_name(), err_msg)
+        
     work_sig_time     = sig_time.to_bytes(8, byteorder='big')[::-1].hex() 
     work_protoversion = protocol_version.to_bytes(4, byteorder='big')[::-1].hex()
 

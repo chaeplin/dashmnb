@@ -19,8 +19,8 @@ def get_rawtxid(alias, txid, txidn, access):
         return None
 
     except Exception as e:
-        print(e.args)
-        sys.exit("\n\nDash-QT or dashd running ?\n")
+        err_msg = 'Dash-QT or dashd running ?'
+        print_err_exit(get_caller_name(), get_function_name(), err_msg, e.args)
 
 
 def checksynced(access):
@@ -29,22 +29,16 @@ def checksynced(access):
         return status.get('IsSynced')
 
     except Exception as e:
-        print("\n")
-        print('%s - %s' % (get_function_name(), e.args))
-        print('can\'t connect using rpc, is Dash-QT or dashd running ?')
-        sys.exit()
+        err_msg = 'Dash-QT or dashd running ?'
+        print_err_exit(get_caller_name(), get_function_name(), err_msg, e.args)
 
 
 def check_dashd_syncing(access):
     from progress.spinner import Spinner
     spinner = Spinner('---> checking dashd syncing status ')
     while(not checksynced(access)):
-        try:
-            spinner.next()
-            time.sleep(1)
-    
-        except:
-            sys.exit()
+        spinner.next()
+        time.sleep(1)
             
 def check_wallet_lock(access):
     try:
@@ -53,10 +47,8 @@ def check_wallet_lock(access):
             print('\n---> please unlock wallet \n\t==> Menu | Setting | Unlock Wallet or \n\t==> (dash-cli) walletpassphrase "passphrase" timeout')
 
     except Exception as e:
-        print("\n")
-        print('%s - %s' % (get_function_name(), e.args))
-        print('can\'t connect using rpc, is Dash-QT or dashd running ?')
-        sys.exit()
+        err_msg = 'Dash-QT or dashd running ?'
+        print_err_exit(get_caller_name(), get_function_name(), err_msg, e.args)
 
 def check_masternodelist(access):
     try:
@@ -64,10 +56,8 @@ def check_masternodelist(access):
         return mn_of_net
 
     except Exception as e:
-        print("\n")
-        print('%s - %s' % (get_function_name(), e.args))
-        print('can\'t connect using rpc, is Dash-QT or dashd running ?')
-        sys.exit()
+        err_msg = 'Dash-QT or dashd running ?'
+        print_err_exit(get_caller_name(), get_function_name(), err_msg, e.args)
 
 def check_masternodeaddr(access):
     try:
@@ -75,10 +65,8 @@ def check_masternodeaddr(access):
         return mn_of_net
 
     except Exception as e:
-        print("\n")
-        print('%s - %s' % (get_function_name(), e.args))
-        print('can\'t connect using rpc, is Dash-QT or dashd running ?')
-        sys.exit()
+        err_msg = 'Dash-QT or dashd running ?'
+        print_err_exit(get_caller_name(), get_function_name(), err_msg, e.args)
 
 def validateaddress(address, access, checkismine=True):
     r = access.validateaddress(address)
@@ -95,16 +83,16 @@ def importaddress(address, access):
         r = access.importaddress(address, address, False)
 
     except Exception as e:
-        print(e.args)
-        sys.exit("\n\nPlease enter the wallet passphrase with walletpassphrase first\n")
+        err_msg = 'Please enter the wallet passphrase with walletpassphrase first'
+        print_err_exit(get_caller_name(), get_function_name(), err_msg, e.args)
 
 def importprivkey(privkey, alias, access):
     try:
         r = access.importprivkey(privkey, alias, False)
 
     except Exception as e:
-        print(e.args)
-        sys.exit("\n\nPlease enter the wallet passphrase with walletpassphrase first\n")
+        err_msg = 'Please enter the wallet passphrase with walletpassphrase first'
+        print_err_exit(get_caller_name(), get_function_name(), err_msg, e.args)
 
 def decoderawtransaction(signedrawtx, access):
     try:
@@ -112,21 +100,17 @@ def decoderawtransaction(signedrawtx, access):
         return r
 
     except Exception as e:
-        print("\n")
-        print('%s - %s' % (get_function_name(), e.args))
-        print('can\'t connect using rpc, is Dash-QT or dashd running ?')
-        sys.exit()    
+        err_msg = 'Dash-QT or dashd running ?'
+        print_err_exit(get_caller_name(), get_function_name(), err_msg, e.args)
 
 def sendrawtransaction(signedrawtx, access):
     try:
         r = access.sendrawtransaction(signedrawtx)
         return r
-
+        
     except Exception as e:
-        print("\n")
-        print('%s - %s' % (get_function_name(), e.args))
-        print('can\'t connect using rpc, is Dash-QT or dashd running ?')
-        sys.exit()  
+        err_msg = 'Dash-QT or dashd running ?'
+        print_err_exit(get_caller_name(), get_function_name(), err_msg, e.args)
 
 
 # end

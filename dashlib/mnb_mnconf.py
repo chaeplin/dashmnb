@@ -14,12 +14,13 @@ def checking_wallet_rescan(mn_config, access):
     need_wallet_rescan = False
     listunspent = []
 
+    # todo : use listunspent 0 9999999999 address, get unspent for each address, not all unspent
     try:
         get_listunspent = access.listunspent(0)
     
     except Exception as e:
-        print(e.args)
-        sys.exit("\n\nDash-QT or dashd running ?\n")
+        err_msg = 'Dash-QT or dashd running ?'
+        print_err_exit(get_caller_name(), get_function_name(), err_msg, e.args)
 
     for x in get_listunspent:
         unspent_address = x.get('address')
@@ -52,7 +53,8 @@ def checking_mn_config(access, signing):
         mn_config, signing = parse_masternode_conf(lines, access, signing)
     
     else:
-        sys.exit('no %s file' % masternode_conf_file)
+        err_msg = 'no %s file' % masternode_conf_file
+        print_err_exit(get_caller_name(), get_function_name(), err_msg)
 
     check_wallet_lock(access)
     mns = check_masternodelist(access)
@@ -125,7 +127,6 @@ def parse_masternode_conf(lines, access, signing):
         except:
             errorinconf.append('line: %d / %s : has wrong masternode private key' % (lno, alias))
             continue
-            #sys.exit('===> ' + alias + ' has wrong masternode private key')
 
         masternode_address = pubkey_to_address(masternode_pubkey)
 

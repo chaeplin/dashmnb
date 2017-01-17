@@ -27,7 +27,6 @@ def get_txidtxidn(txid, txidn):
 
 def print_mnlist(lineno, mnconfig, ipmatch, mnstatus):
     print(mnconfig.get('alias') + '\t' + mnconfig.get('ipport') + ':' + ipmatch + '\t' + mnconfig.get('collateral_address') + ' ' + mnstatus)
-#    print(alias + '\t' + mnconfig.get('ipport') + '\t' + mnconfig.get('collateral_address') + ' ' + mnstatus)
 
 def print_mnstatus(mn_config, mns, mna):
     print()
@@ -50,5 +49,13 @@ def get_function_name():
 def get_caller_name():
     return sys._getframe(2).f_code.co_name
 
+def print_err_exit(caller_name, function_name, err_msg, errargs=None):
+    msg  = '\n\n\tcaller   : ' + caller_name + '\n'
+    msg += '\tfunction : ' + function_name + '\n'
+    if errargs:
+        msg += '\terr      : ' + str(errargs) + '\n'
+    msg += '\t===> ' + err_msg + '\n'
+
+    raise SystemExit(msg)
 
 # end

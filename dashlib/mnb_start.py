@@ -19,7 +19,7 @@ def start_masternode(mns_to_start, access, client, announce):
     vc = num_to_varint(len(masternodebroadcast)).hex()
     vm = ''.join(masternodebroadcast)
 
-    verify = access.masternodebroadcast("decode", vc + vm)
+    verify = rpc_masternode("decode", vc + vm, access)
     match1 = re.search('^Successfully decoded broadcast messages for (.*) masternodes, failed to decode (.*), total (.*)$', verify.get('overall'))
     
     decoded = {}
@@ -47,7 +47,7 @@ def start_masternode(mns_to_start, access, client, announce):
             print('No.')
             return
         
-        relay  = access.masternodebroadcast("relay", vc + vm)
+        relay  = rpc_masternode("relay", vc + vm, access)
         match2 = re.search('^Successfully relayed broadcast messages for (.*) masternodes, failed to relay (.*), total (.*)$', relay.get('overall'))
 
         relayed = {}

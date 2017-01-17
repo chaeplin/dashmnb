@@ -6,15 +6,25 @@ Run Dash Masternode with Hardware Wallet
 ```
 $ python dashmnb.py
 usage: dashmnb.py [-h] [-c] [-s] [-a] [-b] [-m] [-x]
+                  [masternode_alias [masternode_alias ...]]
+
+positional arguments:
+  masternode_alias
 
 optional arguments:
-  -h, --help     show this help message and exit
-  -c, --check    check masternode config
-  -s, --status   show masternode status
-  -a, --anounce  anounce missing masternodes
-  -b, --balance  show masternodes balance
-  -m, --maketx   make signed raw tx
-  -x, --xfer     broadcast signed raw tx
+  -h, --help        show this help message and exit
+  -c, --check       check masternode config
+  -s, --status      show masternode status
+  -a, --anounce     anounce missing masternodes
+  -b, --balance     show masternodes balance
+  -m, --maketx      make signed raw tx
+  -x, --xfer        broadcast signed raw tx
+```
+
+```
+    start mn3 and mn4(sorted), then show balance
+     python dashmnb.py -b mn4 mn3
+
 ```
 
 ```
@@ -39,23 +49,23 @@ $ python dashmnb.py -s
 |__/|__/_/\__/_/ /_/  /_/ /_/  |__/|__/     |__/|__/\__,_/_/_/\___/\__/  
                                                                          
 
-			by : chaeplin
+      by : chaeplin
 
 Network : TESTNET
 ---> checking dashd syncing status 
 ---> checking masternode config
 
 [masternodes config]
-	configured : 4
-	passed     : 4
+  configured : 4
+  passed     : 4
 
 
 [masternodes status]
-alias	ip (m: ip/port match)	collateral address		   status
-mn1	167.12.133.185:19999:-	yWZJ6fUGrFX4S1ubDgqW7ZCcLBCt89BLt1 -------
-mn2	123.123.103.78:19999:-	yZvTMpTyNEpXxkh52ksg7trfQfoweuTsHe -------
-mn3	123.123.97.225:19999:-	yM56Ai6pHh7NzsYF5SLGMHq25Hd4noHoo6 -------
-mn4	167.12.138.230:19999:-	yfaCDjViCUsZNsPdmKDchBTS38bYNizvAa -------
+alias ip (m: ip/port match) collateral address       status
+mn1 167.12.133.185:19999:-  yWZJ6fUGrFX4S1ubDgqW7ZCcLBCt89BLt1 -------
+mn2 123.123.103.78:19999:-  yZvTMpTyNEpXxkh52ksg7trfQfoweuTsHe -------
+mn3 123.123.97.225:19999:-  yM56Ai6pHh7NzsYF5SLGMHq25Hd4noHoo6 -------
+mn4 167.12.138.230:19999:-  yfaCDjViCUsZNsPdmKDchBTS38bYNizvAa -------
 
 ```
 
@@ -81,23 +91,23 @@ $ python dashmnb.py -a
 |__/|__/_/\__/_/ /_/  /_/ /_/  |__/|__/     |__/|__/\__,_/_/_/\___/\__/  
                                                                          
 
-			by : chaeplin
+      by : chaeplin
 
 Network : TESTNET
 ---> checking dashd syncing status 
 ---> checking masternode config
 
 [masternodes config]
-	configured : 4
-	passed     : 4
+  configured : 4
+  passed     : 4
 
 
 [masternodes status]
-alias	ip (m: ip/port match)	collateral address		   status
-mn1	167.12.133.185:19999:-	yWZJ6fUGrFX4S1ubDgqW7ZCcLBCt89BLt1 -------
-mn2	123.123.103.78:19999:-	yZvTMpTyNEpXxkh52ksg7trfQfoweuTsHe -------
-mn3	123.123.97.225:19999:-	yM56Ai6pHh7NzsYF5SLGMHq25Hd4noHoo6 -------
-mn4	167.12.138.230:19999:-	yfaCDjViCUsZNsPdmKDchBTS38bYNizvAa -------
+alias ip (m: ip/port match) collateral address       status
+mn1 167.12.133.185:19999:-  yWZJ6fUGrFX4S1ubDgqW7ZCcLBCt89BLt1 -------
+mn2 123.123.103.78:19999:-  yZvTMpTyNEpXxkh52ksg7trfQfoweuTsHe -------
+mn3 123.123.97.225:19999:-  yM56Ai6pHh7NzsYF5SLGMHq25Hd4noHoo6 -------
+mn4 167.12.138.230:19999:-  yfaCDjViCUsZNsPdmKDchBTS38bYNizvAa -------
 
 
 [making mnbs and relay]
@@ -123,9 +133,9 @@ Confirm your Passphrase:
 
 
 ---> verify(decoding mnb)
-	---> total   : 4
-	---> success : 4
-	---> failed  : 0
+  ---> total   : 4
+  ---> success : 4
+  ---> failed  : 0
 
 {
     "32919a98950dec41a3d75dc3790063fb009a514fbc1fb2cf9402aab86fd1b0b3": {
@@ -199,9 +209,9 @@ Relay broadcast messages ? [ Yes / (any key to no) ] + enter : Yes
 Yes, will relay
 
 ---> relay(announcing mnb)
-	---> total   : 4
-	---> success : 4
-	---> failed  : 0
+  ---> total   : 4
+  ---> success : 4
+  ---> failed  : 0
 
 {
     "overall": "Successfully relayed broadcast messages for 4 masternodes, failed to relay 0, total 4",
@@ -251,30 +261,30 @@ $ python dashmnb.py -b
 |__/|__/_/\__/_/ /_/  /_/ /_/  |__/|__/     |__/|__/\__,_/_/_/\___/\__/  
                                                                          
 
-			by : chaeplin
+      by : chaeplin
 
 Network : TESTNET
 ---> checking dashd syncing status 
 ---> checking masternode config
 
 [masternodes config]
-	configured : 4
-	passed     : 4
+  configured : 4
+  passed     : 4
 
 
 [masternodes status]
-alias	ip (m: ip/port match)	collateral address		   status
-mn1	167.12.133.185:19999:m	yWZJ6fUGrFX4S1ubDgqW7ZCcLBCt89BLt1 PRE_ENABLED
-mn2	123.123.103.78:19999:m	yZvTMpTyNEpXxkh52ksg7trfQfoweuTsHe PRE_ENABLED
-mn3	123.123.97.225:19999:m	yM56Ai6pHh7NzsYF5SLGMHq25Hd4noHoo6 PRE_ENABLED
-mn4	167.12.138.230:19999:m	yfaCDjViCUsZNsPdmKDchBTS38bYNizvAa PRE_ENABLED
+alias ip (m: ip/port match) collateral address       status
+mn1 167.12.133.185:19999:m  yWZJ6fUGrFX4S1ubDgqW7ZCcLBCt89BLt1 PRE_ENABLED
+mn2 123.123.103.78:19999:m  yZvTMpTyNEpXxkh52ksg7trfQfoweuTsHe PRE_ENABLED
+mn3 123.123.97.225:19999:m  yM56Ai6pHh7NzsYF5SLGMHq25Hd4noHoo6 PRE_ENABLED
+mn4 167.12.138.230:19999:m  yfaCDjViCUsZNsPdmKDchBTS38bYNizvAa PRE_ENABLED
 
 [masternodes balance]
-alias	cnt	balance
-mn1	0	1000
-mn2	0	1000
-mn3	0	1000
-mn4	0	1000
+alias cnt balance
+mn1 0 1000
+mn2 0 1000
+mn3 0 1000
+mn4 0 1000
 
 ```
 

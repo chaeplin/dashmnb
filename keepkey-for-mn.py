@@ -33,7 +33,8 @@ def main():
     bip32_path = client.expand_path(keypath)
 
     # xpub to use 
-    print('xpub --> ' + bip32.serialize(client.get_public_node(bip32_path).node, 0x043587CF))
+    #print('xpub/tpub --> ' + bip32.serialize(client.get_public_node(bip32_path).node, 0x043587CF))
+    print('xpub/tpub --> ' + bip32.serialize(client.get_public_node(bip32_path).node, ( 0x0488B21E if MAINNET else 0x043587CF )))
 
     for i in range(max_gab):
         child_path = '%s%s' % (keypath + '/', str(i))

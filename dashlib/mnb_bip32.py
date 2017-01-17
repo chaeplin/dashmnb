@@ -34,6 +34,8 @@ def chain_path():
         return int(purpose), int(coin_type), int(account), int(change)
 
     else:
-        sys.exit('\ncheck bip32 mpath\n')
+        err_msg = 'check bip32 mpath'
+        print_err_exit(get_caller_name(), get_function_name(), err_msg)
+
 
 # end

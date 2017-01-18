@@ -29,5 +29,8 @@ def broadcast_signedrawtx(mn_config, access):
             xfertxid.append(s)
             print('\n====> txid : %s\n' % s)
 
+    if len(xfertxid) > 0:
+        return xfertxid
 
-    return xfertxid
+    else:
+        return None

@@ -3,6 +3,11 @@ Run Dash Masternode with Hardware Wallet
 
 #### TESTNET ONLY ####
 
+###### Q : why firmware update ?
+    - To support Dash testnet, both trezor and keepkey has only Mainnet.
+    - With Mainnet, no need to update firmware. Use official firmware.
+
+
 ```
 $ python dashmnb.py
 usage: dashmnb.py [-h] [-c] [-s] [-a] [-b] [-m] [-x]
@@ -290,11 +295,13 @@ mn4 0 1000
 
 #### requirement
 - Dash-QT or dashd
-- Keepkey, Trezor(not yet) 
+- Keepkey, Trezor
 - keepkey-firmware
+- Trezor-firmware
 - rpc conn to Dash-QT or dashd
 - python3
-- python-keepkey
+- python-keepkey [for keepkey]
+- python-trezor [for trezor]
 - python-bitcoinrpc
 - python-progress
 - python-pyfiglet
@@ -302,11 +309,13 @@ mn4 0 1000
 
 #### Keepkey firmware
 - Build your own firmware
-- https://github.com/chaeplin/dash-testnet/tree/master/keepkey_firmware
+- https://github.com/chaeplin/dash-testnet/tree/master/keepkey_firmware [for keepkey]
+- https://github.com/chaeplin/trezor-mcu or https://github.com/dashpay/trezor-mcu [for trezor]
 
 ### python lib
 - use python-virtualenv3
-- https://github.com/chaeplin/python-keepkey
+- https://github.com/chaeplin/python-keepkey [for keepkey]
+- https://github.com/chaeplin/python-trezor  [for trezor]
 - https://github.com/chaeplin/python-bitcoinrpc
 - https://github.com/verigak/progress
 - https://github.com/pwaller/pyfiglet
@@ -338,3 +347,4 @@ python "pg to run"
     https://test.explorer.dash.org/tx/82552b6626c9d2ea35c5295135b09acd351a28f552d3a666612d85e36f805e26#o0
     https://test.explorer.dash.org/tx/11c3467a318e33d5b45c588c1676b9d09f4999a96c8ce720b9d4d5815181e28a#o0
     https://test.explorer.dash.org/tx/b7910641dcc640154947d8610ebbdc1e52b7c43383a8b4e96cde6fbd089780a2#o0
+

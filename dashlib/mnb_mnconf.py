@@ -12,7 +12,7 @@ from mnb_explorer import *
 
 def checking_mn_config(access, signing):
     
-    print('\n---> checking masternode config')
+    print('\n---> checking masternode config ....')
     lines =[]
     if os.path.exists(masternode_conf_file):
         with open(masternode_conf_file) as mobj:
@@ -73,20 +73,25 @@ def parse_masternode_conf(lines, access, signing):
         mn_v_ipport.append(ipport)
         mn_v_mnprivkey_wif.append(mnprivkey_wif)
 
+        print('\tmasternode : ' + alias )
+        printdbg('parse_masternode_conf :' + alias )
         
         txidtxidn = get_txidtxidn(txid, txidn)
         mn_v_txidtxidn.append(txidtxidn)
 
+        printdbg('\trawtxid for')
         mnaddr = get_rawtxid(alias, txid, txidn, access)
         if mnaddr == None:
             errorinconf.append('line: %d / %s : no matching txid in blockchain' % (lno, alias))
             continue
 
+        printdbg('\tget_explorer_balance for')
         collateral_exp_balance = float(get_explorer_balance(mnaddr))
         if collateral_exp_balance < 1000:
             errorinconf.append('line: %d / %s : collateral_address has less than 1K balance' % (lno, alias))
             continue
 
+        printdbg('\tprocess_chain for')
         check_mpath = process_chain(mnaddr, txid, txidn, alias)
         if check_mpath == None:
             errorinconf.append('line: %d / %s : can\'t find spath and publickey' % (lno, alias))

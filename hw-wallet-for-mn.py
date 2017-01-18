@@ -6,27 +6,33 @@ sys.path.append( os.path.join( os.path.dirname(__file__), '.', 'dashlib' ) )
 
 from config import *
 
-from keepkeylib.client import KeepKeyClient
-from keepkeylib.transport_hid import HidTransport
-import keepkeylib.ckd_public as bip32
-
-
 def main():
-    # List all connected KeepKeys on USB
+    if TYPE_HW_WALLET.lower().startswith("keepkey"):
+        from keepkeylib.client import KeepKeyClient
+        from keepkeylib.transport_hid import HidTransport
+        import keepkeylib.ckd_public as bip32
+
+    elif TYPE_HW_WALLET.lower().startswith("trezor"):
+        from trezorlib.client import TrezorClient
+        from trezorlib.transport_hid import HidTransport
+        import trezorlib.ckd_public as bip32
+
     devices = HidTransport.enumerate()
 
-    # Check whether we found any
     if len(devices) == 0:
-        print('No KeepKey found')
+        print('No HW Wallet found')
         return
 
-    # Use first connected device
     transport = HidTransport(devices[0])
 
-    # Creates object for manipulating KeepKey
-    client = KeepKeyClient(transport)
+    if TYPE_HW_WALLET.lower().startswith("keepkey"):    
+        client = KeepKeyClient(transport)
 
-    # Print out KeepKey's features and settings
+    elif TYPE_HW_WALLET.lower().startswith("trezor"):
+        client = TrezorClient(transport)
+
+
+    # Print out hw wallet's features and settings
     # print(client.features)
 
     keypath = mpath
@@ -46,5 +52,3 @@ def main():
 if __name__ == '__main__':
     main()
 
-
-# end

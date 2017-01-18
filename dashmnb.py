@@ -29,10 +29,13 @@ def main(args):
     serverURL = 'http://' + rpcuser + ':' + rpcpassword + '@' + rpcbindip + ':' + str(rpcport)
     access = AuthServiceProxy(serverURL) 
 
-    if TYPE_HW_WALLET == 'keepkey':
+
+    printdbg('checking hw wallet')
+    if TYPE_HW_WALLET.lower().startswith("keepkey"):
         from keepkeylib.client import KeepKeyClient
         from keepkeylib.transport_hid import HidTransport
-        
+        import keepkeylib.ckd_public as bip32
+
         devices = HidTransport.enumerate()
     
         if len(devices) == 0:
@@ -40,10 +43,29 @@ def main(args):
             signing  = False
             
         else:
+            print('===> keepkey HW Wallet found')
             transport = HidTransport(devices[0])
             client = KeepKeyClient(transport)
             signing  = True
-    
+
+    elif TYPE_HW_WALLET.lower().startswith("trezor"):
+        from trezorlib.client import TrezorClient
+        from trezorlib.transport_hid import HidTransport
+        import trezorlib.ckd_public as bip32
+
+        devices = HidTransport.enumerate()
+
+        if len(devices) == 0:
+            print('===> No HW Wallet found')
+            signing  = False
+            
+        else:
+            print('===> trezor HW Wallet found')
+            transport = HidTransport(devices[0])
+            client = TrezorClient(transport)
+            signing  = True
+            
+
     if len(mpath) == 0:
         err_msg = 'please configure bip49 path'
         print_err_exit(get_caller_name(), get_function_name(), err_msg)
@@ -111,7 +133,7 @@ def main(args):
             print('[making txs]')
             for x in sorted(list(mn_config.keys())):
                 print('---> signing txs for mn %s: ' % mn_config[x].get('alias'))
-                mn_config[x]["signedrawtx"] = make_txs_for_keepkey(mn_config[x], client)
+                mn_config[x]["signedrawtx"] = make_txs_for_hwwallet(mn_config[x], client)
 
 
     if args.xfer and signing:
@@ -128,7 +150,7 @@ def parse_args():
     parser = argparse.ArgumentParser()
 
     parser.add_argument(dest ='masternode_to_start',
-                        metavar = 'masternode_alias',
+                        metavar = 'masternode_alias_to_start',
                         nargs = '*' )
 
     parser.add_argument('-c','--check',
@@ -170,7 +192,7 @@ def parse_args():
 
 
 if __name__ == "__main__":
-
+    printdbg('main starting')
     if (sys.version_info < (3, 0)):
         sys.exit('need python3')
 

@@ -62,10 +62,18 @@ def make_inputs_for_keepkey(tx, receiving_address, collateral_spath, client):
     import binascii
     from decimal import Decimal
 
-    import keepkeylib.messages_pb2 as proto
-    import keepkeylib.types_pb2 as proto_types    
-    from keepkeylib import tx_api
-    from keepkeylib.tx_api import TXAPIDashTestnet   
+    if TYPE_HW_WALLET.lower().startswith("keepkey"):
+        import keepkeylib.messages_pb2 as proto
+        import keepkeylib.types_pb2 as proto_types    
+        from keepkeylib import tx_api
+        from keepkeylib.tx_api import TXAPIDashTestnet   
+
+    elif TYPE_HW_WALLET.lower().startswith("trezor"):
+        import trezorlib.messages_pb2 as proto
+        import trezorlib.types_pb2 as proto_types    
+        from trezorlib import tx_api
+        from trezorlib.tx_api import TXAPIDashTestnet         
+
 
     tx_api.rpcuser = rpcuser
     tx_api.rpcpassword = rpcpassword
@@ -116,7 +124,7 @@ def make_inputs_for_keepkey(tx, receiving_address, collateral_spath, client):
 
     return serialized_tx.hex()
 
-def make_txs_for_keepkey(mnconfig, client):  
+def make_txs_for_hwwallet(mnconfig, client):  
     
     txs = mnconfig.get('txs', None)
     collateral_spath = mnconfig.get('collateral_spath', None)

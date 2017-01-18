@@ -30,6 +30,7 @@ def main(args):
     access = AuthServiceProxy(serverURL) 
 
     if TYPE_HW_WALLET == 'keepkey':
+        printdbg('checking hw wallet')
         from keepkeylib.client import KeepKeyClient
         from keepkeylib.transport_hid import HidTransport
         
@@ -128,7 +129,7 @@ def parse_args():
     parser = argparse.ArgumentParser()
 
     parser.add_argument(dest ='masternode_to_start',
-                        metavar = 'masternode_alias',
+                        metavar = 'masternode_alias_to_start',
                         nargs = '*' )
 
     parser.add_argument('-c','--check',
@@ -170,7 +171,7 @@ def parse_args():
 
 
 if __name__ == "__main__":
-
+    printdbg('main starting')
     if (sys.version_info < (3, 0)):
         sys.exit('need python3')
 

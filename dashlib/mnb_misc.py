@@ -2,6 +2,7 @@ import sys, os, time
 sys.path.append( os.path.join( os.path.dirname(__file__), '..' ) )
 sys.path.append( os.path.join( os.path.dirname(__file__), '..', 'dashlib' ) )
 
+#from datetime import datetime
 
 def clear_screen():
     os.system('clear')
@@ -16,7 +17,7 @@ def logo_show():
     #print('\n\t\t\tdonation : xxxxxxxxxx')
     print('\t\t\tby : chaeplin\n')
     print('Network : ' +  ('MAINNET' if MAINNET else 'TESTNET'))
-    time.sleep(3)
+    time.sleep(1)
     #clear_screen()
 
 def get_txidtxidn(txid, txidn):
@@ -57,5 +58,14 @@ def print_err_exit(caller_name, function_name, err_msg, errargs=None):
     msg += '\t===> ' + err_msg + '\n'
 
     raise SystemExit(msg)
+
+def now():
+    return int(time.time())
+
+def printdbg(str):
+    ts = time.strftime('%Y-%m-%d %H:%M:%S', time.gmtime(now()))
+    logstr = "{} {}".format(ts, str)
+    if os.environ.get('DASHMNB_DEBUG', None):
+        print(logstr)
 
 # end

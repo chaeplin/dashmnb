@@ -141,8 +141,9 @@ def main(args):
         xfertxid = broadcast_signedrawtx(mn_config, access)
 
         print()
-        for x in xfertxid:
-            print('\t' + x)
+        if xfertxid != None:
+            for x in xfertxid:
+                print('\t' + x)
 
 
 def parse_args():

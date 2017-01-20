@@ -118,6 +118,10 @@ def main(args):
 
         need_wallet_rescan = print_balance(mn_config)
 
+        if need_wallet_rescan:
+            err_msg = '\n\trestarting Dash-QT or dashd with -rescan needed'
+            print_err_exit(get_caller_name(), get_function_name(), err_msg)
+
     if not signing:
         err_msg = 'need HW wallet to spend'
         print_err_exit(get_caller_name(), get_function_name(), err_msg)
@@ -126,7 +130,7 @@ def main(args):
     if args.maketx or args.xfer:
 
         if need_wallet_rescan:
-            err_msg = '1) to spend mn payments in HW Wallet, restart Dash-QT or dashd with -rescan\n2) if did -rescan and still see this messge, check if 1K was spent'
+            err_msg = '\n\t1) to spend mn payments in HW Wallet, restart Dash-QT or dashd with -rescan\n\t2) if did -rescan and still see this messge, check if 1K was spent'
             print_err_exit(get_caller_name(), get_function_name(), err_msg)
 
         if signing:

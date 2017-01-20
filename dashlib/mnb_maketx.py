@@ -9,6 +9,9 @@ from mnb_mnconf import *
 from mnb_bip32 import *
 
 def print_balance(mn_config):
+
+    need_wallet_rescan = False
+
     print('[masternodes balance]')
     print('alias\tcnt\tbalance(dashd)\tbalance(explorer)')
     
@@ -21,8 +24,15 @@ def print_balance(mn_config):
         sumofunspent  = sum(unspent)
         cnt           = len(unspent)
 
-        print(alias + '\t' + str(cnt) + '\t' + str(sumofunspent)  + '\t' + str(exp_balance))
+        if cnt == 0:
+            need_wallet_rescan = True
+
+        print(alias  + '\t' + '{:2d}\t{:12.8f}\t{:12.8f}'.format(cnt, sumofunspent, exp_balance))
+
     print('\n* count / balance of dashd is spendable(over 100 confirmation)')
+
+    return need_wallet_rescan
+
 
 def get_unspent_txs(mnconfig, access):
     collateral_address   = mnconfig.get('collateral_address')

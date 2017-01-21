@@ -125,7 +125,7 @@ def make_inputs_for_hw_wallet(tx, receiving_address, collateral_spath, client, t
 
 
     feetohuman = round(Decimal(txsizefee / 1e8), 4)
-    print('send %s, %s txs to %s with fee of %s : total amount : %s' % (amount_total - feetohuman, len(tx), receiving_address, feetohuman, amount_total))
+    print('send %s, %s txs to %s with fee of %s : total amount : %s\n' % (amount_total - feetohuman, len(tx), receiving_address, feetohuman, amount_total))
     
     try:
         (signatures, serialized_tx) = client.sign_tx(coin_name, inputs, outputs)

@@ -5,7 +5,7 @@ sys.path.append( os.path.join( os.path.dirname(__file__), '..', 'dashlib' ) )
 import re
 from mnb_makemnb import *
 
-def start_masternode(mns_to_start, access, client, announce):
+def start_masternode(mns_to_start, access, client, announce, tunnel=None):
     if announce:
         print('\n[making mnbs and relay]')
     else:
@@ -13,13 +13,13 @@ def start_masternode(mns_to_start, access, client, announce):
 
     masternodebroadcast = []
     for alias in sorted(mns_to_start):
-        mnbhex = make_mnb(mns_to_start[alias].get('alias'), mns_to_start[alias], access, client)
+        mnbhex = make_mnb(mns_to_start[alias].get('alias'), mns_to_start[alias], access, client, tunnel)
         masternodebroadcast.append(mnbhex)
     
     vc = num_to_varint(len(masternodebroadcast)).hex()
     vm = ''.join(masternodebroadcast)
 
-    verify = rpc_masternode("decode", vc + vm, access)
+    verify = rpc_masternode("decode", vc + vm, access, tunnel)
     match1 = re.search('^Successfully decoded broadcast messages for (.*) masternodes, failed to decode (.*), total (.*)$', verify.get('overall'))
     
     decoded = {}
@@ -47,7 +47,7 @@ def start_masternode(mns_to_start, access, client, announce):
             print('No.')
             return
         
-        relay  = rpc_masternode("relay", vc + vm, access)
+        relay  = rpc_masternode("relay", vc + vm, access, tunnel)
         match2 = re.search('^Successfully relayed broadcast messages for (.*) masternodes, failed to relay (.*), total (.*)$', relay.get('overall'))
 
         relayed = {}

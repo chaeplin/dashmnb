@@ -73,10 +73,7 @@ def main(args, tunnel=None):
         err_msg = 'please configure bip32 xpub/tpub'
         print_err_exit(get_caller_name(), get_function_name(), err_msg, None, tunnel)
 
-    check_dashd_syncing(access, tunnel) 
-
-    if len(args.masternode_to_start) >= 1:
-        args.anounce = True
+    check_dashd_syncing(access, tunnel)
 
     if args.check or args.status or args.anounce or args.balance or args.maketx or args.xfer:
         mn_config, signing, mns, mna = checking_mn_config(access, signing, tunnel)
@@ -100,15 +97,23 @@ def main(args, tunnel=None):
         mns_to_start = {}
         for x in sorted(list(mn_config.keys())):
             txidtxidn = mn_config.get(x).get('collateral_txidtxidn')
-            if ((mns.get(txidtxidn, None) != 'ENABLED' \
-                and mns.get(txidtxidn, None) != 'PRE_ENABLED')) \
-                or mn_config.get(x).get('alias') in args.masternode_to_start :
+            if len(args.masternode_to_start) > 0:
+                if mn_config.get(x).get('alias') in args.masternode_to_start:
+                    mns_to_start[x] = mn_config[x]
 
-                mns_to_start[x] = mn_config[x]
+            else:
+                if ((mns.get(txidtxidn, None) != 'ENABLED' \
+                    and mns.get(txidtxidn, None) != 'PRE_ENABLED')) :
+                    mns_to_start[x] = mn_config[x]
+
+#            if ((mns.get(txidtxidn, None) != 'ENABLED' \
+#                and mns.get(txidtxidn, None) != 'PRE_ENABLED')) \
+#                or mn_config.get(x).get('alias') in args.masternode_to_start :
+#
+#                mns_to_start[x] = mn_config[x]
 
         if len(mns_to_start) > 0 and signing:
             start_masternode(mns_to_start, access, client, args.anounce, tunnel)
-
 
     # wallet rescan
     if args.balance or args.maketx or args.xfer:
@@ -135,18 +140,25 @@ def main(args, tunnel=None):
         if signing:
             print('[making txs]')
             for x in sorted(list(mn_config.keys())):
-                print('---> signing txs for mn %s: ' % mn_config[x].get('alias'))
-                mn_config[x]["signedrawtx"] = make_txs_for_hwwallet(mn_config[x], client, tunnel)
+                if len(args.masternode_to_start) > 0:
+                    if mn_config.get(x).get('alias') in args.masternode_to_start:
+                        print('---> signing txs for mn %s: ' % mn_config[x].get('alias'))
+                        mn_config[x]["signedrawtx"] = make_txs_for_hwwallet(mn_config[x], client, tunnel)
 
+                else:
+                    print('---> signing txs for mn %s: ' % mn_config[x].get('alias'))
+                    mn_config[x]["signedrawtx"] = make_txs_for_hwwallet(mn_config[x], client, tunnel)
 
     if args.xfer and signing:
-        print('[broadcasting txs]')
         xfertxid = broadcast_signedrawtx(mn_config, access, tunnel)
 
         print()
         if xfertxid != None:
             for x in xfertxid:
                 print('\t' + x)
+
+    if tunnel:
+        os.kill(tunnel, signal.SIGTERM)
 
 
 def parse_args():
@@ -212,6 +224,7 @@ if __name__ == "__main__":
         main(args, tunnel_pid)
 
     except KeyboardInterrupt:
+        os.kill(tunnel_pid, signal.SIGTERM)
         sys.exit()
 
 # end

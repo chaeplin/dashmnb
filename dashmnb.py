@@ -20,6 +20,7 @@ from mnb_start import *
 from mnb_xfer import *
 from mnb_sshtunnel import *
 from mnb_hwwallet import *
+import signal
 
 from bitcoinrpc.authproxy import AuthServiceProxy, JSONRPCException    
 

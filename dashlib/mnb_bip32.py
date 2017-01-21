@@ -22,7 +22,7 @@ def process_chain(collateral_address, txid, txidn, alias):
 
         i += 1
 
-def chain_path():
+def chain_path(tunnel=None):
     import re
     pathmatch = re.search("^(.*)'/(.*)'/(.*)'/(.*)$", mpath)
     if (pathmatch):
@@ -35,7 +35,7 @@ def chain_path():
 
     else:
         err_msg = 'check bip32 mpath'
-        print_err_exit(get_caller_name(), get_function_name(), err_msg)
+        print_err_exit(get_caller_name(), get_function_name(), err_msg, None, tunnel)
 
 
 # end

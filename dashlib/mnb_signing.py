@@ -24,7 +24,7 @@ def serialize_input_str(tx, prevout_n, sequence, scriptSig):
     s.append(')')
     return ''.join(s)
 
-def signmessage(last_ping_serialize_for_sig, address, access):
+def signmessage(last_ping_serialize_for_sig, address, access, tunnel=None):
     
     import base64
     try:
@@ -33,7 +33,7 @@ def signmessage(last_ping_serialize_for_sig, address, access):
 
     except Exception as e:
         err_msg = 'Please enter the wallet passphrase with walletpassphrase first'
-        print_err_exit(get_caller_name(), get_function_name(), err_msg, e.args)
+        print_err_exit(get_caller_name(), get_function_name(), err_msg, e.args, tunnel)
 
 def keepkeysign(serialize_for_sig, spath, address, client):
 

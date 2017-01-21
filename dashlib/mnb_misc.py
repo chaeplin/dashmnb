@@ -50,12 +50,17 @@ def get_function_name():
 def get_caller_name():
     return sys._getframe(2).f_code.co_name
 
-def print_err_exit(caller_name, function_name, err_msg, errargs=None):
+def print_err_exit(caller_name, function_name, err_msg, errargs=None, tunnel=None):
+    import signal
+
     msg  = '\n\n\tcaller   : ' + caller_name + '\n'
     msg += '\tfunction : ' + function_name + '\n'
     if errargs:
         msg += '\terr      : ' + str(errargs) + '\n'
     msg += '\t===> ' + err_msg + '\n'
+
+    if tunnel:
+        os.kill(tunnel, signal.SIGTERM)
 
     raise SystemExit(msg)
 

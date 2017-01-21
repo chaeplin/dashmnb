@@ -10,7 +10,7 @@ from mnb_signing import *
 from mnb_rpc import *
 from mnb_maketx import *
 
-def make_mnb(alias, mnconfig, access, client):
+def make_mnb(alias, mnconfig, access, client, tunnel=None):
     print('---> making mnb for %s' % alias)
 
     # ------ some default config
@@ -22,7 +22,7 @@ def make_mnb(alias, mnconfig, access, client):
     #cur_block_height = access.getblockcount()
     #block_hash = access.getblockhash(cur_block_height - 12)
 
-    block_hash = get_block_hash_for_mnb(access)
+    block_hash = get_block_hash_for_mnb(access, tunnel)
 
     vintx  = bytes.fromhex(mnconfig['collateral_txid'])[::-1].hex()
     vinno  = mnconfig['collateral_txidn'].to_bytes(4, byteorder='big')[::-1].hex()
@@ -50,10 +50,10 @@ def make_mnb(alias, mnconfig, access, client):
 
     except Exception as e:
         err_msg = e.args
-        print_err_exit(get_caller_name(), get_function_name(), err_msg)
+        print_err_exit(get_caller_name(), get_function_name(), err_msg, None, tunnel)
 
     except KeyboardInterrupt:
-        print_err_exit(get_caller_name(), get_function_name(), 'KeyboardInterrupt')
+        print_err_exit(get_caller_name(), get_function_name(), 'KeyboardInterrupt', None, tunnel)
         
     work_sig_time     = sig_time.to_bytes(8, byteorder='big')[::-1].hex() 
     work_protoversion = protocol_version.to_bytes(4, byteorder='big')[::-1].hex()
@@ -62,7 +62,7 @@ def make_mnb(alias, mnconfig, access, client):
 
     last_ping_serialize_for_sig  = serialize_input_str(mnconfig['collateral_txid'], mnconfig['collateral_txidn'], sequence, scriptSig) + block_hash + str(sig_time)
 
-    sig2 = signmessage(last_ping_serialize_for_sig, mnconfig['masternode_address'], access)
+    sig2 = signmessage(last_ping_serialize_for_sig, mnconfig['masternode_address'], access, tunnel)
 
     work = vintx + vinno + vinsig + vinseq \
         + ipv6map + collateral_in + delegate_in \

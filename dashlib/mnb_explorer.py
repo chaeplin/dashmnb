@@ -6,9 +6,10 @@ sys.path.append( os.path.join( os.path.dirname(__file__), '..', 'dashlib' ) )
 
 import requests
 from config import *
+from mnb_misc import *
 
 
-def make_request(url):
+def make_request(url, tunnel=None):
     USERAGET = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_1) AppleWebKit/602.2.14 (KHTML, like Gecko) Version/10.0.1 Safari/602.2.14'
     headers = {'user-agent': USERAGET}
 
@@ -22,16 +23,16 @@ def make_request(url):
 
     except requests.exceptions.RequestException:
         err_msg = requests.exceptions.RequestException
-        print_err_exit(get_caller_name(), get_function_name(), err_msg)        
+        print_err_exit(get_caller_name(), get_function_name(), err_msg, None, tunnel)        
 
     except Exception as e:
         err_msg = e.args
-        print_err_exit(get_caller_name(), get_function_name(), err_msg)
+        print_err_exit(get_caller_name(), get_function_name(), err_msg, None, tunnel)
 
 
-def get_explorer_balance(address):
+def get_explorer_balance(address, tunnel=None):
     url  = 'https://test.explorer.dash.org/chain/tDash/q/addressbalance/' + address
-    response = make_request(url)
+    response = make_request(url, tunnel)
 
     return response
 

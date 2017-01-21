@@ -34,11 +34,11 @@ def print_balance(mn_config):
     return need_wallet_rescan
 
 
-def get_unspent_txs(mnconfig, access):
+def get_unspent_txs(mnconfig, access, tunnel=None):
     collateral_address   = mnconfig.get('collateral_address')
     collateral_txidtxidn = mnconfig.get('collateral_txidtxidn')
 
-    listunspent = get_listunspent(0, 999999999, collateral_address, access)
+    listunspent = get_listunspent(0, 999999999, collateral_address, access, tunnel)
 
     unspent_mine = []
     balance_mine = []
@@ -68,7 +68,8 @@ def get_unspent_txs(mnconfig, access):
 
     return unspent_mine, sublist, balance_mine
 
-def make_inputs_for_keepkey(tx, receiving_address, collateral_spath, client):
+def make_inputs_for_hw_wallet(tx, receiving_address, collateral_spath, client, tunnel=None):
+    # trezor and keepkey
     import binascii
     from decimal import Decimal
 
@@ -95,10 +96,10 @@ def make_inputs_for_keepkey(tx, receiving_address, collateral_spath, client):
     inputs = []
     outputs = []
     amount_total = 0
-    purpose, coin_type, account, change = chain_path()
+    purpose, coin_type, account, change = chain_path(tunnel)
 
     if collateral_spath == None or receiving_address == None:
-        sys.exit('make_inputs_for_keepkey receiving_address / collateral_spath : Should not None')
+        sys.exit('make_inputs_for_hw_wallet receiving_address / collateral_spath : Should not None')
 
     # make input
     for x in tx:
@@ -107,7 +108,7 @@ def make_inputs_for_keepkey(tx, receiving_address, collateral_spath, client):
         vout   = x.get('vout', None)
 
         if amount == None or txid == None or vout == None:
-            sys.exit('make_inputs_for_keepkey amount / txid / vout : Should not None')
+            sys.exit('make_inputs_for_hw_wallet amount / txid / vout : Should not None')
 
         amount_total += amount
         inputs.append( proto_types.TxInputType(address_n=[purpose | 0x80000000, coin_type | 0x80000000, account | 0x80000000, change, int(collateral_spath)],
@@ -124,30 +125,30 @@ def make_inputs_for_keepkey(tx, receiving_address, collateral_spath, client):
 
 
     feetohuman = round(Decimal(txsizefee / 1e8), 4)
-    print('send %s, %s txs to %s with fee of %s : total amount : %s' % (amount_total - feetohuman, len(tx), receiving_address, feetohuman, amount_total))
+    print('send %s, %s txs to %s with fee of %s : total amount : %s\n' % (amount_total - feetohuman, len(tx), receiving_address, feetohuman, amount_total))
     
     try:
         (signatures, serialized_tx) = client.sign_tx(coin_name, inputs, outputs)
 
     except KeyboardInterrupt:
-        print_err_exit(get_caller_name(), get_function_name(), 'KeyboardInterrupt')
+        print_err_exit(get_caller_name(), get_function_name(), 'KeyboardInterrupt', None, tunnel)
 
     return serialized_tx.hex()
 
-def make_txs_for_hwwallet(mnconfig, client):  
+def make_txs_for_hwwallet(mnconfig, client, tunnel=None):  
     
     txs = mnconfig.get('txs', None)
     collateral_spath = mnconfig.get('collateral_spath', None)
     receiving_address = mnconfig.get('receiving_address', None)
 
     if collateral_spath == None or receiving_address == None:
-        sys.exit('make_inputs_for_keepkey receiving_address / collateral_spath : Should not None')
+        sys.exit('make_inputs_for_hw_wallet receiving_address / collateral_spath : Should not None')
 
     serialized_txs = []
     if txs != None:
         for tx in txs:
             if (len(tx)) > min_unspent:
-                serialized_tx = make_inputs_for_keepkey(tx, receiving_address, collateral_spath, client)
+                serialized_tx = make_inputs_for_hw_wallet(tx, receiving_address, collateral_spath, client, tunnel)
                 serialized_txs.append(serialized_tx)
 
     return serialized_txs

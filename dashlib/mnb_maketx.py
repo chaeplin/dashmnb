@@ -89,7 +89,7 @@ def make_inputs_for_hw_wallet(tx, receiving_address, collateral_spath, client, t
     tx_api.rpcuser = rpcuser
     tx_api.rpcpassword = rpcpassword
     tx_api.rpcbindip = rpcbindip
-    tx_api.rpcport = rpcport
+    tx_api.rpcport = (rpcport if tunnel == None else SSH_LOCAL_PORT) 
     
     client.set_tx_api(TXAPIDashTestnet())
 

@@ -11,6 +11,13 @@ rpcpassword = 'rpcuser-password'
 rpcbindip   = '127.0.0.1'
 rpcport     = 19998
 
+# ssh tunnel
+USE_SSH_TUNNEL   = True  # True or False
+SSH_IDENTITYFILE = '~/.ssh/xxx.pem'
+SSH_USER         = 'xxx'
+SSH_SERVER       = '121.121.121.121'
+SSH_LOCAL_PORT   = '29998'
+
 # HW WALLET TYPE
 TYPE_HW_WALLET = 'keepkey'           # keepkey, trezor(not yet) 
 #
@@ -42,6 +49,7 @@ if MAINNET:
     max_amounts = 10    # max amounts of each unspent tx 
     max_unspent = 10
     min_unspent = 3
+    
     default_receiving_address = ''
 
 else:

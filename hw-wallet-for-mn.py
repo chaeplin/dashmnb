@@ -5,33 +5,13 @@ sys.path.append( os.path.join( os.path.dirname(__file__), '.' ) )
 sys.path.append( os.path.join( os.path.dirname(__file__), '.', 'dashlib' ) )
 
 from config import *
+from mnb_hwwallet import *
 
 def main():
-    if TYPE_HW_WALLET.lower().startswith("keepkey"):
-        from keepkeylib.client import KeepKeyClient
-        from keepkeylib.transport_hid import HidTransport
-        import keepkeylib.ckd_public as bip32
+    client, signing = check_hw_wallet()
 
-    elif TYPE_HW_WALLET.lower().startswith("trezor"):
-        from trezorlib.client import TrezorClient
-        from trezorlib.transport_hid import HidTransport
-        import trezorlib.ckd_public as bip32
-
-    devices = HidTransport.enumerate()
-
-    if len(devices) == 0:
-        print('No HW Wallet found')
-        return
-
-    transport = HidTransport(devices[0])
-
-    if TYPE_HW_WALLET.lower().startswith("keepkey"):    
-        client = KeepKeyClient(transport)
-
-    elif TYPE_HW_WALLET.lower().startswith("trezor"):
-        client = TrezorClient(transport)
-
-
+    if client == None:
+        sys.exit()
     # Print out hw wallet's features and settings
     # print(client.features)
 

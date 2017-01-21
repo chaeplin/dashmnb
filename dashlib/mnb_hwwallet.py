@@ -10,6 +10,9 @@ def check_hw_wallet():
     printdbg('checking hw wallet')
     #client = None
 
+    client   = None
+    signing  = False
+
     if TYPE_HW_WALLET.lower().startswith("keepkey"):
         from keepkeylib.client import KeepKeyClient
         from keepkeylib.transport_hid import HidTransport

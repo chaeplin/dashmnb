@@ -10,18 +10,19 @@ import threading
 import signal
 
 class SshTunnel(threading.Thread):
-    def __init__(self, localport, remoteport, remoteuser, remotehost):
+    def __init__(self, localport, remoteport, remoteuser, remotehost, identityfile):
         threading.Thread.__init__(self)
         self.localport = localport      # Local port to listen to
         self.remoteport = remoteport    # Remote port on remotehost
         self.remoteuser = remoteuser    # Remote user on remotehost
         self.remotehost = remotehost    # What host do we send traffic to
+        self.identityfile = identityfile
         self.daemon = True              # So that thread will exit when
                                         # main non-daemon thread finishes
 
     def run(self):
         p = subprocess.Popen([
-            'ssh', '-i', '~/.ssh/conoha.pem',
+            'ssh', '-i', self.identityfile,
                    '-N',
                    '-L', str(self.localport) + ':localhost:' + str(self.remoteport),
                    self.remoteuser + '@' + self.remotehost ])
@@ -36,7 +37,7 @@ class SshTunnel(threading.Thread):
         return self.pid
 
 def start_ssh_tunnel():
-    tunnel = SshTunnel(SSH_LOCAL_PORT, rpcport, SSH_USER, SSH_SERVER)
+    tunnel = SshTunnel(SSH_LOCAL_PORT, rpcport, SSH_USER, SSH_SERVER, SSH_IDENTITYFILE)
     tunnel.start()
     time.sleep(1)
 

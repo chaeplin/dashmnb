@@ -28,7 +28,7 @@ def main(args, tunnel=None):
     logo_show()
 
     # access
-    serverURL = 'http://' + rpcuser + ':' + rpcpassword + '@' + rpcbindip + ':' + str(rpcport)
+    serverURL = 'http://' + rpcuser + ':' + rpcpassword + '@' + rpcbindip + ':' + str(rpcport if tunnel == None else SSH_LOCAL_PORT)  
     access = AuthServiceProxy(serverURL) 
 
     client, signing = check_hw_wallet()
@@ -183,6 +183,7 @@ if __name__ == "__main__":
 
     try:
 
+        tunnel_pid = None
         # ssh tunnel
         if USE_SSH_TUNNEL:
             tunnel = start_ssh_tunnel()
@@ -192,7 +193,8 @@ if __name__ == "__main__":
         main(args, tunnel_pid)
 
     except KeyboardInterrupt:
-        os.kill(tunnel_pid, signal.SIGTERM)
+        if tunnel_pid:
+            os.kill(tunnel_pid, signal.SIGTERM)
         sys.exit()
 
 # end

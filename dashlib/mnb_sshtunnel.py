@@ -1,0 +1,43 @@
+import sys, os, time
+sys.path.append( os.path.join( os.path.dirname(__file__), '..' ) )
+sys.path.append( os.path.join( os.path.dirname(__file__), '..', 'dashlib' ) )
+
+from config import *
+
+import subprocess
+import time
+import threading
+import signal
+
+class SshTunnel(threading.Thread):
+    def __init__(self, localport, remoteport, remoteuser, remotehost):
+        threading.Thread.__init__(self)
+        self.localport = localport      # Local port to listen to
+        self.remoteport = remoteport    # Remote port on remotehost
+        self.remoteuser = remoteuser    # Remote user on remotehost
+        self.remotehost = remotehost    # What host do we send traffic to
+        self.daemon = True              # So that thread will exit when
+                                        # main non-daemon thread finishes
+
+    def run(self):
+        p = subprocess.Popen([
+            'ssh', '-i', '~/.ssh/conoha.pem',
+                   '-N',
+                   '-L', str(self.localport) + ':localhost:' + str(self.remoteport),
+                   self.remoteuser + '@' + self.remotehost ])
+
+        if p:
+            self.pid = p.pid
+        
+        else:
+            raise Exception ('ssh tunnel setup failed')
+
+    def _getpid(self):
+        return self.pid
+
+def start_ssh_tunnel():
+    tunnel = SshTunnel(SSH_LOCAL_PORT, rpcport, SSH_USER, SSH_SERVER)
+    tunnel.start()
+    time.sleep(1)
+
+    return tunnel

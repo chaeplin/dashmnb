@@ -10,7 +10,7 @@ from mnb_rpc import *
 from mnb_bip32 import *
 from mnb_explorer import *
 
-def checking_mn_config(access, signing):
+def checking_mn_config(access, signing, tunnel=None):
     
     print('\n---> checking masternode config ....')
     lines =[]
@@ -19,11 +19,11 @@ def checking_mn_config(access, signing):
             for line in mobj:            
                 lines.append(line.strip())
    
-        mn_config, signing = parse_masternode_conf(lines, access, signing)
+        mn_config, signing = parse_masternode_conf(lines, access, signing, tunnel)
     
     else:
         err_msg = 'no %s file' % masternode_conf_file
-        print_err_exit(get_caller_name(), get_function_name(), err_msg)
+        print_err_exit(get_caller_name(), get_function_name(), err_msg, None, tunnel)
 
     check_wallet_lock(access)
     mns = check_masternodelist(access)
@@ -31,7 +31,7 @@ def checking_mn_config(access, signing):
 
     return mn_config, signing, mns, mna
 
-def parse_masternode_conf(lines, access, signing):
+def parse_masternode_conf(lines, access, signing, tunnel=None):
 
     i = 0
     lno = 0
@@ -80,7 +80,7 @@ def parse_masternode_conf(lines, access, signing):
         mn_v_txidtxidn.append(txidtxidn)
 
         printdbg('\trawtxid for')
-        mnaddr = get_rawtxid(alias, txid, txidn, access)
+        mnaddr = get_rawtxid(alias, txid, txidn, access, tunnel)
         if mnaddr == None:
             errorinconf.append('line: %d / %s : no matching txid in blockchain' % (lno, alias))
             continue
@@ -109,19 +109,27 @@ def parse_masternode_conf(lines, access, signing):
 
         masternode_address = pubkey_to_address(masternode_pubkey)
 
-        if (validateaddress(mnaddr, access, False) == None): sys.exit('collateral_address error on ' + get_function_name())
-        if (validateaddress(masternode_address, access, False) == None): sys.exit('masternode_address error on ' + get_function_name())
-        if (validateaddress(raddr, access, False) == None): sys.exit('masternode_address error on ' + get_function_name())
+        if (validateaddress(mnaddr, access, False, tunnel) == None):
+            err_msg = 'collateral_address error'
+            print_err_exit(get_caller_name(), get_function_name(), err_msg, None, tunnel)
+
+        if (validateaddress(masternode_address, access, False, tunnel) == None): 
+            err_msg = 'masternode_address error'
+            print_err_exit(get_caller_name(), get_function_name(), err_msg, None, tunnel)
+
+        if (validateaddress(raddr, access, False, tunnel) == None): 
+            err_msg = 'receiving_address error'
+            print_err_exit(get_caller_name(), get_function_name(), err_msg, None, tunnel)
 
         # import mnprivkey_wif
-        validate_masternode_address = validateaddress(masternode_address, access)
+        validate_masternode_address = validateaddress(masternode_address, access, True, tunnel)
         if validate_masternode_address == None or validate_masternode_address == False:
             importprivkey(mnprivkey_wif, masternode_address, access)
 
         # import watch only address
-        validate_collateral_address = validateaddress(mnaddr, access, False)
+        validate_collateral_address = validateaddress(mnaddr, access, False, tunnel)
         if validate_collateral_address == None or validate_collateral_address == False:
-            importaddress(mnaddr, access)
+            importaddress(mnaddr, access, tunnel)
 
         mn_config[lineno] = {
             "alias": alias,

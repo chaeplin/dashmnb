@@ -4,6 +4,7 @@ sys.path.append( os.path.join( os.path.dirname(__file__), '..', 'dashlib' ) )
 
 import re
 from mnb_makemnb import *
+from mnb_misc import *
 
 def start_masternode(mns_to_start, access, client, announce, tunnel=None):
     if announce:
@@ -36,7 +37,8 @@ def start_masternode(mns_to_start, access, client, announce, tunnel=None):
     print(json.dumps(verify, sort_keys=True, indent=4, separators=(',', ': ')))
 
     if decoded['success'] != decoded['total']:
-        sys.exit('error occurred while verifying mnb hex')
+        err_msg = 'error occurred while verifying mnb hex'
+        print_err_exit(get_caller_name(), get_function_name(), err_msg, None, tunnel)
 
     if announce:
         

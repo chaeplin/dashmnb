@@ -88,8 +88,9 @@ def parse_masternode_conf(lines, access, signing, tunnel=None):
         printdbg('\tget_explorer_balance for')
         collateral_exp_balance = float(get_explorer_balance(mnaddr))
         if collateral_exp_balance < 1000:
-            errorinconf.append('line: %d / %s : collateral_address has less than 1K balance' % (lno, alias))
-            continue
+            errorinconf.append('line: %d / %s : collateral_address has less than 1K balance : %s' % (lno, alias, collateral_exp_balance))
+            if MOVE_1K_COLLATERAL == False:
+                continue
 
         printdbg('\tprocess_chain for')
         check_mpath = process_chain(mnaddr, txid, txidn, alias)
@@ -166,9 +167,9 @@ def parse_masternode_conf(lines, access, signing, tunnel=None):
     print('\n[masternodes config]')
     print('\tconfigured : %s' % i)
     print('\tpassed     : %s' % len(mn_config))
-    if len(errorsnprogress) > 0:
-        signing  = False
-        print('\tdups       : %s' % errorsnprogress)
+    #if len(errorsnprogress) > 0:
+    #    signing  = False
+    #    print('\tdups       : %s' % errorsnprogress)
 
     if 'alias' in errorsnprogress:
         print('\n[duplicated alias]')

@@ -46,7 +46,7 @@ def make_mnb(alias, mnconfig, access, client, tunnel=None):
                       + format_hash(Hash160(bytes.fromhex(mnconfig['masternode_pubkey']))) + str(protocol_version)
 
     try:
-        sig1 = keepkeysign(serialize_for_sig, mnconfig['collateral_spath'], mnconfig['collateral_address'], client)
+        sig1 = hwwallet_signmessage(serialize_for_sig, mnconfig['collateral_spath'], mnconfig['collateral_address'], client, tunnel)
 
     except Exception as e:
         err_msg = e.args

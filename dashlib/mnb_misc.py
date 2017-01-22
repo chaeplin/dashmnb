@@ -53,7 +53,8 @@ def get_caller_name():
 def print_err_exit(caller_name, function_name, err_msg, errargs=None, tunnel=None):
     import signal
 
-    msg  = '\n\n\tcaller   : ' + caller_name + '\n'
+    msg  = '\n\n\tversion  : 0.1a\n'
+    msg += '\tcaller   : ' + caller_name + '\n'
     msg += '\tfunction : ' + function_name + '\n'
     if errargs:
         msg += '\terr      : ' + str(errargs) + '\n'

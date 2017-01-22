@@ -127,15 +127,15 @@ def main(args, tunnel=None):
                 print('\t' + x)
 
     if tunnel:
-        os.kill(tunnel, signal.SIGTERM)
+        print_err_exit(get_caller_name(), get_function_name(), 'end of pg', None, tunnel)
 
 
-def parse_args():
+def parse_args(tunnel=None):
 
     parser = argparse.ArgumentParser()
 
     parser.add_argument(dest ='masternode_to_start',
-                        metavar = 'masternode_alias_to_start',
+                        metavar = 'masternode_alias_to_start/spend',
                         nargs = '*' )
 
     parser.add_argument('-c','--check',
@@ -171,7 +171,7 @@ def parse_args():
 
     if len(sys.argv) < 2:
         parser.print_help()
-        sys.exit(1)
+        print_err_exit(get_caller_name(), get_function_name(), 'print help', None, tunnel)
 
     return parser.parse_args()
 
@@ -190,7 +190,7 @@ if __name__ == "__main__":
             tunnel = start_ssh_tunnel()
             tunnel_pid = tunnel._getpid()
 
-        args = parse_args()
+        args = parse_args(tunnel_pid)
         main(args, tunnel_pid)
 
     except KeyboardInterrupt:

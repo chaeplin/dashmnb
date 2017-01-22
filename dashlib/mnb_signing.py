@@ -4,6 +4,7 @@ sys.path.append( os.path.join( os.path.dirname(__file__), '..', 'dashlib' ) )
 
 from config import *
 from mnb_bip32 import *
+from mnb_misc import *
 
 def serialize_input_str(tx, prevout_n, sequence, scriptSig):
 
@@ -35,14 +36,15 @@ def signmessage(last_ping_serialize_for_sig, address, access, tunnel=None):
         err_msg = 'Please enter the wallet passphrase with walletpassphrase first'
         print_err_exit(get_caller_name(), get_function_name(), err_msg, e.args, tunnel)
 
-def keepkeysign(serialize_for_sig, spath, address, client):
+def hwwallet_signmessage(serialize_for_sig, spath, address, client, tunnel=None):
 
     print('---> check keepkey and press button')
     purpose, coin_type, account, change = chain_path()
 
     sig = client.sign_message(coin_name, [purpose | 0x80000000, coin_type | 0x80000000, account | 0x80000000, change, int(spath)], serialize_for_sig)
     if sig.address != address:
-        sys.exit('**** ----> check key path')
+        err_msg = '**** ----> check key path'
+        print_err_exit(get_caller_name(), get_function_name(), err_msg, None, tunnel)
 
     return sig.signature.hex()
 

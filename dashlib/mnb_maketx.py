@@ -99,7 +99,8 @@ def make_inputs_for_hw_wallet(tx, receiving_address, collateral_spath, client, t
     purpose, coin_type, account, change = chain_path(tunnel)
 
     if collateral_spath == None or receiving_address == None:
-        sys.exit('make_inputs_for_hw_wallet receiving_address / collateral_spath : Should not None')
+        err_msg = 'make_inputs_for_hw_wallet receiving_address / collateral_spath : Should not None'
+        print_err_exit(get_caller_name(), get_function_name(), err_msg, None, tunnel)
 
     # make input
     for x in tx:
@@ -108,7 +109,8 @@ def make_inputs_for_hw_wallet(tx, receiving_address, collateral_spath, client, t
         vout   = x.get('vout', None)
 
         if amount == None or txid == None or vout == None:
-            sys.exit('make_inputs_for_hw_wallet amount / txid / vout : Should not None')
+            err_msg = 'make_inputs_for_hw_wallet amount / txid / vout : Should not None'
+            print_err_exit(get_caller_name(), get_function_name(), err_msg, None, tunnel)
 
         amount_total += amount
         inputs.append( proto_types.TxInputType(address_n=[purpose | 0x80000000, coin_type | 0x80000000, account | 0x80000000, change, int(collateral_spath)],
@@ -142,7 +144,8 @@ def make_txs_for_hwwallet(mnconfig, client, tunnel=None):
     receiving_address = mnconfig.get('receiving_address', None)
 
     if collateral_spath == None or receiving_address == None:
-        sys.exit('make_inputs_for_hw_wallet receiving_address / collateral_spath : Should not None')
+        err_msg = 'make_inputs_for_hw_wallet receiving_address / collateral_spath : Should not None'
+        print_err_exit(get_caller_name(), get_function_name(), err_msg, None, tunnel)
 
     serialized_txs = []
     if txs != None:

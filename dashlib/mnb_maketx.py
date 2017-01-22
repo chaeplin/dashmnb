@@ -31,7 +31,11 @@ def print_balance(mn_config):
 
     print('\n* count / balance of dashd is spendable(over 100 confirmation)')
 
-    return need_wallet_rescan
+    if MOVE_1K_COLLATERAL == True:
+        return False
+    
+    else:
+        return need_wallet_rescan
 
 
 def get_unspent_txs(mnconfig, access, tunnel=None):
@@ -50,8 +54,12 @@ def get_unspent_txs(mnconfig, access, tunnel=None):
 
         balance_mine.append(unspent_amount)
 
-        if (unspent_txidtxidn != collateral_txidtxidn) and (unspent_amount < max_amounts): # and unspent_confirmations > min_conf: # dashd listunspent will not show unmatured coinbase transaction
-            unspent_mine.append(m)    
+        if MOVE_1K_COLLATERAL == True:
+            unspent_mine.append(m)
+
+        elif MOVE_1K_COLLATERAL == False:
+            if (unspent_txidtxidn != collateral_txidtxidn) and (unspent_amount < max_amounts): # and unspent_confirmations > min_conf: # dashd listunspent will not show unmatured coinbase transaction
+                unspent_mine.append(m)    
 
 
     txs = []

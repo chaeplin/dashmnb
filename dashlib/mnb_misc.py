@@ -2,7 +2,6 @@ import sys, os, time
 sys.path.append( os.path.join( os.path.dirname(__file__), '..' ) )
 sys.path.append( os.path.join( os.path.dirname(__file__), '..', 'dashlib' ) )
 
-#from datetime import datetime
 
 def clear_screen():
     os.system('clear')
@@ -10,6 +9,7 @@ def clear_screen():
 def logo_show():
     from pyfiglet import Figlet
     from config import MAINNET
+    from config import MOVE_1K_COLLATERAL
     
     f = Figlet(font='slant')
     #f = Figlet(font='small')
@@ -17,7 +17,15 @@ def logo_show():
     #print('\n\t\t\tdonation : xxxxxxxxxx')
     print('\t\t\tby : chaeplin\n')
     print('Network : ' +  ('MAINNET' if MAINNET else 'TESTNET'))
-    time.sleep(1)
+    if MOVE_1K_COLLATERAL == True:
+        print()
+        print('**** MOVE_1K_COLLATERAL is True *******')
+        print()
+        time.sleep(5)
+
+    else:
+        time.sleep(1)
+
     #clear_screen()
 
 def get_txidtxidn(txid, txidn):

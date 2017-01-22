@@ -197,6 +197,10 @@ def parse_masternode_conf(lines, access, signing, tunnel=None):
             print('\t %s' % x)
 
     print()
-    return mn_config, signing
+    if MOVE_1K_COLLATERAL == True:
+        return mn_config, True
+
+    else:
+        return mn_config, signing
 
 # end

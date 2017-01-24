@@ -27,9 +27,9 @@ def print_balance(mn_config):
         if cnt == 0:
             need_wallet_rescan = True
 
-        print(alias  + '\t' + '{:2d}\t{:12.8f}\t{:12.8f}'.format(cnt, sumofunspent, exp_balance))
+        print(alias  + '\t' + '{:2d}\t{:14.8f}\t{:14.8f}'.format(cnt, sumofunspent, exp_balance))
 
-    print('\n* count / balance of dashd is spendable(over 100 confirmation)')
+    print('\n* count / balance of dashd is spendable\n(over [6 - received, 100 - mnpayment] confirmations)\n')
 
     if MOVE_1K_COLLATERAL == True:
         return False
@@ -42,7 +42,7 @@ def get_unspent_txs(mnconfig, access, tunnel=None):
     collateral_address   = mnconfig.get('collateral_address')
     collateral_txidtxidn = mnconfig.get('collateral_txidtxidn')
 
-    listunspent = get_listunspent(0, 999999999, collateral_address, access, tunnel)
+    listunspent = get_listunspent(6, 999999999, collateral_address, access, tunnel)
 
     unspent_mine = []
     balance_mine = []
@@ -127,6 +127,11 @@ def make_inputs_for_hw_wallet(tx, receiving_address, collateral_spath, client, t
 
     txsizefee = round((len(inputs) * 148 + 33 - 10) / 1000) * min_fee
 
+    # minimal fee if input length is < 4, or fee == 0
+    # if len(inputs) < 4:
+    if txsizefee == 0:
+        txsizefee = min_fee    
+
     # make output based on inputs
     outputs.append( proto_types.TxOutputType(address=receiving_address,
                       amount=int(amount_total * 100000000) - txsizefee,
@@ -139,11 +144,11 @@ def make_inputs_for_hw_wallet(tx, receiving_address, collateral_spath, client, t
     
     try:
         (signatures, serialized_tx) = client.sign_tx(coin_name, inputs, outputs)
+        return serialized_tx.hex()
 
     except KeyboardInterrupt:
         print_err_exit(get_caller_name(), get_function_name(), 'KeyboardInterrupt', None, tunnel)
 
-    return serialized_tx.hex()
 
 def make_txs_for_hwwallet(mnconfig, client, tunnel=None):  
     

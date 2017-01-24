@@ -16,6 +16,17 @@ Run Dash Masternode with Hardware Wallet
     - send collateral + coins(mn payment) in hw wallet
     - ssh tunnel to use remote dashd
 
+###### Q : why Dash-QT or dashd needed ?
+    - instead of block explorer 
+    - to sign mnp icluded in mnb(mnb signed by hw wallet)
+    - to check address, collateral, masternode status
+    - to get unspent tx of collateral using watch only address
+
+
+###### Q : why do -rescan
+    - -rescan means restaring dashd or Dash-QT with -rescan option
+    - while dashmnb do importaddress, dashmnb set rescan 'False' cause rescan usually takes more than 30 secs and rpc timeout occured.
+
 
 ###### help
 ```

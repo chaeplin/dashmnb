@@ -38,7 +38,8 @@ def signmessage(last_ping_serialize_for_sig, address, access, tunnel=None):
 
 def hwwallet_signmessage(serialize_for_sig, spath, address, client, tunnel=None):
 
-    print('---> check keepkey and press button')
+    print_hw_wallet_check()
+    
     purpose, coin_type, account, change = chain_path()
 
     sig = client.sign_message(coin_name, [purpose | 0x80000000, coin_type | 0x80000000, account | 0x80000000, change, int(spath)], serialize_for_sig)

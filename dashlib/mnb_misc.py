@@ -82,4 +82,10 @@ def printdbg(str):
     if os.environ.get('DASHMNB_DEBUG', None):
         print(logstr)
 
+def print_hw_wallet_check():
+    print('---> check hw wallet, check message on screen and press button')
+    print('\tif PIN protected, wallet ask your PIN(once per session)')
+    print('\tif Passphrase protected, wallet ask your Passphrase(once per session)')
+    print('\tcheck message on screen and press button on hw wallet to proceed(all signing)\n')
+
 # end

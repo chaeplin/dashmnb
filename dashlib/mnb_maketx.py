@@ -141,7 +141,9 @@ def make_inputs_for_hw_wallet(tx, receiving_address, collateral_spath, client, t
 
     feetohuman = round(Decimal(txsizefee / 1e8), 4)
     print('\tsend %s, %s txs to %s with fee of %s : total amount : %s\n' % (amount_total - feetohuman, len(tx), receiving_address, feetohuman, amount_total))
-    
+
+    print_hw_wallet_check()
+            
     try:
         (signatures, serialized_tx) = client.sign_tx(coin_name, inputs, outputs)
         return serialized_tx.hex()
@@ -163,7 +165,7 @@ def make_txs_for_hwwallet(mnconfig, client, tunnel=None):
     serialized_txs = []
     if txs != None:
         for tx in txs:
-            if (len(tx)) > min_unspent or MOVE_1K_COLLATERAL == True:
+            if (len(tx)) >= min_unspent or MOVE_1K_COLLATERAL == True:
                 serialized_tx = make_inputs_for_hw_wallet(tx, receiving_address, collateral_spath, client, tunnel)
                 serialized_txs.append(serialized_tx)
 

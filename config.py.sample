@@ -19,7 +19,8 @@ SSH_SERVER       = '121.121.121.121'
 SSH_LOCAL_PORT   = '29998'
 
 # HW WALLET TYPE
-TYPE_HW_WALLET = 'keepkey'           # keepkey, trezor(not yet) 
+TYPE_HW_WALLET = 'Trezor'          # Keepkey [ keepkey ], Trezor [ trezor ]
+
 #
 # tDash :  44'/165'/xxx'/0
 # Dash  :  44'/5'/xxx'/0
@@ -69,4 +70,8 @@ else:
 
 #
 errorsnprogress = []
+
+# caution this config move 1K collateral to configured address
+MOVE_1K_COLLATERAL = False
+
 # end of config.py

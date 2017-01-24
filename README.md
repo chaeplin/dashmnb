@@ -9,32 +9,34 @@ Run Dash Masternode with Hardware Wallet
 
 
 ```
-$ python dashmnb.py
+(venv3)  > $ python dashmnb.py 
 usage: dashmnb.py [-h] [-c] [-s] [-a] [-b] [-m] [-x]
-                  [masternode_alias [masternode_alias ...]]
+                  [masternode_alias_to_start/spend [masternode_alias_to_start/spend ...]]
 
 positional arguments:
-  masternode_alias
+  masternode_alias_to_start/spend
 
 optional arguments:
-  -h, --help        show this help message and exit
-  -c, --check       check masternode config
-  -s, --status      show masternode status
-  -a, --anounce     anounce missing masternodes
-  -b, --balance     show masternodes balance
-  -m, --maketx      make signed raw tx
-  -x, --xfer        broadcast signed raw tx
+  -h, --help            show this help message and exit
+  -c, --check           check masternode config
+  -s, --status          show masternode status
+  -a, --anounce         anounce missing masternodes
+  -b, --balance         show masternodes balance
+  -m, --maketx          make signed raw tx
+  -x, --xfer            broadcast signed raw tx
+
+
+  version  : 0.1a
+  caller   : <module>
+  function : parse_args
+  ===> print help
 ```
 
-```
-    start mn3 and mn4(sorted), then show balance
-     python dashmnb.py -b mn4 mn3
 
 ```
+show masternode status and balance
 
-```
-
-$ python dashmnb.py -s
+(venv3)  > $ python dashmnb.py  -b
     ____             __  
    / __ \____ ______/ /_ 
   / / / / __ `/ ___/ __ \
@@ -57,8 +59,13 @@ $ python dashmnb.py -s
       by : chaeplin
 
 Network : TESTNET
+===> No HW Wallet found
 ---> checking dashd syncing status 
----> checking masternode config
+---> checking masternode config ....
+  masternode : mn5
+  masternode : mn6
+  masternode : mn7
+  masternode : mn8
 
 [masternodes config]
   configured : 4
@@ -67,16 +74,35 @@ Network : TESTNET
 
 [masternodes status]
 alias ip (m: ip/port match) collateral address       status
-mn1 167.12.133.185:19999:-  yWZJ6fUGrFX4S1ubDgqW7ZCcLBCt89BLt1 -------
-mn2 123.123.103.78:19999:-  yZvTMpTyNEpXxkh52ksg7trfQfoweuTsHe -------
-mn3 123.123.97.225:19999:-  yM56Ai6pHh7NzsYF5SLGMHq25Hd4noHoo6 -------
-mn4 167.12.138.230:19999:-  yfaCDjViCUsZNsPdmKDchBTS38bYNizvAa -------
+mn5 123.123.123.185:19999:m  yUduzrCkiLRYeN2dXenW5vT79D73A7GZw8 ENABLED
+mn6 123.123.124.178:19999:m  yUKUDGVc2AzHeZZLGfCz7c313AZMZoBn1k ENABLED
+mn7 123.123.125.225:19999:m  yRzYTUdLCAWVfvZ9WhJi5CrxcsU68DVox2 ENABLED
+mn8 123.123.128.230:19999:m  ybv3cX4Gmn1ZK2ZgFgu51NADe3MXrtT7qP ENABLED
+
+[masternodes balance]
+alias cnt balance(dashd)  balance(explorer)
+mn5  1   1000.00000000   1011.25000000
+mn6  1   1000.00000000   1011.25000000
+mn7  1   1000.00000000   1011.25000000
+mn8  1   1000.00000000   1011.25000000
+
+* count / balance of dashd is spendable
+(over [6 - received, 100 - mnpayment] confirmations)
+
+
+
+  version  : 0.1a
+  caller   : <module>
+  function : main
+  ===> need HW wallet to spend
 
 ```
 
 
 ```
-$ python dashmnb.py -a
+re anounnunce mn 7 (now hardware wallet)
+
+(venv3)  > $ python dashmnb.py  -a mn7
     ____             __  
    / __ \____ ______/ /_ 
   / / / / __ `/ ___/ __ \
@@ -99,8 +125,13 @@ $ python dashmnb.py -a
       by : chaeplin
 
 Network : TESTNET
+===> No HW Wallet found
 ---> checking dashd syncing status 
----> checking masternode config
+---> checking masternode config ....
+  masternode : mn5
+  masternode : mn6
+  masternode : mn7
+  masternode : mn8
 
 [masternodes config]
   configured : 4
@@ -109,144 +140,138 @@ Network : TESTNET
 
 [masternodes status]
 alias ip (m: ip/port match) collateral address       status
-mn1 167.12.133.185:19999:-  yWZJ6fUGrFX4S1ubDgqW7ZCcLBCt89BLt1 -------
-mn2 123.123.103.78:19999:-  yZvTMpTyNEpXxkh52ksg7trfQfoweuTsHe -------
-mn3 123.123.97.225:19999:-  yM56Ai6pHh7NzsYF5SLGMHq25Hd4noHoo6 -------
-mn4 167.12.138.230:19999:-  yfaCDjViCUsZNsPdmKDchBTS38bYNizvAa -------
+mn5 123.123.123.185:19999:m  yUduzrCkiLRYeN2dXenW5vT79D73A7GZw8 ENABLED
+mn6 123.123.124.178:19999:m  yUKUDGVc2AzHeZZLGfCz7c313AZMZoBn1k ENABLED
+mn7 123.123.125.225:19999:m  yRzYTUdLCAWVfvZ9WhJi5CrxcsU68DVox2 ENABLED
+mn8 123.123.128.230:19999:m  ybv3cX4Gmn1ZK2ZgFgu51NADe3MXrtT7qP ENABLED
+
+
+
+  version  : 0.1a
+  caller   : <module>
+  function : main
+  ===> need HW wallet to anounce
+
+```
+
+```
+re anounnunce mn 7
+
+(venv3)  > $ python dashmnb.py  -a mn7
+    ____             __  
+   / __ \____ ______/ /_ 
+  / / / / __ `/ ___/ __ \
+ / /_/ / /_/ (__  ) / / /
+/_____/\__,_/____/_/ /_/ 
+                         
+    __  ___           __                            __   
+   /  |/  /___ ______/ /____  _________  ____  ____/ /__ 
+  / /|_/ / __ `/ ___/ __/ _ \/ ___/ __ \/ __ \/ __  / _ \
+ / /  / / /_/ (__  ) /_/  __/ /  / / / / /_/ / /_/ /  __/
+/_/  /_/\__,_/____/\__/\___/_/  /_/ /_/\____/\__,_/\___/ 
+                                                         
+           _ __  __       __  ___       __   _       __      ____     __ 
+ _      __(_) /_/ /_     / / / / |     / /  | |     / /___ _/ / /__  / /_
+| | /| / / / __/ __ \   / /_/ /| | /| / /   | | /| / / __ `/ / / _ \/ __/
+| |/ |/ / / /_/ / / /  / __  / | |/ |/ /    | |/ |/ / /_/ / / /  __/ /_  
+|__/|__/_/\__/_/ /_/  /_/ /_/  |__/|__/     |__/|__/\__,_/_/_/\___/\__/  
+                                                                         
+
+      by : chaeplin
+
+Network : TESTNET
+===> trezor HW Wallet found
+---> checking dashd syncing status 
+---> checking masternode config ....
+  masternode : mn5
+  masternode : mn6
+  masternode : mn7
+  masternode : mn8
+
+[masternodes config]
+  configured : 4
+  passed     : 4
+
+
+[masternodes status]
+alias ip (m: ip/port match) collateral address       status
+mn5 123.123.123.185:19999:m  yUduzrCkiLRYeN2dXenW5vT79D73A7GZw8 ENABLED
+mn6 123.123.124.178:19999:m  yUKUDGVc2AzHeZZLGfCz7c313AZMZoBn1k ENABLED
+mn7 123.123.125.225:19999:m  yRzYTUdLCAWVfvZ9WhJi5CrxcsU68DVox2 ENABLED
+mn8 123.123.128.230:19999:m  ybv3cX4Gmn1ZK2ZgFgu51NADe3MXrtT7qP ENABLED
 
 
 [making mnbs and relay]
----> making mnb for mn1
+---> making mnb for mn7
 ---> check keepkey and press button
+Use the numeric keypad to describe number positions. The layout is:
+    7 8 9
+    4 5 6
+    1 2 3
+Please enter current PIN: 
+
 Passphrase required: 
 
 Confirm your Passphrase: 
 
----> mnb hex for mn1 : 18735b18d410dea62eba1dc3e36fd27a5a543962cc1177ba0da7decd53c4d18a0000000000ffffffff00000000000000000000ffff965f85b94e1f2103e0fe533b6003a64528c5ed548a516f61e0099fb6eb9011daa79254eb2d9f902d41046e5dac3d27c86b2afd98850755a74298547da52efd7e6c8c0854999fe9f09043c0942a7d9b0f6fd0a6091a2f5d4aef1e24892e88e6acc61a3ba0181970fd5c1e4120ea7ef82c8ea8bbca154c0e01729f529c1cc4cf49d0d4bf395f349c40dd46754005e5022607eaeb9064d1be4c397b1b9d46c36b57c8f8bf10325e9df091a3d507ce257d58000000003c12010018735b18d410dea62eba1dc3e36fd27a5a543962cc1177ba0da7decd53c4d18a0000000000ffffffffdf0369aac1cea74ef617e3ea73a1ff79c8f1f020a584e7b3e3567bd460000000ce257d5800000000411c7b69e9278a64f91db00ef1e7e8bbc146491fbe99adfba840e1eafc0ad6cfcd3305f376f050d9002a4cf804378317da68b49faf8c7046d8ef0c9549da1084fa68
-
----> making mnb for mn2
----> check keepkey and press button
----> mnb hex for mn2 : 1a3b8717ee81e8c32d44e7f958701c751a79e3490bb60f5182f9ef5272fa70a50000000000ffffffff00000000000000000000ffff8582674e4e1f2102e215bd16259ca594156053ca0d936278b7a53408aaddec14dc5ab4c3ffebc2c541041477bf3f056c4620de103174ba4b3eaf1600e0d7f9b1dde9a270eb370ffc2e27ef642bf961f96bd289fad25aa57fc757c9a234a986ece3bb330d8f4d999f6771411f9dff148708ca9a79d02f94a290bcd85f650f70f56a03fedd64939778d75aebde23f35600da0020d343f34f0a50e4f2a960fafeed49a9b025570ee8c29d47e30edd257d58000000003c1201001a3b8717ee81e8c32d44e7f958701c751a79e3490bb60f5182f9ef5272fa70a50000000000ffffffffdf0369aac1cea74ef617e3ea73a1ff79c8f1f020a584e7b3e3567bd460000000dd257d5800000000411cf4c6d26518ed64877ef1e08e05c92ee1af7afb0d1436017c1e215129f9c5b4d44527d8396e929c8444301edc7c08d25fc615f9e3ffb48aebeb7a3daaec3b57e7
-
----> making mnb for mn3
----> check keepkey and press button
----> mnb hex for mn3 : d52420a97b19871379b5657ed9ccbb879d55d73c3e5ad347fa5c70e2efc834cd0100000000ffffffff00000000000000000000ffff858261e14e1f2103873f3508a52cecf642809a31f5bed08f6271041e5d0f4ff9666ccf95fdacbcaa4104a3f5440a94533269141ae0848fe01dfa895631ff28df1e4682b32953c4b5595f54f0cc521c677e560ae8ce3aa4724c14efe932e9cb48437137930e4af55e973341202b4d2025af91becd6c40bac391025894d0eb73f1a0662860bf60a4093623699b201c834b3ec945be5027bef0736e2e35b802d304be8d533408a2a1b02b1e7ae7e2257d58000000003c120100d52420a97b19871379b5657ed9ccbb879d55d73c3e5ad347fa5c70e2efc834cd0100000000ffffffffdf0369aac1cea74ef617e3ea73a1ff79c8f1f020a584e7b3e3567bd460000000e2257d5800000000411b35bd1ecf9d80a86b7d769ad72bd10f63b6ecbed25ff8e1fe4f18a072173bdfde61fc7f014af42f60041b1645df80fbfa43c0593efbb0b7f807ed8c1a9f2787a4
-
----> making mnb for mn4
----> check keepkey and press button
----> mnb hex for mn4 : f8d181c08eaff42b0af1c797273e3faefd9cb156710341ed51ced9260e493cd40100000000ffffffff00000000000000000000ffff965f8ae64e1f2103fbc9d592c66b2489074e4c798a12a1c470afc5647767a4931add0f36ed7ece3941042bad256d62548585b97165efca20a15390dda25e5a63e9e8f2658936ffcd394f68899201125522ca06f123b930e58e7da5a6343b44c53611395dafb39dd070324120251d73e3ffe59d72eb9b88c15e8ad408e4c5a086004ae8457c62743effefa0f60fbb448a54951187437f465a18a7c7cd989f5dea80a2fe26ca807f1cf88528a1e5257d58000000003c120100f8d181c08eaff42b0af1c797273e3faefd9cb156710341ed51ced9260e493cd40100000000ffffffffdf0369aac1cea74ef617e3ea73a1ff79c8f1f020a584e7b3e3567bd460000000e5257d5800000000411c645391bde25abf804cf86b3bd117f8cd30a8aad3856a96236749be04a321a5883b6718507f09e09d06450d4952ad25e148337b9d80c869d4268775d9e0a475f3
+---> mnb hex for mn7 : b1a6b9f80be726455f29353fd295f78a7d21878db5f48a087d2f935f5e6e95380000000000ffffffff00000000000000000000ffff858261e14e1f210294ac0a0e95e61a6cab53bedcdda4a26543a7ba199a393ef8f660aa923b1dc59441041708bfbf96c2d35a48a1db88add3bdaaa8c222b0ebdaff77ed822c5c56222c47324c965afffa0e0891e9476854cae531e4447ae973941bef53bcf147b0fc29c5412017f08f7911c24c501c51bcbb43c3eff65b0168f123ad45fdd37c2465c33ad29a1dd9fb33bc3b4db7c7b5a56a7f36cf3e39dc9f776b0fe76c196af99443ec7077c6758758000000003c120100b1a6b9f80be726455f29353fd295f78a7d21878db5f48a087d2f935f5e6e95380000000000ffffffff83003c0a9eeeea274efc4ab2366a4ea17da17b2db87bbe4d39accb170a000000c675875800000000411cfcf2572cf1a5128be955ff005f2e5772cb23e3d52e45ba5620b4a2df1599f8a67a80b3f3fdf8116f4e228920665fb5bddc4e30121ec7bba209001e126d72c300
 
 
 ---> verify(decoding mnb)
-  ---> total   : 4
-  ---> success : 4
+  ---> total   : 1
+  ---> success : 1
   ---> failed  : 0
 
 {
-    "32919a98950dec41a3d75dc3790063fb009a514fbc1fb2cf9402aab86fd1b0b3": {
-        "addr": "167.12.138.230:19999",
+    "0ee9155594b786f8367410af021406fc3aa030950ea750410f8396ce4dd315cd": {
+        "addr": "123.123.125.225:19999",
         "lastPing": {
-            "blockHash": "00000060d47b56e3b3e784a520f0f1c879ffa173eae317f64ea7cec1aa6903df",
-            "sigTime": 1484596709,
-            "vchSig": "HGRTkb3iWr+ATPhrO9EX+M0wqKrThWqWI2dJvgSjIaWIO2cYUH8J4J0GRQ1JUq0l4Ugze52AyGnUJod12eCkdfM=",
-            "vin": "CTxIn(COutPoint(d43c490e26d9ce51ed41037156b19cfdae3f3e2797c7f10a2bf4af8ec081d1f8, 1), scriptSig=)"
+            "blockHash": "0000000a17cbac394dbe7bb82d7ba17da14e6a36b24afc4e27eaee9e0a3c0083",
+            "sigTime": 1485272518,
+            "vchSig": "HPzyVyzxpRKL6VX/AF8uV3LLI+PVLkW6ViC0ot8VmfimeoCz8/34EW9OIokgZl+1vdxOMBIex7uiCQAeEm1ywwA=",
+            "vin": "CTxIn(COutPoint(38956e5e5f932f7d088af4b58d87217d8af795d23f35295f4526e70bf8b9a6b1, 0), scriptSig=)"
         },
         "nLastDsq": 0,
         "protocolVersion": 70204,
-        "pubKeyCollateralAddress": "yfaCDjViCUsZNsPdmKDchBTS38bYNizvAa",
-        "pubKeyMasternode": "ybpS2bbyKbnQHwJkuQC8TMJUkhNNqqtXMr",
-        "sigTime": 1484596709,
-        "vchSig": "ICUdc+P/5Z1y65uIwV6K1AjkxaCGAEroRXxidD7/76D2D7tEilSVEYdDf0ZaGKfHzZifXeqAov4myoB/HPiFKKE=",
-        "vin": "CTxIn(COutPoint(d43c490e26d9ce51ed41037156b19cfdae3f3e2797c7f10a2bf4af8ec081d1f8, 1), scriptSig=)"
+        "pubKeyCollateralAddress": "yRzYTUdLCAWVfvZ9WhJi5CrxcsU68DVox2",
+        "pubKeyMasternode": "yi3JF94TwqfqWiNhUEMvQ2iot1W9o3Jj8o",
+        "sigTime": 1485272518,
+        "vchSig": "IBfwj3kRwkxQHFG8u0PD7/ZbAWjxI61F/dN8JGXDOtKaHdn7M7w7TbfHtaVqfzbPPjncn3drD+dsGWr5lEPscHc=",
+        "vin": "CTxIn(COutPoint(38956e5e5f932f7d088af4b58d87217d8af795d23f35295f4526e70bf8b9a6b1, 0), scriptSig=)"
     },
-    "35c68ff77763b8cacac09c7dba3d603dc8af9779fe72a11f4fe3443d405e3c18": {
-        "addr": "123.123.103.78:19999",
-        "lastPing": {
-            "blockHash": "00000060d47b56e3b3e784a520f0f1c879ffa173eae317f64ea7cec1aa6903df",
-            "sigTime": 1484596701,
-            "vchSig": "HPTG0mUY7WSHfvHgjgXJLuGvevsNFDYBfB4hUSn5xbTURSfYOW6SnIREMB7cfAjSX8YV+eP/tIrr63o9quw7V+c=",
-            "vin": "CTxIn(COutPoint(a570fa7252eff982510fb60b49e3791a751c7058f9e7442dc3e881ee17873b1a, 0), scriptSig=)"
-        },
-        "nLastDsq": 0,
-        "protocolVersion": 70204,
-        "pubKeyCollateralAddress": "yZvTMpTyNEpXxkh52ksg7trfQfoweuTsHe",
-        "pubKeyMasternode": "yccPZy54vMrCpKfHf7BD9q4DtPdQekPY97",
-        "sigTime": 1484596701,
-        "vchSig": "H53/FIcIypp50C+UopC82F9lD3D1agP+3WSTl3jXWuveI/NWANoAINND808KUOTyqWD6/u1JqbAlVw7owp1H4w4=",
-        "vin": "CTxIn(COutPoint(a570fa7252eff982510fb60b49e3791a751c7058f9e7442dc3e881ee17873b1a, 0), scriptSig=)"
-    },
-    "886c905afcb3b8878d79112e3717da16a51760b4e8b233239ca5323803ddb836": {
-        "addr": "123.123.97.225:19999",
-        "lastPing": {
-            "blockHash": "00000060d47b56e3b3e784a520f0f1c879ffa173eae317f64ea7cec1aa6903df",
-            "sigTime": 1484596706,
-            "vchSig": "GzW9Hs+dgKhrfXaa1yvRD2O27L7SX/jh/k8YoHIXO9/eYfx/AUr0L2AEGxZF34D7+kPAWT77sLf4B+2MGp8nh6Q=",
-            "vin": "CTxIn(COutPoint(cd34c8efe2705cfa47d35a3e3cd7559d87bbccd97e65b5791387197ba92024d5, 1), scriptSig=)"
-        },
-        "nLastDsq": 0,
-        "protocolVersion": 70204,
-        "pubKeyCollateralAddress": "yM56Ai6pHh7NzsYF5SLGMHq25Hd4noHoo6",
-        "pubKeyMasternode": "yiko1kF1HzvDsyNwkcUjE7iJgUvPqwqp8e",
-        "sigTime": 1484596706,
-        "vchSig": "ICtNICWvkb7NbEC6w5ECWJTQ63PxoGYoYL9gpAk2I2mbIByDSz7JRb5QJ77wc24uNbgC0wS+jVM0CKKhsCseeuc=",
-        "vin": "CTxIn(COutPoint(cd34c8efe2705cfa47d35a3e3cd7559d87bbccd97e65b5791387197ba92024d5, 1), scriptSig=)"
-    },
-    "9a5dcc9e692e3a0d737707ccf1de8cc3c4022bc12b600f393838f24506299d9c": {
-        "addr": "167.12.133.185:19999",
-        "lastPing": {
-            "blockHash": "00000060d47b56e3b3e784a520f0f1c879ffa173eae317f64ea7cec1aa6903df",
-            "sigTime": 1484596686,
-            "vchSig": "HHtp6SeKZPkdsA7x5+i7wUZJH76ZrfuoQOHq/ArWz80zBfN28FDZACpM+AQ3gxfaaLSfr4xwRtjvDJVJ2hCE+mg=",
-            "vin": "CTxIn(COutPoint(8ad1c453cddea70dba7711cc6239545a7ad26fe3c31dba2ea6de10d4185b7318, 0), scriptSig=)"
-        },
-        "nLastDsq": 0,
-        "protocolVersion": 70204,
-        "pubKeyCollateralAddress": "yWZJ6fUGrFX4S1ubDgqW7ZCcLBCt89BLt1",
-        "pubKeyMasternode": "yfUmjuXkFDCy7a3Gs5CFQqp8f3eFzbAMXK",
-        "sigTime": 1484596686,
-        "vchSig": "IOp++CyOqLvKFUwOAXKfUpwcxM9J0NS/OV80nEDdRnVABeUCJgfq65Bk0b5MOXsbnUbDa1fI+L8QMl6d8JGj1Qc=",
-        "vin": "CTxIn(COutPoint(8ad1c453cddea70dba7711cc6239545a7ad26fe3c31dba2ea6de10d4185b7318, 0), scriptSig=)"
-    },
-    "overall": "Successfully decoded broadcast messages for 4 masternodes, failed to decode 0, total 4"
+    "overall": "Successfully decoded broadcast messages for 1 masternodes, failed to decode 0, total 1"
 }
 
 Relay broadcast messages ? [ Yes / (any key to no) ] + enter : Yes
 Yes, will relay
 
 ---> relay(announcing mnb)
-  ---> total   : 4
-  ---> success : 4
+  ---> total   : 1
+  ---> success : 1
   ---> failed  : 0
 
 {
-    "overall": "Successfully relayed broadcast messages for 4 masternodes, failed to relay 0, total 4",
-    "35c68ff77763b8cacac09c7dba3d603dc8af9779fe72a11f4fe3443d405e3c18": {
-        "35c68ff77763b8cacac09c7dba3d603dc8af9779fe72a11f4fe3443d405e3c18": "successful",
-        "addr": "123.123.103.78:19999",
-        "vin": "CTxIn(COutPoint(a570fa7252eff982510fb60b49e3791a751c7058f9e7442dc3e881ee17873b1a, 0), scriptSig=)"
+    "0ee9155594b786f8367410af021406fc3aa030950ea750410f8396ce4dd315cd": {
+        "0ee9155594b786f8367410af021406fc3aa030950ea750410f8396ce4dd315cd": "successful",
+        "addr": "123.123.125.225:19999",
+        "vin": "CTxIn(COutPoint(38956e5e5f932f7d088af4b58d87217d8af795d23f35295f4526e70bf8b9a6b1, 0), scriptSig=)"
     },
-    "9a5dcc9e692e3a0d737707ccf1de8cc3c4022bc12b600f393838f24506299d9c": {
-        "9a5dcc9e692e3a0d737707ccf1de8cc3c4022bc12b600f393838f24506299d9c": "successful",
-        "addr": "167.12.133.185:19999",
-        "vin": "CTxIn(COutPoint(8ad1c453cddea70dba7711cc6239545a7ad26fe3c31dba2ea6de10d4185b7318, 0), scriptSig=)"
-    },
-    "32919a98950dec41a3d75dc3790063fb009a514fbc1fb2cf9402aab86fd1b0b3": {
-        "addr": "167.12.138.230:19999",
-        "vin": "CTxIn(COutPoint(d43c490e26d9ce51ed41037156b19cfdae3f3e2797c7f10a2bf4af8ec081d1f8, 1), scriptSig=)",
-        "32919a98950dec41a3d75dc3790063fb009a514fbc1fb2cf9402aab86fd1b0b3": "successful"
-    },
-    "886c905afcb3b8878d79112e3717da16a51760b4e8b233239ca5323803ddb836": {
-        "addr": "123.123.97.225:19999",
-        "vin": "CTxIn(COutPoint(cd34c8efe2705cfa47d35a3e3cd7559d87bbccd97e65b5791387197ba92024d5, 1), scriptSig=)",
-        "886c905afcb3b8878d79112e3717da16a51760b4e8b233239ca5323803ddb836": "successful"
-    }
+    "overall": "Successfully relayed broadcast messages for 1 masternodes, failed to relay 0, total 1"
 }
 
-```
+
+  version  : 0.1a
+  caller   : <module>
+  function : main
+  ===> end of pg
 
 ```
 
-$ python dashmnb.py -b
+
+```
+status
+
+(venv3)  > $ python dashmnb.py  -s
     ____             __  
    / __ \____ ______/ /_ 
   / / / / __ `/ ___/ __ \
@@ -269,8 +294,13 @@ $ python dashmnb.py -b
       by : chaeplin
 
 Network : TESTNET
+===> trezor HW Wallet found
 ---> checking dashd syncing status 
----> checking masternode config
+---> checking masternode config ....
+  masternode : mn5
+  masternode : mn6
+  masternode : mn7
+  masternode : mn8
 
 [masternodes config]
   configured : 4
@@ -279,19 +309,82 @@ Network : TESTNET
 
 [masternodes status]
 alias ip (m: ip/port match) collateral address       status
-mn1 167.12.133.185:19999:m  yWZJ6fUGrFX4S1ubDgqW7ZCcLBCt89BLt1 PRE_ENABLED
-mn2 123.123.103.78:19999:m  yZvTMpTyNEpXxkh52ksg7trfQfoweuTsHe PRE_ENABLED
-mn3 123.123.97.225:19999:m  yM56Ai6pHh7NzsYF5SLGMHq25Hd4noHoo6 PRE_ENABLED
-mn4 167.12.138.230:19999:m  yfaCDjViCUsZNsPdmKDchBTS38bYNizvAa PRE_ENABLED
+mn5 123.123.123.185:19999:m  yUduzrCkiLRYeN2dXenW5vT79D73A7GZw8 ENABLED
+mn6 123.123.124.178:19999:m  yUKUDGVc2AzHeZZLGfCz7c313AZMZoBn1k ENABLED
+mn7 123.123.125.225:19999:m  yRzYTUdLCAWVfvZ9WhJi5CrxcsU68DVox2 PRE_ENABLED
+mn8 123.123.128.230:19999:m  ybv3cX4Gmn1ZK2ZgFgu51NADe3MXrtT7qP ENABLED
+
+
+
+  version  : 0.1a
+  caller   : <module>
+  function : main
+  ===> end of pg
+
+  ````
+
+  ```
+(venv3)  > $ python dashmnb.py  -b
+    ____             __  
+   / __ \____ ______/ /_ 
+  / / / / __ `/ ___/ __ \
+ / /_/ / /_/ (__  ) / / /
+/_____/\__,_/____/_/ /_/ 
+                         
+    __  ___           __                            __   
+   /  |/  /___ ______/ /____  _________  ____  ____/ /__ 
+  / /|_/ / __ `/ ___/ __/ _ \/ ___/ __ \/ __ \/ __  / _ \
+ / /  / / /_/ (__  ) /_/  __/ /  / / / / /_/ / /_/ /  __/
+/_/  /_/\__,_/____/\__/\___/_/  /_/ /_/\____/\__,_/\___/ 
+                                                         
+           _ __  __       __  ___       __   _       __      ____     __ 
+ _      __(_) /_/ /_     / / / / |     / /  | |     / /___ _/ / /__  / /_
+| | /| / / / __/ __ \   / /_/ /| | /| / /   | | /| / / __ `/ / / _ \/ __/
+| |/ |/ / / /_/ / / /  / __  / | |/ |/ /    | |/ |/ / /_/ / / /  __/ /_  
+|__/|__/_/\__/_/ /_/  /_/ /_/  |__/|__/     |__/|__/\__,_/_/_/\___/\__/  
+                                                                         
+
+      by : chaeplin
+
+Network : TESTNET
+===> trezor HW Wallet found
+---> checking dashd syncing status 
+---> checking masternode config ....
+  masternode : mn5
+  masternode : mn6
+  masternode : mn7
+  masternode : mn8
+
+[masternodes config]
+  configured : 4
+  passed     : 4
+
+
+[masternodes status]
+alias ip (m: ip/port match) collateral address       status
+mn5 123.123.123.185:19999:m  yUduzrCkiLRYeN2dXenW5vT79D73A7GZw8 ENABLED
+mn6 123.123.124.178:19999:m  yUKUDGVc2AzHeZZLGfCz7c313AZMZoBn1k ENABLED
+mn7 123.123.125.225:19999:m  yRzYTUdLCAWVfvZ9WhJi5CrxcsU68DVox2 PRE_ENABLED
+mn8 123.123.128.230:19999:m  ybv3cX4Gmn1ZK2ZgFgu51NADe3MXrtT7qP ENABLED
 
 [masternodes balance]
-alias cnt balance
-mn1 0 1000
-mn2 0 1000
-mn3 0 1000
-mn4 0 1000
+alias cnt balance(dashd)  balance(explorer)
+mn5  1   1000.00000000   1011.25000000
+mn6  1   1000.00000000   1011.25000000
+mn7  1   1000.00000000   1011.25000000
+mn8  1   1000.00000000   1011.25000000
 
+* count / balance of dashd is spendable
+(over [6 - received, 100 - mnpayment] confirmations)
+
+
+
+  version  : 0.1a
+  caller   : <module>
+  function : main
+  ===> end of pg
 ```
+
 
 #### requirement
 - Dash-QT or dashd

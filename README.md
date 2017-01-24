@@ -4,8 +4,8 @@ Run Dash Masternode with Hardware Wallet
 #### TESTNET ONLY ####
 
 ###### Q : why firmware update ?
-    - To support Dash testnet, both trezor and keepkey has only Mainnet.
-    - With Mainnet, no need to update firmware. Use official firmware.
+    - to support Dash testnet, both trezor and keepkey has only Mainnet.
+    - with Mainnet, no need to update firmware. Use official firmware.
 
 
 ###### Q : what can dashmnb do
@@ -18,14 +18,16 @@ Run Dash Masternode with Hardware Wallet
 
 ###### Q : why Dash-QT or dashd needed ?
     - instead of block explorer 
-    - to sign mnp icluded in mnb(mnb signed by hw wallet)
+    - to sign mnp included in mnb(mnb signed by hw wallet)
     - to check address, collateral, masternode status
     - to get unspent tx of collateral using watch only address
+    - to relay mnb and txs
 
 
 ###### Q : why do -rescan
     - -rescan means restaring dashd or Dash-QT with -rescan option
     - while dashmnb do importaddress, dashmnb set rescan 'False' cause rescan usually takes more than 30 secs and rpc timeout occured.
+    - after initial checking of masternode config, dashmnb will ask you to do rescan
 
 
 ###### help

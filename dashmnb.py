@@ -171,6 +171,12 @@ def parse_args(tunnel=None):
 
 
     if len(sys.argv) < 2:
+        if MOVE_1K_COLLATERAL == True:
+            print()
+            print('**** MOVE_1K_COLLATERAL is True *******')
+            print()
+            time.sleep(5)
+
         parser.print_help()
         print_err_exit(get_caller_name(), get_function_name(), 'print help', None, tunnel)
 

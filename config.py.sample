@@ -71,7 +71,7 @@ else:
 #
 errorsnprogress = []
 
-# caution this config move 1K collateral to configured address
+# caution this config move 1K collateral to configured address with fee 0.0001
 MOVE_1K_COLLATERAL = False
 
 # end of config.py

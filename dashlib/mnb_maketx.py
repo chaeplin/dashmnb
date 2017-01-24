@@ -27,7 +27,7 @@ def print_balance(mn_config):
         if cnt == 0:
             need_wallet_rescan = True
 
-        print(alias  + '\t' + '{:2d}\t{:14.8f}\t{:14.8f}'.format(cnt, sumofunspent, exp_balance))
+        print(alias  + '\t' + '{:2d}\t{:13.8f}\t{:13.8f}'.format(cnt, sumofunspent, exp_balance))
 
     print('\n* count / balance of dashd is spendable\n(over [6 - received, 100 - mnpayment] confirmations)\n')
 

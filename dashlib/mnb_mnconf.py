@@ -111,15 +111,15 @@ def parse_masternode_conf(lines, access, signing, tunnel=None):
         masternode_address = pubkey_to_address(masternode_pubkey)
 
         if (validateaddress(mnaddr, access, False, tunnel) == None):
-            err_msg = 'collateral_address error'
+            err_msg = 'collateral_address error : ' +  alias
             print_err_exit(get_caller_name(), get_function_name(), err_msg, None, tunnel)
 
         if (validateaddress(masternode_address, access, False, tunnel) == None): 
-            err_msg = 'masternode_address error'
+            err_msg = 'masternode_address error : ' +  alias
             print_err_exit(get_caller_name(), get_function_name(), err_msg, None, tunnel)
 
         if (validateaddress(raddr, access, False, tunnel) == None): 
-            err_msg = 'receiving_address error'
+            err_msg = 'receiving_address error : ' +  alias
             print_err_exit(get_caller_name(), get_function_name(), err_msg, None, tunnel)
 
         # import mnprivkey_wif

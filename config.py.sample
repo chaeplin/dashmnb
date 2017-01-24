@@ -64,7 +64,7 @@ else:
     max_unspent = 50
     min_unspent = 3
 
-    default_receiving_address = 'yUGY5tjeu51tLkZFRVdut2kJVVBA2ZEL3Z' # default address to send coins in hw wallet 
+    default_receiving_address = '' # default address to send coins in hw wallet 
                                                                      # if reveiving_address in masternode.conf is blank
                                                                      # this is not chaing payment address of mn
 

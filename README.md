@@ -14,6 +14,7 @@ Run Dash Masternode with Hardware Wallet
     - show masternode status
     - send coins(mn payment) in hw wallet
     - send collateral + coins(mn payment) in hw wallet
+    - ssh tunnel to use remote dashd
 
 
 ###### help

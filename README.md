@@ -641,6 +641,9 @@ python "pg to run"
 - run Dash-QT or dashd
 - run dashmnb.py
 
+###### Thanks to
+- codes form https://github.com/dashpay/electrum-dash
+- ref : https://github.com/dashpay/dash/blob/v0.12.1.x/dash-docs/protocol-documentation.md by 
 
 ######
     https://test.explorer.dash.org/tx/dec9c5ef0b4f82b77107f29e0096a30faacbf068f5b46a106726b02036caaeb4#o0

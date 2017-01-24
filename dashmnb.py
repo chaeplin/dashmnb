@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 # mnb.py
 
-# codes form code from https://github.com/dashpay/electrum-dash
+# code from https://github.com/dashpay/electrum-dash
 # ref : https://github.com/dashpay/dash/blob/v0.12.1.x/dash-docs/protocol-documentation.md
 
 import sys, os

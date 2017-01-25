@@ -8,3 +8,7 @@ config.py
 no_sync
 
 *.swp
+
+masternode.mainnet.conf
+
+masternode.testnet.conf

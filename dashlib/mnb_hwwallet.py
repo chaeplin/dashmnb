@@ -5,8 +5,10 @@ sys.path.append( os.path.join( os.path.dirname(__file__), '..', 'dashlib' ) )
 from config import *
 from mnb_misc import *
 
+def list_coins(client):
+    return [coin.coin_name for coin in client.features.coins]
 
-def check_hw_wallet(includebip32=False):
+def check_hw_wallet(tunnel=None, includebip32=False):
     printdbg('checking hw wallet')
     #client = None
 
@@ -20,7 +22,7 @@ def check_hw_wallet(includebip32=False):
             import keepkeylib.ckd_public as bip32
 
         devices = HidTransport.enumerate()
-    
+
         if len(devices) == 0:
             print('===> No HW Wallet found')
             signing  = False
@@ -48,6 +50,13 @@ def check_hw_wallet(includebip32=False):
             transport = HidTransport(devices[0])
             client = TrezorClient(transport)
             signing  = True
+
+
+    wallet_supported_coins = list_coins(client)
+    if coin_name not in wallet_supported_coins:
+        err_msg = 'only following coins supported by wallet\n\t' + str(wallet_supported_coins)
+        print_err_exit(get_caller_name(), get_function_name(), err_msg, None, tunnel)
+
     if includebip32:
         return client, signing, bip32
 

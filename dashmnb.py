@@ -32,7 +32,7 @@ def main(args, tunnel=None):
     serverURL = 'http://' + rpcuser + ':' + rpcpassword + '@' + rpcbindip + ':' + str(rpcport if tunnel == None else SSH_LOCAL_PORT)  
     access = AuthServiceProxy(serverURL) 
 
-    client, signing = check_hw_wallet()
+    client, signing = check_hw_wallet(tunnel)
 
     if len(mpath) == 0:
         err_msg = 'please configure bip49 path'

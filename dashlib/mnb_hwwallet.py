@@ -6,7 +6,7 @@ from config import *
 from mnb_misc import *
 
 
-def check_hw_wallet():
+def check_hw_wallet(includebip32=False):
     printdbg('checking hw wallet')
     #client = None
 
@@ -16,7 +16,8 @@ def check_hw_wallet():
     if TYPE_HW_WALLET.lower().startswith("keepkey"):
         from keepkeylib.client import KeepKeyClient
         from keepkeylib.transport_hid import HidTransport
-        import keepkeylib.ckd_public as bip32
+        if includebip32:
+            import keepkeylib.ckd_public as bip32
 
         devices = HidTransport.enumerate()
     
@@ -33,7 +34,8 @@ def check_hw_wallet():
     elif TYPE_HW_WALLET.lower().startswith("trezor"):
         from trezorlib.client import TrezorClient
         from trezorlib.transport_hid import HidTransport
-        import trezorlib.ckd_public as bip32
+        if includebip32:
+            import trezorlib.ckd_public as bip32
 
         devices = HidTransport.enumerate()
 
@@ -46,6 +48,8 @@ def check_hw_wallet():
             transport = HidTransport(devices[0])
             client = TrezorClient(transport)
             signing  = True
+    if includebip32:
+        return client, signing, bip32
 
-    return client, signing
-
+    else:
+        return client, signing

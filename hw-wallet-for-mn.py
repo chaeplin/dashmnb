@@ -8,7 +8,7 @@ from config import *
 from mnb_hwwallet import *
 
 def main():
-    client, signing = check_hw_wallet()
+    client, signing, bip32 = check_hw_wallet(True)
 
     if client == None:
         sys.exit()

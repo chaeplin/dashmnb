@@ -56,13 +56,6 @@ def main(args, tunnel=None):
             err_msg = 'need HW wallet to anounce'
             print_err_exit(get_caller_name(), get_function_name(), err_msg, None, tunnel)
 
-        
-#        mn_alias_list = [
-#                { 
-#                    mn_config.get(m).get('alias'): mn_config.get(m)
-#                } 
-#                for m in sorted(list(mn_config.keys()))]
-
         mns_to_start = {}
         for x in sorted(list(mn_config.keys())):
             txidtxidn = mn_config.get(x).get('collateral_txidtxidn')
@@ -74,12 +67,6 @@ def main(args, tunnel=None):
                 if ((mns.get(txidtxidn, None) != 'ENABLED' \
                     and mns.get(txidtxidn, None) != 'PRE_ENABLED')) :
                     mns_to_start[x] = mn_config[x]
-
-#            if ((mns.get(txidtxidn, None) != 'ENABLED' \
-#                and mns.get(txidtxidn, None) != 'PRE_ENABLED')) \
-#                or mn_config.get(x).get('alias') in args.masternode_to_start :
-#
-#                mns_to_start[x] = mn_config[x]
 
         if len(mns_to_start) > 0 and signing:
             start_masternode(mns_to_start, access, client, args.anounce, tunnel)
@@ -109,11 +96,6 @@ def main(args, tunnel=None):
         if signing:
             print('[making txs]')
             for x in sorted(list(mn_config.keys())):
-
-                #print('1---> ', mn_config[x].get('collateral_dashd_balance'))
-                #print('1---> ', len(mn_config[x].get('collateral_dashd_balance')))
-                #print('2---> ', mn_config[x].get('txs', None))
-                #print('2---> ', len(mn_config[x].get('txs', None)))
 
                 if len(mn_config[x].get('collateral_dashd_balance')) > 0 and len(mn_config[x].get('txs', None)) > 0:
                     if len(args.masternode_to_start) > 0:

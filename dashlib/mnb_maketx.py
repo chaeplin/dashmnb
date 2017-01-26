@@ -85,13 +85,13 @@ def make_inputs_for_hw_wallet(tx, receiving_address, collateral_spath, client, t
         import keepkeylib.messages_pb2 as proto
         import keepkeylib.types_pb2 as proto_types    
         from keepkeylib import tx_api
-        from keepkeylib.tx_api import TXAPIDashTestnet   
+        from keepkeylib.tx_api import TXAPIDashrpc   
 
     elif TYPE_HW_WALLET.lower().startswith("trezor"):
         import trezorlib.messages_pb2 as proto
         import trezorlib.types_pb2 as proto_types    
         from trezorlib import tx_api
-        from trezorlib.tx_api import TXAPIDashTestnet         
+        from trezorlib.tx_api import TXAPIDashrpc         
 
 
     tx_api.rpcuser = rpcuser
@@ -99,7 +99,7 @@ def make_inputs_for_hw_wallet(tx, receiving_address, collateral_spath, client, t
     tx_api.rpcbindip = rpcbindip
     tx_api.rpcport = (rpcport if tunnel == None else SSH_LOCAL_PORT) 
     
-    client.set_tx_api(TXAPIDashTestnet())
+    client.set_tx_api(TXAPIDashrpc())
 
     inputs = []
     outputs = []

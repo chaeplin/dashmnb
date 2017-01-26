@@ -51,11 +51,12 @@ def check_hw_wallet(tunnel=None, includebip32=False):
             client = TrezorClient(transport)
             signing  = True
 
+    if client != None:
 
-    wallet_supported_coins = list_coins(client)
-    if coin_name not in wallet_supported_coins:
-        err_msg = 'only following coins supported by wallet\n\t' + str(wallet_supported_coins)
-        print_err_exit(get_caller_name(), get_function_name(), err_msg, None, tunnel)
+        wallet_supported_coins = list_coins(client)
+        if coin_name not in wallet_supported_coins:
+            err_msg = 'only following coins supported by wallet\n\t' + str(wallet_supported_coins)
+            print_err_exit(get_caller_name(), get_function_name(), err_msg, None, tunnel)
 
     if includebip32:
         return client, signing, bip32

@@ -26,7 +26,7 @@ def make_request(url, tunnel=None):
         print_err_exit(get_caller_name(), get_function_name(), err_msg, None, tunnel)        
 
     except Exception as e:
-        err_msg = e.args
+        err_msg = str(e.args)
         print_err_exit(get_caller_name(), get_function_name(), err_msg, None, tunnel)
 
 

@@ -49,7 +49,7 @@ def make_mnb(alias, mnconfig, access, client, mpath, tunnel=None):
         sig1 = hwwallet_signmessage(serialize_for_sig, mnconfig['collateral_spath'], mnconfig['collateral_address'], client, mpath, tunnel)
 
     except Exception as e:
-        err_msg = e.args
+        err_msg = str(e.args)
         print_err_exit(get_caller_name(), get_function_name(), err_msg, None, tunnel)
 
     except KeyboardInterrupt:

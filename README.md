@@ -633,10 +633,10 @@ python "pg to run"
 ```
 
 ###### How to
-- use hw-wallet-for-mn.py to gen a list of address (change key path = mpath)
+- use hw-wallet-for-mn.py to gen a list of address
 - send 1k tDash to Address
 - set up remote masternode
-- move config.py.sample to config.py and edit parameters
+- move config.sample.py to config.py and edit parameters
 - move masternode.conf.sample to masternode.conf and edit
 - run Dash-QT or dashd
 - run dashmnb.py

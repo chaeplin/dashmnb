@@ -6,7 +6,8 @@ from config import *
 from mnb_misc import *
 from mnb_rpc import *
 from mnb_mnconf import *
-from mnb_bip32 import *
+#from mnb_bip32 import *
+from mnb_hwwallet import *
 
 def print_balance(mn_config):
 
@@ -54,13 +55,22 @@ def get_unspent_txs(mnconfig, access, tunnel=None):
 
         balance_mine.append(unspent_amount)
 
+        #print(collateral_address, collateral_txidtxidn, unspent_txidtxidn, unspent_amount)
+
+        #print('MOVE_1K_COLLATERAL --> ', MOVE_1K_COLLATERAL)
+
         if MOVE_1K_COLLATERAL == True:
+            #print('1111')
             unspent_mine.append(m)
 
         elif MOVE_1K_COLLATERAL == False:
+            #print('2222')
+            #print(unspent_txidtxidn, collateral_txidtxidn, unspent_amount, max_amounts)
             if (unspent_txidtxidn != collateral_txidtxidn) and (unspent_amount < max_amounts): # and unspent_confirmations > min_conf: # dashd listunspent will not show unmatured coinbase transaction
+                #print('333333')
                 unspent_mine.append(m)    
 
+    #print('unspent_mine ', unspent_mine)
 
     txs = []
     for x in unspent_mine:
@@ -76,7 +86,7 @@ def get_unspent_txs(mnconfig, access, tunnel=None):
 
     return unspent_mine, sublist, balance_mine
 
-def make_inputs_for_hw_wallet(tx, receiving_address, collateral_spath, client, tunnel=None):
+def make_inputs_for_hw_wallet(tx, receiving_address, collateral_spath, client, mpath, tunnel=None):
     # trezor and keepkey
     import binascii
     from decimal import Decimal
@@ -104,7 +114,7 @@ def make_inputs_for_hw_wallet(tx, receiving_address, collateral_spath, client, t
     inputs = []
     outputs = []
     amount_total = 0
-    purpose, coin_type, account, change = chain_path(tunnel)
+    purpose, coin_type, account, change = chain_path(mpath, tunnel)
 
     if collateral_spath == None or receiving_address == None:
         err_msg = 'make_inputs_for_hw_wallet receiving_address / collateral_spath : Should not None'
@@ -157,7 +167,7 @@ def make_inputs_for_hw_wallet(tx, receiving_address, collateral_spath, client, t
         print_err_exit(get_caller_name(), get_function_name(), 'KeyboardInterrupt', None, tunnel)
 
 
-def make_txs_for_hwwallet(mnconfig, client, tunnel=None):  
+def make_txs_for_hwwallet(mnconfig, client, mpath, tunnel=None):  
     
     txs = mnconfig.get('txs', None)
     collateral_spath = mnconfig.get('collateral_spath', None)
@@ -171,7 +181,7 @@ def make_txs_for_hwwallet(mnconfig, client, tunnel=None):
     if txs != None:
         for tx in txs:
             if (len(tx)) >= min_unspent or MOVE_1K_COLLATERAL == True:
-                serialized_tx = make_inputs_for_hw_wallet(tx, receiving_address, collateral_spath, client, tunnel)
+                serialized_tx = make_inputs_for_hw_wallet(tx, receiving_address, collateral_spath, client, mpath, tunnel)
                 serialized_txs.append(serialized_tx)
 
             else:

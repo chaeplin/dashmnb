@@ -10,7 +10,7 @@ from mnb_signing import *
 from mnb_rpc import *
 from mnb_maketx import *
 
-def make_mnb(alias, mnconfig, access, client, tunnel=None):
+def make_mnb(alias, mnconfig, access, client, mpath, tunnel=None):
     print('---> making mnb for %s' % alias)
 
     # ------ some default config
@@ -46,7 +46,7 @@ def make_mnb(alias, mnconfig, access, client, tunnel=None):
                       + format_hash(Hash160(bytes.fromhex(mnconfig['masternode_pubkey']))) + str(protocol_version)
 
     try:
-        sig1 = hwwallet_signmessage(serialize_for_sig, mnconfig['collateral_spath'], mnconfig['collateral_address'], client, tunnel)
+        sig1 = hwwallet_signmessage(serialize_for_sig, mnconfig['collateral_spath'], mnconfig['collateral_address'], client, mpath, tunnel)
 
     except Exception as e:
         err_msg = e.args

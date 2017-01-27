@@ -7,10 +7,9 @@ import collections
 from config import *
 from mnb_misc import *
 from mnb_rpc import *
-from mnb_bip32 import *
 from mnb_explorer import *
 
-def checking_mn_config(access, signing, tunnel=None):
+def checking_mn_config(access, signing, chain_pubkey, tunnel=None):
     
     print('\n---> checking masternode config ....')
     lines =[]
@@ -19,7 +18,7 @@ def checking_mn_config(access, signing, tunnel=None):
             for line in mobj:            
                 lines.append(line.strip())
    
-        mn_config, signing = parse_masternode_conf(lines, access, signing, tunnel)
+        mn_config, signing = parse_masternode_conf(lines, access, signing, chain_pubkey, tunnel)
     
     else:
         err_msg = 'no %s file' % masternode_conf_file
@@ -31,7 +30,7 @@ def checking_mn_config(access, signing, tunnel=None):
 
     return mn_config, signing, mns, mna
 
-def parse_masternode_conf(lines, access, signing, tunnel=None):
+def parse_masternode_conf(lines, access, signing, chain_pubkey, tunnel=None):
 
     i = 0
     lno = 0
@@ -93,14 +92,20 @@ def parse_masternode_conf(lines, access, signing, tunnel=None):
                 continue
 
         printdbg('\tprocess_chain for')
-        check_mpath = process_chain(mnaddr, txid, txidn, alias)
-        if check_mpath == None:
+        #check_mpath = process_chain(mnaddr, txid, txidn, alias, mpath, xpub)
+        #if check_mpath == None:
+        #    errorinconf.append('line: %d / %s : can\'t find spath and publickey' % (lno, alias))
+        #    continue
+
+        collateral_spath = chain_pubkey.get(mnaddr).get('spath', None)
+        collateral_pubkey = chain_pubkey.get(mnaddr).get('addrpubkey', None)
+
+        if collateral_spath == None or collateral_pubkey == None:
             errorinconf.append('line: %d / %s : can\'t find spath and publickey' % (lno, alias))
             continue
 
-        collateral_spath = check_mpath.get('spath', None)
-        collateral_pubkey = check_mpath.get('addrpubkey', None)
 
+        printdbg('\tget masternode_pubkey for')
         try:
             masternode_pubkey  = get_public_key(wif_to_privkey(mnprivkey_wif).get('privkey')).get('pubkeyhex')
         
@@ -109,6 +114,8 @@ def parse_masternode_conf(lines, access, signing, tunnel=None):
             continue
 
         masternode_address = pubkey_to_address(masternode_pubkey)
+
+        printdbg('\tvalidateaddress for')
 
         if (validateaddress(mnaddr, access, False, tunnel) == None):
             err_msg = 'collateral_address error : ' +  alias
@@ -122,14 +129,18 @@ def parse_masternode_conf(lines, access, signing, tunnel=None):
             err_msg = 'receiving_address error : ' +  alias
             print_err_exit(get_caller_name(), get_function_name(), err_msg, None, tunnel)
 
+        printdbg('\tvalidateaddress for')
+
         # import mnprivkey_wif
         validate_masternode_address = validateaddress(masternode_address, access, True, tunnel)
         if validate_masternode_address != True: # None or validate_masternode_address == False:
+            printdbg('\timportprivkey for')
             importprivkey(mnprivkey_wif, masternode_address, access)
 
         # import watch only address
         validate_collateral_address = validateaddress(mnaddr, access, False, tunnel)
         if validate_collateral_address != True:  # or validate_collateral_address == False:
+            printdbg('\timportaddress for')
             importaddress(mnaddr, access, tunnel)
 
         mn_config[lineno] = {
@@ -148,6 +159,8 @@ def parse_masternode_conf(lines, access, signing, tunnel=None):
             "collateral_exp_balance": collateral_exp_balance,
             "receiving_address": raddr
         }
+
+        printdbg('\tdone for')
             
     ###########################################
     if len(mn_config) != i:

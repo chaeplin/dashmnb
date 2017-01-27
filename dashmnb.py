@@ -32,21 +32,25 @@ def main(args, tunnel=None):
     serverURL = 'http://' + rpcuser + ':' + rpcpassword + '@' + rpcbindip + ':' + str(rpcport if tunnel == None else SSH_LOCAL_PORT)  
     access = AuthServiceProxy(serverURL) 
 
-    client, signing = check_hw_wallet(tunnel)
+    client, signing, bip32, mpath, xpub = check_hw_wallet(tunnel)
+    chain_pubkey = get_chain_pubkey(client, bip32, tunnel)
 
-    if len(mpath) == 0:
-        err_msg = 'please configure bip49 path'
-        print_err_exit(get_caller_name(), get_function_name(), err_msg, None, tunnel)
+    #if len(mpath) == 0:
+    #    err_msg = 'please configure bip49 path'
+    #    print_err_exit(get_caller_name(), get_function_name(), err_msg, None, tunnel)
     
-    if len(xpub) == 0:
-        err_msg = 'please configure bip32 xpub/tpub'
+    #if len(xpub) == 0:
+    #    err_msg = 'please configure bip32 xpub/tpub'
+    #    print_err_exit(get_caller_name(), get_function_name(), err_msg, None, tunnel)
+
+    if len(str(account_no)) == 0:
+        err_msg = 'please configure bip32 path : account_no'
         print_err_exit(get_caller_name(), get_function_name(), err_msg, None, tunnel)
 
     check_dashd_syncing(access, tunnel)
 
     if args.check or args.status or args.anounce or args.balance or args.maketx or args.xfer:
-        mn_config, signing, mns, mna = checking_mn_config(access, signing, tunnel)
-
+        mn_config, signing, mns, mna = checking_mn_config(access, signing, chain_pubkey, tunnel)
 
     if args.status or args.anounce or args.balance or args.maketx or args.xfer:
         print_mnstatus(mn_config, mns, mna)
@@ -69,7 +73,7 @@ def main(args, tunnel=None):
                     mns_to_start[x] = mn_config[x]
 
         if len(mns_to_start) > 0 and signing:
-            start_masternode(mns_to_start, access, client, args.anounce, tunnel)
+            start_masternode(mns_to_start, access, client, args.anounce, mpath, tunnel)
 
     # wallet rescan
     if args.balance or args.maketx or args.xfer:
@@ -86,7 +90,6 @@ def main(args, tunnel=None):
         err_msg = 'need HW wallet to spend'
         print_err_exit(get_caller_name(), get_function_name(), err_msg, None, tunnel)
 
-
     if args.maketx or args.xfer:
 
         if need_wallet_rescan:
@@ -96,16 +99,15 @@ def main(args, tunnel=None):
         if signing:
             print('[making txs]')
             for x in sorted(list(mn_config.keys())):
-
                 if len(mn_config[x].get('collateral_dashd_balance')) > 0 and len(mn_config[x].get('txs', None)) > 0:
                     if len(args.masternode_to_start) > 0:
                         if mn_config.get(x).get('alias') in args.masternode_to_start :
                             print('---> signing txs for mn %s: ' % mn_config[x].get('alias'))
-                            mn_config[x]["signedrawtx"] = make_txs_for_hwwallet(mn_config[x], client, tunnel)
+                            mn_config[x]["signedrawtx"] = make_txs_for_hwwallet(mn_config[x], client, mpath, tunnel)
     
                     else:
                         print('---> signing txs for mn %s: ' % mn_config[x].get('alias'))
-                        mn_config[x]["signedrawtx"] = make_txs_for_hwwallet(mn_config[x], client, tunnel)
+                        mn_config[x]["signedrawtx"] = make_txs_for_hwwallet(mn_config[x], client, mpath, tunnel)
 
     if args.xfer and signing:
         xfertxid = broadcast_signedrawtx(mn_config, access, tunnel)

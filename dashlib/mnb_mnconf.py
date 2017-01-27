@@ -82,7 +82,7 @@ def parse_masternode_conf(lines, access, signing, tunnel=None):
         printdbg('\trawtxid for')
         mnaddr = get_rawtxid(alias, txid, txidn, access, tunnel)
         if mnaddr == None:
-            errorinconf.append('line: %d / %s : no matching txid in blockchain' % (lno, alias))
+            errorinconf.append('line: %d / %s : no matching txid witk 1K collateral in blockchain' % (lno, alias))
             continue
 
         printdbg('\tget_explorer_balance for')
@@ -124,12 +124,12 @@ def parse_masternode_conf(lines, access, signing, tunnel=None):
 
         # import mnprivkey_wif
         validate_masternode_address = validateaddress(masternode_address, access, True, tunnel)
-        if validate_masternode_address == None or validate_masternode_address == False:
+        if validate_masternode_address != True: # None or validate_masternode_address == False:
             importprivkey(mnprivkey_wif, masternode_address, access)
 
         # import watch only address
         validate_collateral_address = validateaddress(mnaddr, access, False, tunnel)
-        if validate_collateral_address == None or validate_collateral_address == False:
+        if validate_collateral_address != True:  # or validate_collateral_address == False:
             importaddress(mnaddr, access, tunnel)
 
         mn_config[lineno] = {

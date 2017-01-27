@@ -51,7 +51,7 @@ def main(args, tunnel=None):
     if args.status or args.anounce or args.balance or args.maketx or args.xfer:
         print_mnstatus(mn_config, mns, mna)
 
-    if args.anounce:
+    if args.anounce and MOVE_1K_COLLATERAL == False:
         if not signing:
             err_msg = 'need HW wallet to anounce'
             print_err_exit(get_caller_name(), get_function_name(), err_msg, None, tunnel)

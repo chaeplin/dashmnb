@@ -24,7 +24,7 @@ def broadcast_signedrawtx(mn_config, access, tunnel=None):
                     print('\nYes, will broadcast')
                 else:
                     print('\nNo.')
-                    return
+                    continue
     
                 s = sendrawtransaction(tx, access, tunnel)
                 xfertxid.append(s)

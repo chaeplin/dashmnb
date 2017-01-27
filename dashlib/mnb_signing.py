@@ -42,7 +42,17 @@ def hwwallet_signmessage(serialize_for_sig, spath, address, client, tunnel=None)
     
     purpose, coin_type, account, change = chain_path()
 
-    sig = client.sign_message(coin_name, [purpose | 0x80000000, coin_type | 0x80000000, account | 0x80000000, change, int(spath)], serialize_for_sig)
+    try:
+        sig = client.sign_message(coin_name, [purpose | 0x80000000, coin_type | 0x80000000, account | 0x80000000, change, int(spath)], serialize_for_sig)
+
+    except Exception as e:
+        err_msg = str(e.args)
+        print_err_exit(get_caller_name(), get_function_name(), err_msg, None, tunnel)
+
+    except KeyboardInterrupt:
+        print_err_exit(get_caller_name(), get_function_name(), 'KeyboardInterrupt', None, tunnel)
+
+
     if sig.address != address:
         err_msg = '**** ----> check key path'
         print_err_exit(get_caller_name(), get_function_name(), err_msg, None, tunnel)

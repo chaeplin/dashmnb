@@ -31,7 +31,11 @@ def make_request(url, tunnel=None):
 
 
 def get_explorer_balance(address, tunnel=None):
-    url  = 'https://test.explorer.dash.org/chain/tDash/q/addressbalance/' + address
+    if MAINNET:
+        url  = 'https://explorer.dash.org/chain/Dash/q/addressbalance/' + address
+    else:
+        url  = 'https://test.explorer.dash.org/chain/tDash/q/addressbalance/' + address
+
     response = make_request(url, tunnel)
 
     return response

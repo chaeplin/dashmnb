@@ -143,10 +143,15 @@ def make_inputs_for_hw_wallet(tx, receiving_address, collateral_spath, client, t
     print('\tsend %s, %s txs to %s with fee of %s : total amount : %s\n' % (amount_total - feetohuman, len(tx), receiving_address, feetohuman, amount_total))
 
     print_hw_wallet_check()
-            
+
+
     try:
         (signatures, serialized_tx) = client.sign_tx(coin_name, inputs, outputs)
         return serialized_tx.hex()
+
+    except Exception as e:
+        err_msg = str(e.args)
+        print_err_exit(get_caller_name(), get_function_name(), err_msg, None, tunnel)
 
     except KeyboardInterrupt:
         print_err_exit(get_caller_name(), get_function_name(), 'KeyboardInterrupt', None, tunnel)

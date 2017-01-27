@@ -21,17 +21,29 @@ def check_hw_wallet(tunnel=None, includebip32=False):
         if includebip32:
             import keepkeylib.ckd_public as bip32
 
-        devices = HidTransport.enumerate()
+        try:
+            devices = HidTransport.enumerate()
+
+        except Exception as e:
+            err_msg = str(e.args)
+            print_err_exit(get_caller_name(), get_function_name(), err_msg, None, tunnel)
 
         if len(devices) == 0:
             print('===> No HW Wallet found')
             signing  = False
             
         else:
-            print('===> keepkey HW Wallet found')
-            transport = HidTransport(devices[0])
-            client = KeepKeyClient(transport)
-            signing  = True
+
+            try:    
+                print('===> keepkey HW Wallet found')
+                transport = HidTransport(devices[0])
+                client = KeepKeyClient(transport)
+                signing  = True
+
+            except Exception as e:
+                err_msg = str(e.args)
+                print_err_exit(get_caller_name(), get_function_name(), err_msg, None, tunnel)
+
 
     elif TYPE_HW_WALLET.lower().startswith("trezor"):
         from trezorlib.client import TrezorClient
@@ -39,21 +51,37 @@ def check_hw_wallet(tunnel=None, includebip32=False):
         if includebip32:
             import trezorlib.ckd_public as bip32
 
-        devices = HidTransport.enumerate()
+        try:
+            devices = HidTransport.enumerate()
+        
+        except Exception as e:
+            err_msg = str(e.args)
+            print_err_exit(get_caller_name(), get_function_name(), err_msg, None, tunnel)
 
         if len(devices) == 0:
             print('===> No HW Wallet found')
             signing  = False
             
         else:
-            print('===> trezor HW Wallet found')
-            transport = HidTransport(devices[0])
-            client = TrezorClient(transport)
-            signing  = True
+            try:
+                print('===> trezor HW Wallet found')
+                transport = HidTransport(devices[0])
+                client = TrezorClient(transport)
+                signing  = True
+
+            except Exception as e:
+                err_msg = str(e.args)
+                print_err_exit(get_caller_name(), get_function_name(), err_msg, None, tunnel)
 
     if client != None:
 
-        wallet_supported_coins = list_coins(client)
+        try:
+            wallet_supported_coins = list_coins(client)
+
+        except Exception as e:
+            err_msg = str(e.args)
+            print_err_exit(get_caller_name(), get_function_name(), err_msg, None, tunnel)        
+
         if coin_name not in wallet_supported_coins:
             err_msg = 'only following coins supported by wallet\n\t' + str(wallet_supported_coins)
             print_err_exit(get_caller_name(), get_function_name(), err_msg, None, tunnel)

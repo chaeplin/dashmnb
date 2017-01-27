@@ -13,8 +13,12 @@ def get_rawtxid(alias, txid, txidn, access, tunnel=None):
         mntxidtxidn = get_txidtxidn(txid, txidn)
 
         for voutaddr in rawtx.keys():
-            if mntxidtxidn == rawtx.get(voutaddr).get('txid') and rawtx.get(voutaddr).get('value') == '1000.00000000':
-                return voutaddr
+            if mntxidtxidn == rawtx.get(voutaddr).get('txid'):
+                if MOVE_1K_COLLATERAL == False and rawtx.get(voutaddr).get('value') == '1000.00000000':
+                    return voutaddr
+
+                if MOVE_1K_COLLATERAL == True:
+                    return voutaddr
 
         return None
 
@@ -23,10 +27,40 @@ def get_rawtxid(alias, txid, txidn, access, tunnel=None):
         print_err_exit(get_caller_name(), get_function_name(), err_msg, e.args, tunnel)
 
 
+def rpcgetinfo(access, tunnel=None):
+    try:
+        getinfo = access.getinfo()
+        istestnet = getinfo.get('testnet')
+
+        if MAINNET == True and istestnet == True:
+            err_msg = 'dashd is on testnet, check config plz'
+            print_err_exit(get_caller_name(), get_function_name(), err_msg, None, tunnel)
+
+        if MAINNET == False and istestnet == False:
+            err_msg = 'dashd is on mainnet, check config plz'
+            print_err_exit(get_caller_name(), get_function_name(), err_msg, None, tunnel)
+
+        return getinfo.get('protocolversion')
+
+    except Exception as e:
+        err_msg = 'Dash-QT or dashd running ?'
+        print_err_exit(get_caller_name(), get_function_name(), err_msg, e.args, tunnel)
+
+
 def checksynced(access, tunnel=None):
+    protocolversion = rpcgetinfo(access, tunnel=None)
+
     try:
         status = access.mnsync('status')
-        return status.get('IsSynced')
+
+        if protocolversion > 70200:
+            return status.get('IsSynced')
+
+        else:
+            if status.get('RequestedMasternodeAssets') == 999:
+                return True
+            else:
+                return False
 
     except Exception as e:
         err_msg = 'Dash-QT or dashd running ?'
@@ -73,12 +107,13 @@ def check_masternodeaddr(access, tunnel=None):
         print_err_exit(get_caller_name(), get_function_name(), err_msg, e.args, tunnel)
 
 def validateaddress(address, access, checkismine, tunnel=None):
+    #print(address)
     r = access.validateaddress(address)
-    if r['isvalid'] and r['address'] == address:
+    if r.get('isvalid') and r.get('address') == address:
         if checkismine:
-            return r['ismine']
+            return r.get('ismine')
         else:
-            return r['iswatchonly']
+            return r.get('iswatchonly', False)
     else:
         return None
 

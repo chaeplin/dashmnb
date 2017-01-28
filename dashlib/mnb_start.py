@@ -6,7 +6,7 @@ import re
 from mnb_makemnb import *
 from mnb_misc import *
 
-def start_masternode(mns_to_start, access, client, announce, mpath, tunnel=None):
+def start_masternode(mns_to_start, protocolversion, access, client, announce, mpath, tunnel=None):
     if announce:
         print('\n[making mnbs and relay]')
     else:
@@ -14,7 +14,7 @@ def start_masternode(mns_to_start, access, client, announce, mpath, tunnel=None)
 
     masternodebroadcast = []
     for alias in sorted(mns_to_start):
-        mnbhex = make_mnb(mns_to_start[alias].get('alias'), mns_to_start[alias], access, client, mpath, tunnel)
+        mnbhex = make_mnb(mns_to_start[alias].get('alias'), protocolversion, mns_to_start[alias], access, client, mpath, tunnel)
         masternodebroadcast.append(mnbhex)
     
     vc = num_to_varint(len(masternodebroadcast)).hex()

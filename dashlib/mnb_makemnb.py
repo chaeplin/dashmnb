@@ -10,13 +10,14 @@ from mnb_signing import *
 from mnb_rpc import *
 from mnb_maketx import *
 
-def make_mnb(alias, mnconfig, access, client, mpath, tunnel=None):
+def make_mnb(alias, protocolversion, mnconfig, access, client, mpath, tunnel=None):
     print('---> making mnb for %s' % alias)
 
     # ------ some default config
     scriptSig = ''
     sequence = 0xffffffff
-    protocol_version = 70204
+    #protocol_version = 70204
+    protocol_version = protocolversion
     sig_time = int(time.time())
 
     #cur_block_height = access.getblockcount()
@@ -41,9 +42,11 @@ def make_mnb(alias, mnconfig, access, client, mpath, tunnel=None):
     collateral_in = num_to_varint(len(mnconfig['collateral_pubkey'])/2).hex() + mnconfig['collateral_pubkey']
     delegate_in   = num_to_varint(len(mnconfig['masternode_pubkey'])/2).hex() + mnconfig['masternode_pubkey']
 
-    serialize_for_sig = str(mnconfig['ipport']) + str(sig_time) \
-                      + format_hash(Hash160(bytes.fromhex(mnconfig['collateral_pubkey']))) \
-                      + format_hash(Hash160(bytes.fromhex(mnconfig['masternode_pubkey']))) + str(protocol_version)
+    serialize_for_sig = str(mnconfig['ipport']) \
+                        + str(sig_time) \
+                        + format_hash(Hash160(bytes.fromhex(mnconfig['collateral_pubkey']))) \
+                        + format_hash(Hash160(bytes.fromhex(mnconfig['masternode_pubkey']))) \
+                        + str(protocol_version)
 
     try:
         sig1 = hwwallet_signmessage(serialize_for_sig, mnconfig['collateral_spath'], mnconfig['collateral_address'], client, mpath, tunnel)
@@ -58,7 +61,7 @@ def make_mnb(alias, mnconfig, access, client, mpath, tunnel=None):
     work_sig_time     = sig_time.to_bytes(8, byteorder='big')[::-1].hex() 
     work_protoversion = protocol_version.to_bytes(4, byteorder='big')[::-1].hex()
 
-    last_ping_block_hash = bytes.fromhex(block_hash)[::-1].hex() 
+    last_ping_block_hash = bytes.fromhex(block_hash)[::-1].hex()
 
     last_ping_serialize_for_sig  = serialize_input_str(mnconfig['collateral_txid'], mnconfig['collateral_txidn'], sequence, scriptSig) + block_hash + str(sig_time)
 

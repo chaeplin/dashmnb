@@ -47,20 +47,22 @@ def rpcgetinfo(access, tunnel=None):
         print_err_exit(get_caller_name(), get_function_name(), err_msg, e.args, tunnel)
 
 
-def checksynced(access, tunnel=None):
+def checksynced(access, pversion=False, tunnel=None):
     protocolversion = rpcgetinfo(access, tunnel=None)
 
     try:
         status = access.mnsync('status')
 
-        if protocolversion > 70200:
-            return status.get('IsSynced')
+        if protocolversion > 70201:
+            if pversion:
+                return protocolversion
+            else:
+                return status.get('IsSynced')
 
         else:
-            if status.get('RequestedMasternodeAssets') == 999:
-                return True
-            else:
-                return False
+            err_msg = 'Dash 12.0 not supported'
+            print_err_exit(get_caller_name(), get_function_name(), err_msg, e.args, tunnel)
+
 
     except Exception as e:
         err_msg = 'Dash-QT or dashd running ?'
@@ -70,7 +72,9 @@ def checksynced(access, tunnel=None):
 def check_dashd_syncing(access, tunnel=None):
     from progress.spinner import Spinner
     spinner = Spinner('---> checking dashd syncing status ')
-    while(not checksynced(access, tunnel)):
+    protocolversion = checksynced(access, True, tunnel)
+
+    while(not checksynced(access, False, tunnel)):
         try:
             spinner.next()
             time.sleep(1)
@@ -78,6 +82,8 @@ def check_dashd_syncing(access, tunnel=None):
         except KeyboardInterrupt:
             print_err_exit(get_caller_name(), get_function_name(), 'KeyboardInterrupt', None, tunnel)
             
+    return protocolversion
+
 def check_wallet_lock(access, tunnel=None):
     try:
         getinfo = access.getinfo()

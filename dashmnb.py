@@ -47,7 +47,7 @@ def main(args, tunnel=None):
         err_msg = 'please configure bip32 path : account_no'
         print_err_exit(get_caller_name(), get_function_name(), err_msg, None, tunnel)
 
-    check_dashd_syncing(access, tunnel)
+    protocolversion = check_dashd_syncing(access, tunnel)
 
     if args.check or args.status or args.anounce or args.balance or args.maketx or args.xfer:
         mn_config, signing, mns, mna = checking_mn_config(access, signing, chain_pubkey, tunnel)
@@ -73,7 +73,7 @@ def main(args, tunnel=None):
                     mns_to_start[x] = mn_config[x]
 
         if len(mns_to_start) > 0 and signing:
-            start_masternode(mns_to_start, access, client, args.anounce, mpath, tunnel)
+            start_masternode(mns_to_start, protocolversion, access, client, args.anounce, mpath, tunnel)
 
     # wallet rescan
     if args.balance or args.maketx or args.xfer:

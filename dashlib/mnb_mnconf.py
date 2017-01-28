@@ -81,7 +81,7 @@ def parse_masternode_conf(lines, access, signing, chain_pubkey, tunnel=None):
         printdbg('\trawtxid for')
         mnaddr = get_rawtxid(alias, txid, txidn, access, tunnel)
         if mnaddr == None:
-            errorinconf.append('line: %d / %s : no matching txid witk 1K collateral in blockchain' % (lno, alias))
+            errorinconf.append('line: %d / %s : no matching txid with 1K collateral in blockchain' % (lno, alias))
             continue
 
         printdbg('\tget_explorer_balance for')
@@ -97,8 +97,12 @@ def parse_masternode_conf(lines, access, signing, chain_pubkey, tunnel=None):
         #    errorinconf.append('line: %d / %s : can\'t find spath and publickey' % (lno, alias))
         #    continue
 
-        collateral_spath = chain_pubkey.get(mnaddr).get('spath', None)
-        collateral_pubkey = chain_pubkey.get(mnaddr).get('addrpubkey', None)
+        if mnaddr in chain_pubkey:
+            collateral_spath = chain_pubkey.get(mnaddr).get('spath', None)
+            collateral_pubkey = chain_pubkey.get(mnaddr).get('addrpubkey', None)
+        else:
+            err_msg = 'collateral_address not ip bip32 path(ex: Passphrase err) : ' +  alias
+            print_err_exit(get_caller_name(), get_function_name(), err_msg, None, tunnel)
 
         if collateral_spath == None or collateral_pubkey == None:
             errorinconf.append('line: %d / %s : can\'t find spath and publickey' % (lno, alias))

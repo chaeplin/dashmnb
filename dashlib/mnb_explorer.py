@@ -14,7 +14,7 @@ def make_request(url, tunnel=None):
     headers = {'user-agent': USERAGET}
 
     try:
-        response = requests.get(url, headers=headers, timeout=(3,5))
+        response = requests.get(url, headers=headers, timeout=(4,3))
         if response.status_code == requests.codes.ok and float(response.text) >= 0:
             return response.text
 
@@ -22,7 +22,7 @@ def make_request(url, tunnel=None):
             return None
 
     except requests.exceptions.RequestException:
-        err_msg = requests.exceptions.RequestException
+        err_msg = 'requests.exceptions.RequestException'
         print_err_exit(get_caller_name(), get_function_name(), err_msg, None, tunnel)        
 
     except Exception as e:

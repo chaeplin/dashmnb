@@ -7,7 +7,7 @@ from config import *
 from mnb_misc import *
 
 
-def chain_path(mpath, tunnel=None):
+def chain_path(mpath):
     import re
     pathmatch = re.search("^(.*)'/(.*)'/(.*)'/(.*)$", mpath)
     if (pathmatch):
@@ -23,12 +23,10 @@ def chain_path(mpath, tunnel=None):
         print_err_exit(
             get_caller_name(),
             get_function_name(),
-            err_msg,
-            None,
-            tunnel)
+            err_msg)
 
 
-def get_chain_pubkey(client, bip32, tunnel=None):
+def get_chain_pubkey(client, bip32):
     try:
         mpath = get_mpath()
 
@@ -50,26 +48,20 @@ def get_chain_pubkey(client, bip32, tunnel=None):
         print_err_exit(
             get_caller_name(),
             get_function_name(),
-            err_msg,
-            None,
-            tunnel)
+            err_msg)
 
     except Exception as e:
         err_msg = str(e.args)
         print_err_exit(
             get_caller_name(),
             get_function_name(),
-            err_msg,
-            None,
-            tunnel)
+            err_msg)
 
     except KeyboardInterrupt:
         print_err_exit(
             get_caller_name(),
             get_function_name(),
-            "KeyboardInterrupt",
-            None,
-            tunnel)
+            "KeyboardInterrupt")
 
 
 def get_mpath(default_account=False):
@@ -90,7 +82,7 @@ def list_coins(client):
     return [coin.coin_name for coin in client.features.coins]
 
 
-def check_hw_wallet(tunnel=None):
+def check_hw_wallet():
     printdbg('checking hw wallet')
     #client = None
 
@@ -110,9 +102,7 @@ def check_hw_wallet(tunnel=None):
             print_err_exit(
                 get_caller_name(),
                 get_function_name(),
-                err_msg,
-                None,
-                tunnel)
+                err_msg)
 
         if len(devices) == 0:
             print('===> No HW Wallet found')
@@ -131,9 +121,7 @@ def check_hw_wallet(tunnel=None):
                 print_err_exit(
                     get_caller_name(),
                     get_function_name(),
-                    err_msg,
-                    None,
-                    tunnel)
+                    err_msg)
 
     elif TYPE_HW_WALLET.lower().startswith("trezor"):
         from trezorlib.client import TrezorClient
@@ -148,9 +136,7 @@ def check_hw_wallet(tunnel=None):
             print_err_exit(
                 get_caller_name(),
                 get_function_name(),
-                err_msg,
-                None,
-                tunnel)
+                err_msg)
 
         if len(devices) == 0:
             print('===> No HW Wallet found')
@@ -168,9 +154,7 @@ def check_hw_wallet(tunnel=None):
                 print_err_exit(
                     get_caller_name(),
                     get_function_name(),
-                    err_msg,
-                    None,
-                    tunnel)
+                    err_msg)
 
     if client is not None:
 
@@ -182,9 +166,7 @@ def check_hw_wallet(tunnel=None):
             print_err_exit(
                 get_caller_name(),
                 get_function_name(),
-                err_msg,
-                None,
-                tunnel)
+                err_msg)
 
         if coin_name not in wallet_supported_coins:
             err_msg = 'only following coins supported by wallet\n\t' + \
@@ -192,18 +174,14 @@ def check_hw_wallet(tunnel=None):
             print_err_exit(
                 get_caller_name(),
                 get_function_name(),
-                err_msg,
-                None,
-                tunnel)
+                err_msg)
 
     else:
         err_msg = "Can't run dashmnb without hw wallet"
         print_err_exit(
             get_caller_name(),
             get_function_name(),
-            err_msg,
-            None,
-            tunnel)
+            err_msg)
 
     try:
         mpath = get_mpath()
@@ -217,25 +195,19 @@ def check_hw_wallet(tunnel=None):
         print_err_exit(
             get_caller_name(),
             get_function_name(),
-            err_msg,
-            None,
-            tunnel)
+            err_msg)
 
     except Exception as e:
         err_msg = str(e.args)
         print_err_exit(
             get_caller_name(),
             get_function_name(),
-            err_msg,
-            None,
-            tunnel)
+            err_msg)
 
     except KeyboardInterrupt:
         print_err_exit(
             get_caller_name(),
             get_function_name(),
-            "KeyboardInterrupt",
-            None,
-            tunnel)
+            "KeyboardInterrupt")
 
     return client, signing, bip32, mpath, xpub

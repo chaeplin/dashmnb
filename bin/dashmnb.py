@@ -28,40 +28,34 @@ import atexit
 from bitcoinrpc.authproxy import AuthServiceProxy, JSONRPCException
 
 
-def main(args, tunnel=None):
+def main(args):
     # clear_screen()
     logo_show()
 
     # access
     serverURL = 'http://' + rpcuser + ':' + rpcpassword + '@' + \
-        rpcbindip + ':' + str(rpcport if tunnel is None else SSH_LOCAL_PORT)
+        rpcbindip + ':' + str(rpcport if USE_SSH_TUNNEL is False else SSH_LOCAL_PORT)
     access = AuthServiceProxy(serverURL)
 
-    client, signing, bip32, mpath, xpub = check_hw_wallet(tunnel)
-    chain_pubkey = get_chain_pubkey(client, bip32, tunnel)
+    client, signing, bip32, mpath, xpub = check_hw_wallet()
+    chain_pubkey = get_chain_pubkey(client, bip32)
 
-    # if len(mpath) == 0:
-    #    err_msg = 'please configure bip49 path'
-    #    print_err_exit(get_caller_name(), get_function_name(), err_msg, None, tunnel)
-
-    # if len(xpub) == 0:
-    #    err_msg = 'please configure bip32 xpub/tpub'
-    #    print_err_exit(get_caller_name(), get_function_name(), err_msg, None, tunnel)
 
     if len(str(account_no)) == 0:
         err_msg = 'please configure bip32 path : account_no'
         print_err_exit(
             get_caller_name(),
             get_function_name(),
-            err_msg,
-            None,
-            tunnel)
+            err_msg)
 
-    protocolversion = check_dashd_syncing(access, tunnel)
+    protocolversion = check_dashd_syncing(access)
 
     if args.check or args.status or args.anounce or args.balance or args.maketx or args.xfer:
         mn_config, signing, mns, mna = checking_mn_config(
-            access, signing, chain_pubkey, tunnel)
+            access, signing, chain_pubkey)
+
+    #print(json.dumps(mn_config, sort_keys=True, indent=4, separators=(',', ': ')))
+    #sys.exit()
 
     if args.status or args.anounce or args.balance or args.maketx or args.xfer:
         print_mnstatus(mn_config, mns, mna)
@@ -72,9 +66,7 @@ def main(args, tunnel=None):
             print_err_exit(
                 get_caller_name(),
                 get_function_name(),
-                err_msg,
-                None,
-                tunnel)
+                err_msg)
 
         mns_to_start = {}
         for x in sorted(list(mn_config.keys())):
@@ -95,14 +87,13 @@ def main(args, tunnel=None):
                 access,
                 client,
                 args.anounce,
-                mpath,
-                tunnel)
+                mpath)
 
     # wallet rescan
     if args.balance or args.maketx or args.xfer:
         for m in sorted(list(mn_config.keys())):
             mn_config[m]["unspent"], mn_config[m]["txs"], mn_config[m][
-                "collateral_dashd_balance"] = get_unspent_txs(mn_config.get(m), access, tunnel)
+                "collateral_dashd_balance"] = get_unspent_txs(mn_config.get(m), access)
 
         need_wallet_rescan = print_balance(mn_config)
 
@@ -111,18 +102,14 @@ def main(args, tunnel=None):
             print_err_exit(
                 get_caller_name(),
                 get_function_name(),
-                err_msg,
-                None,
-                tunnel)
+                err_msg)
 
     if not signing:
         err_msg = 'need HW wallet to spend'
         print_err_exit(
             get_caller_name(),
             get_function_name(),
-            err_msg,
-            None,
-            tunnel)
+            err_msg)
 
     if args.maketx or args.xfer:
 
@@ -131,9 +118,7 @@ def main(args, tunnel=None):
             print_err_exit(
                 get_caller_name(),
                 get_function_name(),
-                err_msg,
-                None,
-                tunnel)
+                err_msg)
 
         if signing:
             print('[making txs]')
@@ -150,33 +135,31 @@ def main(args, tunnel=None):
                                 '---> signing txs for mn %s: ' %
                                 mn_config[x].get('alias'))
                             mn_config[x]["signedrawtx"] = make_txs_for_hwwallet(
-                                mn_config[x], client, mpath, tunnel)
+                                mn_config[x], client, mpath)
 
                     else:
                         print(
                             '---> signing txs for mn %s: ' %
                             mn_config[x].get('alias'))
                         mn_config[x]["signedrawtx"] = make_txs_for_hwwallet(
-                            mn_config[x], client, mpath, tunnel)
+                            mn_config[x], client, mpath)
 
     if args.xfer and signing:
-        xfertxid = broadcast_signedrawtx(mn_config, access, tunnel)
+        xfertxid = broadcast_signedrawtx(mn_config, access)
 
         print()
         if xfertxid is not None:
             for x in xfertxid:
                 print('\t' + x)
 
-    if tunnel:
-        print_err_exit(
-            get_caller_name(),
-            get_function_name(),
-            'end of pg',
-            None,
-            tunnel)
+
+    print_err_exit(
+        get_caller_name(),
+        get_function_name(),
+            'end of pg')
 
 
-def parse_args(tunnel=None):
+def parse_args():
 
     parser = argparse.ArgumentParser()
 
@@ -225,9 +208,7 @@ def parse_args(tunnel=None):
         print_err_exit(
             get_caller_name(),
             get_function_name(),
-            'print help',
-            None,
-            tunnel)
+            'print help')
 
     return parser.parse_args()
 
@@ -249,9 +230,9 @@ if __name__ == "__main__":
             tunnel = start_ssh_tunnel()
             tunnel_pid = tunnel._getpid()
 
-        args = parse_args(tunnel_pid)
+        args = parse_args()
         atexit.register(killsubprocess)
-        main(args, tunnel_pid)
+        main(args)
 
     except KeyboardInterrupt:
         if tunnel_pid:

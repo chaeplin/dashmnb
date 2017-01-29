@@ -18,8 +18,7 @@ def make_mnb(
         mnconfig,
         access,
         client,
-        mpath,
-        tunnel=None):
+        mpath):
     print('---> making mnb for %s' % alias)
 
     # ------ some default config
@@ -32,11 +31,10 @@ def make_mnb(
     #cur_block_height = access.getblockcount()
     #block_hash = access.getblockhash(cur_block_height - 12)
 
-    block_hash = get_block_hash_for_mnb(access, tunnel)
+    block_hash = get_block_hash_for_mnb(access)
 
     vintx = bytes.fromhex(mnconfig['collateral_txid'])[::-1].hex()
-    vinno = mnconfig['collateral_txidn'].to_bytes(4, byteorder='big')[
-        ::-1].hex()
+    vinno = mnconfig['collateral_txidn'].to_bytes(4, byteorder='big')[::-1].hex()
     vinsig = num_to_varint(len(scriptSig) / 2).hex() + \
         bytes.fromhex(scriptSig)[::-1].hex()
     vinseq = sequence.to_bytes(4, byteorder='big')[::-1].hex()
@@ -67,25 +65,20 @@ def make_mnb(
             mnconfig['collateral_spath'],
             mnconfig['collateral_address'],
             client,
-            mpath,
-            tunnel)
+            mpath)
 
     except Exception as e:
         err_msg = str(e.args)
         print_err_exit(
             get_caller_name(),
             get_function_name(),
-            err_msg,
-            None,
-            tunnel)
+            err_msg)
 
     except KeyboardInterrupt:
         print_err_exit(
             get_caller_name(),
             get_function_name(),
-            'KeyboardInterrupt',
-            None,
-            tunnel)
+            'KeyboardInterrupt')
 
     work_sig_time = sig_time.to_bytes(8, byteorder='big')[::-1].hex()
     work_protoversion = protocol_version.to_bytes(4, byteorder='big')[
@@ -99,8 +92,10 @@ def make_mnb(
         sequence,
         scriptSig) + block_hash + str(sig_time)
 
-    sig2 = signmessage(last_ping_serialize_for_sig, mnconfig[
-                       'masternode_address'], access, tunnel)
+    sig2 = signmessage(
+            last_ping_serialize_for_sig, 
+            mnconfig['masternode_address'],
+            access)
 
     work = vintx + vinno + vinsig + vinseq \
         + ipv6map + collateral_in + delegate_in \

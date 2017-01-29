@@ -74,26 +74,20 @@ def main():
             print_err_exit(
                 get_caller_name(),
                 get_function_name(),
-                err_msg,
-                None,
-                None)
+                err_msg)
 
         except Exception as e:
             err_msg = str(e.args)
             print_err_exit(
                 get_caller_name(),
                 get_function_name(),
-                err_msg,
-                None,
-                None)
+                err_msg)
 
         except KeyboardInterrupt:
             print_err_exit(
                 get_caller_name(),
                 get_function_name(),
-                "KeyboardInterrupt",
-                None,
-                None)
+                "KeyboardInterrupt")
 
     client.close()
 

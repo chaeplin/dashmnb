@@ -74,9 +74,8 @@ def print_err_exit(
         caller_name,
         function_name,
         err_msg,
-        errargs=None,
-        tunnel=None):
-    import signal
+        errargs=None):
+#    import signal
 
     msg = '\n\n\tversion  : 0.2a\n'
     msg += '\tcaller   : ' + caller_name + '\n'
@@ -85,8 +84,8 @@ def print_err_exit(
         msg += '\terr      : ' + str(errargs) + '\n'
     msg += '\t===> ' + err_msg + '\n'
 
-    if tunnel:
-        os.kill(tunnel, signal.SIGTERM)
+#    if tunnel:
+#        os.kill(tunnel, signal.SIGTERM)
 
     raise SystemExit(msg)
 

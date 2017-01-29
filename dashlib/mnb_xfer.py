@@ -7,7 +7,7 @@ sys.path.append(os.path.join(os.path.dirname(__file__), '..', 'dashlib'))
 from mnb_rpc import *
 
 
-def broadcast_signedrawtx(mn_config, access, tunnel=None):
+def broadcast_signedrawtx(mn_config, access):
     xfertxid = []
     for x in mn_config:
         alias = mn_config[x].get('alias')
@@ -16,7 +16,7 @@ def broadcast_signedrawtx(mn_config, access, tunnel=None):
 
             print('\nverify tx for %s' % alias)
             for tx in signedrawtx:
-                r = decoderawtransaction(tx, access, tunnel)
+                r = decoderawtransaction(tx, access)
 
                 print(
                     json.dumps(
@@ -35,7 +35,7 @@ def broadcast_signedrawtx(mn_config, access, tunnel=None):
                     print('\nNo.')
                     continue
 
-                s = sendrawtransaction(tx, access, tunnel)
+                s = sendrawtransaction(tx, access)
                 xfertxid.append(s)
                 print('\n====> txid : %s\n' % s)
 

@@ -48,12 +48,12 @@ def print_balance(mn_config):
         return need_wallet_rescan
 
 
-def get_unspent_txs(mnconfig, access, tunnel=None):
+def get_unspent_txs(mnconfig, access):
     collateral_address = mnconfig.get('collateral_address')
     collateral_txidtxidn = mnconfig.get('collateral_txidtxidn')
 
     listunspent = get_listunspent(
-        6, 999999999, collateral_address, access, tunnel)
+        6, 999999999, collateral_address, access)
 
     unspent_mine = []
     balance_mine = []
@@ -106,8 +106,7 @@ def make_inputs_for_hw_wallet(
         receiving_address,
         collateral_spath,
         client,
-        mpath,
-        tunnel=None):
+        mpath):
     # trezor and keepkey
     import binascii
     from decimal import Decimal
@@ -127,23 +126,21 @@ def make_inputs_for_hw_wallet(
     tx_api.rpcuser = rpcuser
     tx_api.rpcpassword = rpcpassword
     tx_api.rpcbindip = rpcbindip
-    tx_api.rpcport = (rpcport if tunnel is None else SSH_LOCAL_PORT)
+    tx_api.rpcport = (rpcport if USE_SSH_TUNNEL is False else SSH_LOCAL_PORT)
 
     client.set_tx_api(TXAPIDashrpc())
 
     inputs = []
     outputs = []
     amount_total = 0
-    purpose, coin_type, account, change = chain_path(mpath, tunnel)
+    purpose, coin_type, account, change = chain_path(mpath)
 
     if collateral_spath is None or receiving_address is None:
         err_msg = 'make_inputs_for_hw_wallet receiving_address / collateral_spath : Should not None'
         print_err_exit(
             get_caller_name(),
             get_function_name(),
-            err_msg,
-            None,
-            tunnel)
+            err_msg)
 
     # make input
     for x in tx:
@@ -156,9 +153,7 @@ def make_inputs_for_hw_wallet(
             print_err_exit(
                 get_caller_name(),
                 get_function_name(),
-                err_msg,
-                None,
-                tunnel)
+                err_msg)
 
         amount_total += amount
         inputs.append(
@@ -205,20 +200,16 @@ def make_inputs_for_hw_wallet(
         print_err_exit(
             get_caller_name(),
             get_function_name(),
-            err_msg,
-            None,
-            tunnel)
+            err_msg)
 
     except KeyboardInterrupt:
         print_err_exit(
             get_caller_name(),
             get_function_name(),
-            'KeyboardInterrupt',
-            None,
-            tunnel)
+            'KeyboardInterrupt')
 
 
-def make_txs_for_hwwallet(mnconfig, client, mpath, tunnel=None):
+def make_txs_for_hwwallet(mnconfig, client, mpath):
 
     txs = mnconfig.get('txs', None)
     collateral_spath = mnconfig.get('collateral_spath', None)
@@ -229,16 +220,14 @@ def make_txs_for_hwwallet(mnconfig, client, mpath, tunnel=None):
         print_err_exit(
             get_caller_name(),
             get_function_name(),
-            err_msg,
-            None,
-            tunnel)
+            err_msg)
 
     serialized_txs = []
     if txs is not None:
         for tx in txs:
             if (len(tx)) >= min_unspent or MOVE_1K_COLLATERAL:
                 serialized_tx = make_inputs_for_hw_wallet(
-                    tx, receiving_address, collateral_spath, client, mpath, tunnel)
+                    tx, receiving_address, collateral_spath, client, mpath)
                 serialized_txs.append(serialized_tx)
 
             else:

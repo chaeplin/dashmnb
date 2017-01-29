@@ -7,9 +7,8 @@ from config import *
 from mnb_misc import *
 from mnb_rpc import *
 from mnb_mnconf import *
-#from mnb_bip32 import *
 from mnb_hwwallet import *
-
+from decimal import Decimal
 
 def print_balance(mn_config):
 
@@ -18,12 +17,12 @@ def print_balance(mn_config):
     print('[masternodes balance]')
     print('alias\tcnt\tbalance(dashd)\tbalance(explorer)')
 
-    for m in sorted(list(mn_config.keys())):
-        alias = mn_config[m].get('alias')
-        exp_balance = mn_config[m].get('collateral_exp_balance')
+    for m in mn_config:
+        alias = m.get('alias')
+        exp_balance = m.get('collateral_exp_balance')
         if exp_balance is None:
             exp_balance = '---'
-        unspent = mn_config[m].get('collateral_dashd_balance')
+        unspent = m.get('collateral_dashd_balance')
         sumofunspent = sum(unspent)
         cnt = len(unspent)
 
@@ -47,13 +46,36 @@ def print_balance(mn_config):
     else:
         return need_wallet_rescan
 
+def check_mtime_of_tx(unspent_cache_abs_path):
+    if os.path.exists(unspent_cache_abs_path):
+        mtime_of_unspent_cache = int(os.path.getmtime(unspent_cache_abs_path))
+        cache_unspent_statinfo = os.stat(unspent_cache_abs_path)
+    
+    else:
+        return True
+
+    if cache_unspent_statinfo.st_size == 0:
+        return True
+
+    if time.time() > (mtime_of_unspent_cache + (txs_cache_refresh_interval_hour * 60 * 60)): 
+        return True
+
+    return False
 
 def get_unspent_txs(mnconfig, access):
     collateral_address = mnconfig.get('collateral_address')
     collateral_txidtxidn = mnconfig.get('collateral_txidtxidn')
 
-    listunspent = get_listunspent(
-        6, 999999999, collateral_address, access)
+    unspent_cache_abs_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), '../cache/' + ('MAINNET' if MAINNET else 'TESTNET') + '-' + collateral_txidtxidn  + '-unspent.dat')
+
+    bgetListUnspentAgain  = check_mtime_of_tx(unspent_cache_abs_path)
+    if bgetListUnspentAgain:
+        listunspent = get_listunspent(6, 999999999, collateral_address, access)
+        with open(unspent_cache_abs_path, 'w') as outfile:
+            json.dump(listunspent, outfile)
+    else:
+        with open(unspent_cache_abs_path) as data_file:    
+            listunspent = json.load(data_file, parse_float=Decimal)
 
     unspent_mine = []
     balance_mine = []
@@ -61,30 +83,16 @@ def get_unspent_txs(mnconfig, access):
     for m in listunspent:
         unspent_txidtxidn = get_txidtxidn(m['txid'], m['vout'])
         unspent_amount = m['amount']
-        # unspent_confirmations = m['confirmations'] # dashd listunspent will
-        # not show unmatured coinbase transaction
 
         balance_mine.append(unspent_amount)
 
-        #print(collateral_address, collateral_txidtxidn, unspent_txidtxidn, unspent_amount)
-
-        #print('MOVE_1K_COLLATERAL --> ', MOVE_1K_COLLATERAL)
-
         if MOVE_1K_COLLATERAL:
-            # print('1111')
             unspent_mine.append(m)
 
         elif MOVE_1K_COLLATERAL == False:
-            # print('2222')
-            #print(unspent_txidtxidn, collateral_txidtxidn, unspent_amount, max_amounts)
-            # and unspent_confirmations > min_conf: # dashd listunspent will
-            # not show unmatured coinbase transaction
             if (unspent_txidtxidn != collateral_txidtxidn) and (
                     unspent_amount < max_amounts):
-                # print('333333')
                 unspent_mine.append(m)
-
-    #print('unspent_mine ', unspent_mine)
 
     txs = []
     for x in unspent_mine:

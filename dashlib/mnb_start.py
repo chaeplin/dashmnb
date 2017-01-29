@@ -21,14 +21,16 @@ def start_masternode(
         print('\n[making mnbs and quit]')
 
     masternodebroadcast = []
-    for alias in sorted(mns_to_start):
+
+    for m in mns_to_start:
         mnbhex = make_mnb(
-            mns_to_start[alias].get('alias'),
+            m.get('alias'),
             protocolversion,
-            mns_to_start[alias],
+            m,
             access,
             client,
             mpath)
+
         masternodebroadcast.append(mnbhex)
 
     vc = num_to_varint(len(masternodebroadcast)).hex()

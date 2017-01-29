@@ -12,7 +12,9 @@ from mnb_misc import *
 
 
 def main():
-    client, signing, bip32, _, _ = check_hw_wallet(None)
+    logo_show()
+
+    client, signing, bip32, _, _ = check_hw_wallet()
 
     if client is None:
         sys.exit()

@@ -54,11 +54,10 @@ def main(args):
         mn_config, signing, mns, mna = checking_mn_config(
             access, signing, chain_pubkey)
 
-    #print(json.dumps(mn_config, sort_keys=True, indent=4, separators=(',', ': ')))
-    #sys.exit()
 
     if args.status or args.anounce or args.balance or args.maketx or args.xfer:
         print_mnstatus(mn_config, mns, mna)
+
 
     if args.anounce and MOVE_1K_COLLATERAL == False:
         if not signing:
@@ -68,17 +67,16 @@ def main(args):
                 get_function_name(),
                 err_msg)
 
-        mns_to_start = {}
-        for x in sorted(list(mn_config.keys())):
-            txidtxidn = mn_config.get(x).get('collateral_txidtxidn')
+        mns_to_start = []
+        for m in mn_config:
+            txidtxidn = m.get('collateral_txidtxidn')
             if len(args.masternode_to_start) > 0:
-                if mn_config.get(x).get('alias') in args.masternode_to_start:
-                    mns_to_start[x] = mn_config[x]
-
+                 if m.get('alias') in args.masternode_to_start:
+                    mns_to_start.append(m)
             else:
                 if ((mns.get(txidtxidn, None) != 'ENABLED'
                      and mns.get(txidtxidn, None) != 'PRE_ENABLED')):
-                    mns_to_start[x] = mn_config[x]
+                    mns_to_start.append(m)
 
         if len(mns_to_start) > 0 and signing:
             start_masternode(
@@ -91,9 +89,8 @@ def main(args):
 
     # wallet rescan
     if args.balance or args.maketx or args.xfer:
-        for m in sorted(list(mn_config.keys())):
-            mn_config[m]["unspent"], mn_config[m]["txs"], mn_config[m][
-                "collateral_dashd_balance"] = get_unspent_txs(mn_config.get(m), access)
+        for m in mn_config:
+            m["unspent"], m["txs"], m["collateral_dashd_balance"] = get_unspent_txs(m, access)
 
         need_wallet_rescan = print_balance(mn_config)
 
@@ -122,27 +119,16 @@ def main(args):
 
         if signing:
             print('[making txs]')
-            for x in sorted(list(mn_config.keys())):
-                if len(
-                    mn_config[x].get('collateral_dashd_balance')) > 0 and len(
-                    mn_config[x].get(
-                        'txs',
-                        None)) > 0:
+            for m in mn_config:
+                if len(m.get('collateral_dashd_balance')) > 0 and len(m.get('txs', None)) > 0:
                     if len(args.masternode_to_start) > 0:
-                        if mn_config.get(x).get(
-                                'alias') in args.masternode_to_start:
-                            print(
-                                '---> signing txs for mn %s: ' %
-                                mn_config[x].get('alias'))
-                            mn_config[x]["signedrawtx"] = make_txs_for_hwwallet(
-                                mn_config[x], client, mpath)
+                        if m.get('alias') in args.masternode_to_start:
+                            print('---> signing txs for mn %s: ' % m.get('alias'))
+                            m["signedrawtx"] = make_txs_for_hwwallet(m, client, mpath)
 
                     else:
-                        print(
-                            '---> signing txs for mn %s: ' %
-                            mn_config[x].get('alias'))
-                        mn_config[x]["signedrawtx"] = make_txs_for_hwwallet(
-                            mn_config[x], client, mpath)
+                        print('---> signing txs for mn %s: ' % m.get('alias'))
+                        m["signedrawtx"] = make_txs_for_hwwallet(m, client, mpath)
 
     if args.xfer and signing:
         xfertxid = broadcast_signedrawtx(mn_config, access)

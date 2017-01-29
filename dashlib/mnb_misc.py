@@ -39,7 +39,7 @@ def get_txidtxidn(txid, txidn):
         return txid + '-' + str(txidn)
 
 
-def print_mnlist(lineno, mnconfig, ipmatch, mnstatus):
+def print_mnlist(mnconfig, ipmatch, mnstatus):
     print(mnconfig.get('alias') + '\t' + mnconfig.get('ipport') + ':' +
           ipmatch + '\t' + mnconfig.get('collateral_address') + ' ' + mnstatus)
 
@@ -48,16 +48,15 @@ def print_mnstatus(mn_config, mns, mna):
     print()
     print('[masternodes status]')
     print('alias\tip (m: ip/port match)\tcollateral address\t\t   status')
-    for m in sorted(list(mn_config.keys())):
-        mna_ip = mna.get(mn_config.get(m).get(
-            'collateral_txidtxidn'), '-------')
-        mns_status = mns.get(mn_config.get(m).get(
-            'collateral_txidtxidn'), '-------')
-        if mn_config[m].get('ipport') != mna_ip:
+
+    for m in mn_config:
+        mna_ip = mna.get(m.get('collateral_txidtxidn', '-------'))
+        mns_status = mns.get(m.get('collateral_txidtxidn', '-------'))
+        if m.get('ipport') != mna_ip:
             ipmatch = '-'
         else:
             ipmatch = 'm'
-        print_mnlist(m, mn_config[m], ipmatch, mns_status)
+        print_mnlist(m, ipmatch, mns_status)
 
     print()
 

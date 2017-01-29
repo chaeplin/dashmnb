@@ -3,11 +3,13 @@
 # mnb.py
 
 # code from https://github.com/dashpay/electrum-dash
-# ref : https://github.com/dashpay/dash/blob/v0.12.1.x/dash-docs/protocol-documentation.md
+# ref :
+# https://github.com/dashpay/dash/blob/v0.12.1.x/dash-docs/protocol-documentation.md
 
-import sys, os
-sys.path.append( os.path.join( os.path.dirname(__file__), '.' ) )
-sys.path.append( os.path.join( os.path.dirname(__file__), '.', 'dashlib' ) )
+import sys
+import os
+sys.path.append(os.path.join(os.path.dirname(__file__), '.'))
+sys.path.append(os.path.join(os.path.dirname(__file__), '.', 'dashlib'))
 
 import argparse
 import time
@@ -21,36 +23,45 @@ from mnb_xfer import *
 from mnb_sshtunnel import *
 from mnb_hwwallet import *
 import signal
+import atexit
 
-from bitcoinrpc.authproxy import AuthServiceProxy, JSONRPCException    
+from bitcoinrpc.authproxy import AuthServiceProxy, JSONRPCException
 
-def main(args, tunnel=None):    
-    #clear_screen()
+
+def main(args, tunnel=None):
+    # clear_screen()
     logo_show()
 
     # access
-    serverURL = 'http://' + rpcuser + ':' + rpcpassword + '@' + rpcbindip + ':' + str(rpcport if tunnel == None else SSH_LOCAL_PORT)  
-    access = AuthServiceProxy(serverURL) 
+    serverURL = 'http://' + rpcuser + ':' + rpcpassword + '@' + \
+        rpcbindip + ':' + str(rpcport if tunnel is None else SSH_LOCAL_PORT)
+    access = AuthServiceProxy(serverURL)
 
     client, signing, bip32, mpath, xpub = check_hw_wallet(tunnel)
     chain_pubkey = get_chain_pubkey(client, bip32, tunnel)
 
-    #if len(mpath) == 0:
+    # if len(mpath) == 0:
     #    err_msg = 'please configure bip49 path'
     #    print_err_exit(get_caller_name(), get_function_name(), err_msg, None, tunnel)
-    
-    #if len(xpub) == 0:
+
+    # if len(xpub) == 0:
     #    err_msg = 'please configure bip32 xpub/tpub'
     #    print_err_exit(get_caller_name(), get_function_name(), err_msg, None, tunnel)
 
     if len(str(account_no)) == 0:
         err_msg = 'please configure bip32 path : account_no'
-        print_err_exit(get_caller_name(), get_function_name(), err_msg, None, tunnel)
+        print_err_exit(
+            get_caller_name(),
+            get_function_name(),
+            err_msg,
+            None,
+            tunnel)
 
     protocolversion = check_dashd_syncing(access, tunnel)
 
     if args.check or args.status or args.anounce or args.balance or args.maketx or args.xfer:
-        mn_config, signing, mns, mna = checking_mn_config(access, signing, chain_pubkey, tunnel)
+        mn_config, signing, mns, mna = checking_mn_config(
+            access, signing, chain_pubkey, tunnel)
 
     if args.status or args.anounce or args.balance or args.maketx or args.xfer:
         print_mnstatus(mn_config, mns, mna)
@@ -58,7 +69,12 @@ def main(args, tunnel=None):
     if args.anounce and MOVE_1K_COLLATERAL == False:
         if not signing:
             err_msg = 'need HW wallet to anounce'
-            print_err_exit(get_caller_name(), get_function_name(), err_msg, None, tunnel)
+            print_err_exit(
+                get_caller_name(),
+                get_function_name(),
+                err_msg,
+                None,
+                tunnel)
 
         mns_to_start = {}
         for x in sorted(list(mn_config.keys())):
@@ -68,112 +84,158 @@ def main(args, tunnel=None):
                     mns_to_start[x] = mn_config[x]
 
             else:
-                if ((mns.get(txidtxidn, None) != 'ENABLED' \
-                    and mns.get(txidtxidn, None) != 'PRE_ENABLED')) :
+                if ((mns.get(txidtxidn, None) != 'ENABLED'
+                     and mns.get(txidtxidn, None) != 'PRE_ENABLED')):
                     mns_to_start[x] = mn_config[x]
 
         if len(mns_to_start) > 0 and signing:
-            start_masternode(mns_to_start, protocolversion, access, client, args.anounce, mpath, tunnel)
+            start_masternode(
+                mns_to_start,
+                protocolversion,
+                access,
+                client,
+                args.anounce,
+                mpath,
+                tunnel)
 
     # wallet rescan
     if args.balance or args.maketx or args.xfer:
         for m in sorted(list(mn_config.keys())):
-            mn_config[m]["unspent"], mn_config[m]["txs"], mn_config[m]["collateral_dashd_balance"] = get_unspent_txs(mn_config.get(m), access, tunnel)
+            mn_config[m]["unspent"], mn_config[m]["txs"], mn_config[m][
+                "collateral_dashd_balance"] = get_unspent_txs(mn_config.get(m), access, tunnel)
 
         need_wallet_rescan = print_balance(mn_config)
 
         if need_wallet_rescan:
             err_msg = '\n\trestarting Dash-QT or dashd with -rescan needed'
-            print_err_exit(get_caller_name(), get_function_name(), err_msg, None, tunnel)
+            print_err_exit(
+                get_caller_name(),
+                get_function_name(),
+                err_msg,
+                None,
+                tunnel)
 
     if not signing:
         err_msg = 'need HW wallet to spend'
-        print_err_exit(get_caller_name(), get_function_name(), err_msg, None, tunnel)
+        print_err_exit(
+            get_caller_name(),
+            get_function_name(),
+            err_msg,
+            None,
+            tunnel)
 
     if args.maketx or args.xfer:
 
         if need_wallet_rescan:
             err_msg = '\n\t1) to spend mn payments in HW Wallet, restart Dash-QT or dashd with -rescan\n\t2) if did -rescan and still see this messge, check if 1K was spent'
-            print_err_exit(get_caller_name(), get_function_name(), err_msg, None, tunnel)
+            print_err_exit(
+                get_caller_name(),
+                get_function_name(),
+                err_msg,
+                None,
+                tunnel)
 
         if signing:
             print('[making txs]')
             for x in sorted(list(mn_config.keys())):
-                if len(mn_config[x].get('collateral_dashd_balance')) > 0 and len(mn_config[x].get('txs', None)) > 0:
+                if len(
+                    mn_config[x].get('collateral_dashd_balance')) > 0 and len(
+                    mn_config[x].get(
+                        'txs',
+                        None)) > 0:
                     if len(args.masternode_to_start) > 0:
-                        if mn_config.get(x).get('alias') in args.masternode_to_start :
-                            print('---> signing txs for mn %s: ' % mn_config[x].get('alias'))
-                            mn_config[x]["signedrawtx"] = make_txs_for_hwwallet(mn_config[x], client, mpath, tunnel)
-    
+                        if mn_config.get(x).get(
+                                'alias') in args.masternode_to_start:
+                            print(
+                                '---> signing txs for mn %s: ' %
+                                mn_config[x].get('alias'))
+                            mn_config[x]["signedrawtx"] = make_txs_for_hwwallet(
+                                mn_config[x], client, mpath, tunnel)
+
                     else:
-                        print('---> signing txs for mn %s: ' % mn_config[x].get('alias'))
-                        mn_config[x]["signedrawtx"] = make_txs_for_hwwallet(mn_config[x], client, mpath, tunnel)
+                        print(
+                            '---> signing txs for mn %s: ' %
+                            mn_config[x].get('alias'))
+                        mn_config[x]["signedrawtx"] = make_txs_for_hwwallet(
+                            mn_config[x], client, mpath, tunnel)
 
     if args.xfer and signing:
         xfertxid = broadcast_signedrawtx(mn_config, access, tunnel)
 
         print()
-        if xfertxid != None:
+        if xfertxid is not None:
             for x in xfertxid:
                 print('\t' + x)
 
     if tunnel:
-        print_err_exit(get_caller_name(), get_function_name(), 'end of pg', None, tunnel)
+        print_err_exit(
+            get_caller_name(),
+            get_function_name(),
+            'end of pg',
+            None,
+            tunnel)
 
 
 def parse_args(tunnel=None):
 
     parser = argparse.ArgumentParser()
 
-    parser.add_argument(dest ='masternode_to_start',
-                        metavar = 'masternode_alias_to_start/spend',
-                        nargs = '*' )
+    parser.add_argument(dest='masternode_to_start',
+                        metavar='masternode_alias_to_start/spend',
+                        nargs='*')
 
-    parser.add_argument('-c','--check',
-                        dest = 'check',
-                        action = 'store_true',
-                        help='check masternode config') 
+    parser.add_argument('-c', '--check',
+                        dest='check',
+                        action='store_true',
+                        help='check masternode config')
 
-    parser.add_argument('-s','--status',
-                        dest = 'status',
-                        action = 'store_true',
-                        help='show masternode status') 
+    parser.add_argument('-s', '--status',
+                        dest='status',
+                        action='store_true',
+                        help='show masternode status')
 
-    parser.add_argument('-a','--anounce',
-                        dest = 'anounce',
-                        action = 'store_true',
-                        help='anounce missing masternodes')                        
+    parser.add_argument('-a', '--anounce',
+                        dest='anounce',
+                        action='store_true',
+                        help='anounce missing masternodes')
 
-    parser.add_argument('-b','--balance',
-                        dest = 'balance',
-                        action = 'store_true',
-                        help='show masternodes balance')   
+    parser.add_argument('-b', '--balance',
+                        dest='balance',
+                        action='store_true',
+                        help='show masternodes balance')
 
-    parser.add_argument('-m','--maketx',
-                        dest = 'maketx',
-                        action = 'store_true',
+    parser.add_argument('-m', '--maketx',
+                        dest='maketx',
+                        action='store_true',
                         help='make signed raw tx')
 
-    parser.add_argument('-x','--xfer',
-                        dest = 'xfer',
-                        action = 'store_true',
+    parser.add_argument('-x', '--xfer',
+                        dest='xfer',
+                        action='store_true',
                         help='broadcast signed raw tx')
 
-
     if len(sys.argv) < 2:
-        if MOVE_1K_COLLATERAL == True:
+        if MOVE_1K_COLLATERAL:
             print()
             print('**** MOVE_1K_COLLATERAL is True *******')
             print()
             time.sleep(5)
 
         parser.print_help()
-        print_err_exit(get_caller_name(), get_function_name(), 'print help', None, tunnel)
+        print_err_exit(
+            get_caller_name(),
+            get_function_name(),
+            'print help',
+            None,
+            tunnel)
 
     return parser.parse_args()
 
 
 if __name__ == "__main__":
+    def killsubprocess():
+        if tunnel_pid:
+            os.kill(tunnel_pid, signal.SIGTERM)
 
     printdbg('main starting')
     if (sys.version_info < (3, 0)):
@@ -188,6 +250,7 @@ if __name__ == "__main__":
             tunnel_pid = tunnel._getpid()
 
         args = parse_args(tunnel_pid)
+        atexit.register(killsubprocess)
         main(args, tunnel_pid)
 
     except KeyboardInterrupt:
@@ -196,4 +259,3 @@ if __name__ == "__main__":
         sys.exit()
 
 # end
-

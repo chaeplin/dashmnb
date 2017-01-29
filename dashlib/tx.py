@@ -1,7 +1,8 @@
 # tx.py
-import sys, os
-sys.path.append( os.path.join( os.path.dirname(__file__), '..' ) )
-sys.path.append( os.path.join( os.path.dirname(__file__), '..', 'dashlib' ) )
+import sys
+import os
+sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
+sys.path.append(os.path.join(os.path.dirname(__file__), '..', 'dashlib'))
 
 import re
 import binascii
@@ -10,6 +11,7 @@ import simplejson as json
 
 from hashs import *
 from script import *
+
 
 def decode(string, base):
     if base == 256 and isinstance(string, str):
@@ -32,10 +34,11 @@ def decode(string, base):
         string = string[1:]
     return result
 
+
 def deserialize_script(script):
     if isinstance(script, str) and re.match('^[0-9a-fA-F]*$', script):
-       return json_changebase(deserialize_script(bytes.fromhex(script)),
-                              lambda x: safe_hexlify(x))        
+        return json_changebase(deserialize_script(bytes.fromhex(script)),
+                               lambda x: safe_hexlify(x))
     #   return json_changebase(deserialize_script(binascii.unhexlify(script)),
     #                          lambda x: safe_hexlify(x))
     out, pos = [], 0
@@ -45,11 +48,11 @@ def deserialize_script(script):
             out.append(None)
             pos += 1
         elif code <= 75:
-            out.append(script[pos+1:pos+1+code])
+            out.append(script[pos + 1:pos + 1 + code])
             pos += 1 + code
         elif code <= 78:
             szsz = pow(2, code - 76)
-            sz = decode(script[pos+szsz: pos:-1], 256)
+            sz = decode(script[pos + szsz: pos:-1], 256)
             out.append(script[pos + 1 + szsz:pos + 1 + szsz + sz])
             pos += 1 + szsz + sz
         elif code <= 96:
@@ -60,29 +63,30 @@ def deserialize_script(script):
             pos += 1
     return out
 
+
 def deserialize(tx):
     if isinstance(tx, str) and re.match('^[0-9a-fA-F]*$', tx):
         return json_changebase(deserialize(bytes.fromhex(tx)),
-                              lambda x: safe_hexlify(x))
-        #return json_changebase(deserialize(binascii.unhexlify(tx)),
-        #                      lambda x: safe_hexlify(x))        
+                               lambda x: safe_hexlify(x))
+        # return json_changebase(deserialize(binascii.unhexlify(tx)),
+        #                      lambda x: safe_hexlify(x))
     pos = [0]
 
     def read_as_int(bytez):
         pos[0] += bytez
-        return decode(tx[pos[0]-bytez:pos[0]][::-1], 256)
+        return decode(tx[pos[0] - bytez:pos[0]][::-1], 256)
 
     def read_var_int():
         pos[0] += 1
-        
-        val = from_byte_to_int(tx[pos[0]-1])
+
+        val = from_byte_to_int(tx[pos[0] - 1])
         if val < 253:
             return val
         return read_as_int(pow(2, val - 252))
 
     def read_bytes(bytez):
         pos[0] += bytez
-        return tx[pos[0]-bytez:pos[0]]
+        return tx[pos[0] - bytez:pos[0]]
 
     def read_var_string():
         size = read_var_int()
@@ -110,12 +114,13 @@ def deserialize(tx):
     obj["locktime"] = read_as_int(4)
     return obj
 
+
 def decoderawtx(rawtx):
-    txo  = deserialize(rawtx)
+    txo = deserialize(rawtx)
     txid = format_hash(double_sha256(bytes.fromhex(rawtx)))
 #    txid = format_hash(double_sha256(binascii.unhexlify(rawtx)))
 
-    #print(txid)
+    # print(txid)
     #print(json.dumps(txo, sort_keys=True, indent=4, separators=(',', ': ')))
 
     addrcheck = {}
@@ -123,37 +128,38 @@ def decoderawtx(rawtx):
         hashn = x.get('outpoint')['hash']
         if hashn != '0000000000000000000000000000000000000000000000000000000000000000':
             des_script = deserialize_script(x.get('script'))
-            addrn      = script_to_addr(des_script)
+            addrn = script_to_addr(des_script)
             if (addrn != 'pay_to_pubkey'
                     and addrn != 'unspendable'
                     and addrn != 'nulldata'
                     and addrn != 'invalid'):
                 addrcheck['good'] = {
-                    "hashin":   hashn + '-' + str(x.get('outpoint')['index']),
+                    "hashin": hashn + '-' + str(x.get('outpoint')['index']),
                     "addrfrom": addrn
                 }
 
             elif (addrn == 'pay_to_pubkey'):
                 addrcheck['pubkey'] = {
-                    "hashin":   hashn + '-' + str(x.get('outpoint')['index']),
+                    "hashin": hashn + '-' + str(x.get('outpoint')['index']),
                     "addrfrom": addrn
                 }
         else:
             addrcheck['coinbase'] = {
-                    "hashin":   '0000000000000000000000000000000000000000000000000000000000000000' + '-' + str(0),
-                    "addrfrom": 'coinbase'
-            }
+                "hashin": '0000000000000000000000000000000000000000000000000000000000000000' +
+                '-' +
+                str(0),
+                "addrfrom": 'coinbase'}
 
-    if addrcheck.get('coinbase', None) != None:
-        hashin   = addrcheck.get('coinbase')['hashin']
-        addrfrom = addrcheck.get('coinbase')['addrfrom']         
+    if addrcheck.get('coinbase', None) is not None:
+        hashin = addrcheck.get('coinbase')['hashin']
+        addrfrom = addrcheck.get('coinbase')['addrfrom']
 
-    if addrcheck.get('pubkey', None) != None:
-        hashin   = addrcheck.get('pubkey')['hashin']
-        addrfrom = addrcheck.get('pubkey')['addrfrom']      
+    if addrcheck.get('pubkey', None) is not None:
+        hashin = addrcheck.get('pubkey')['hashin']
+        addrfrom = addrcheck.get('pubkey')['addrfrom']
 
-    if addrcheck.get('good', None) != None:
-        hashin   = addrcheck.get('good')['hashin']
+    if addrcheck.get('good', None) is not None:
+        hashin = addrcheck.get('good')['hashin']
         addrfrom = addrcheck.get('good')['addrfrom']
 
     #print(json.dumps(addrcheck, sort_keys=True, indent=4, separators=(',', ': ')))
@@ -163,8 +169,8 @@ def decoderawtx(rawtx):
     for x in txo.get('outs'):
         script = x.get('script')
         valout = x.get('value')
-        outno  = x.get('n')
-        value  = str('{0:.8f}'.format(float(valout / 1e8)))
+        outno = x.get('n')
+        value = str('{0:.8f}'.format(float(valout / 1e8)))
         addrto = script_to_addr(script)
 
         hashout = txid + '-' + str(outno)
@@ -179,4 +185,3 @@ def decoderawtx(rawtx):
         }
 
     return addrval
-

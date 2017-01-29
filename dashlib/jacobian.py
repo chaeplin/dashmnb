@@ -1,25 +1,30 @@
 # jacobian.py
-import sys, os
-sys.path.append( os.path.join( os.path.dirname(__file__), '..' ) )
-sys.path.append( os.path.join( os.path.dirname(__file__), '..', 'dashlib' ) )
+import sys
+import os
+sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
+sys.path.append(os.path.join(os.path.dirname(__file__), '..', 'dashlib'))
 
 from utils import *
 
 # private to public key x, y
+
+
 def inv(a, n):
     if a == 0:
         return 0
     lm, hm = 1, 0
     low, high = a % n, n
     while low > 1:
-        r = high//low
-        nm, new = hm-lm*r, high-low*r
+        r = high // low
+        nm, new = hm - lm * r, high - low * r
         lm, low, hm, high = nm, new, lm, low
     return lm % n
+
 
 def to_jacobian(p):
     o = (p[0], p[1], 1)
     return o
+
 
 def jacobian_double(p):
     if not p[1]:
@@ -31,6 +36,7 @@ def jacobian_double(p):
     ny = (M * (S - nx) - 8 * ysq ** 2) % P
     nz = (2 * p[1] * p[2]) % P
     return (nx, ny, nz)
+
 
 def jacobian_add(p, q):
     if not p[1]:
@@ -55,9 +61,11 @@ def jacobian_add(p, q):
     nz = (H * p[2] * q[2]) % P
     return (nx, ny, nz)
 
+
 def from_jacobian(p):
     z = inv(p[2], P)
     return ((p[0] * z**2) % P, (p[1] * z**3) % P)
+
 
 def jacobian_multiply(a, n):
     if a[1] == 0 or n == 0:
@@ -67,9 +75,10 @@ def jacobian_multiply(a, n):
     if n < 0 or n >= N:
         return jacobian_multiply(a, n % N)
     if (n % 2) == 0:
-        return jacobian_double(jacobian_multiply(a, n//2))
+        return jacobian_double(jacobian_multiply(a, n // 2))
     if (n % 2) == 1:
-        return jacobian_add(jacobian_double(jacobian_multiply(a, n//2)), a)
+        return jacobian_add(jacobian_double(jacobian_multiply(a, n // 2)), a)
+
 
 def fast_multiply(a, n):
     return from_jacobian(jacobian_multiply(to_jacobian(a), n))

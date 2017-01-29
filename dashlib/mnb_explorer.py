@@ -1,6 +1,7 @@
-import sys, os
-sys.path.append( os.path.join( os.path.dirname(__file__), '..' ) )
-sys.path.append( os.path.join( os.path.dirname(__file__), '..', 'dashlib' ) )
+import sys
+import os
+sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
+sys.path.append(os.path.join(os.path.dirname(__file__), '..', 'dashlib'))
 
 # use block explorer to check balance, block height to check fork
 
@@ -14,8 +15,9 @@ def make_request(url, tunnel=None):
     headers = {'user-agent': USERAGET}
 
     try:
-        response = requests.get(url, headers=headers, timeout=(4,3))
-        if response.status_code == requests.codes.ok and float(response.text) >= 0:
+        response = requests.get(url, headers=headers, timeout=(4, 3))
+        if response.status_code == requests.codes.ok and float(
+                response.text) >= 0:
             return response.text
 
         else:
@@ -23,18 +25,28 @@ def make_request(url, tunnel=None):
 
     except requests.exceptions.RequestException:
         err_msg = 'requests.exceptions.RequestException'
-        print_err_exit(get_caller_name(), get_function_name(), err_msg, None, tunnel)        
+        print_err_exit(
+            get_caller_name(),
+            get_function_name(),
+            err_msg,
+            None,
+            tunnel)
 
     except Exception as e:
         err_msg = str(e.args)
-        print_err_exit(get_caller_name(), get_function_name(), err_msg, None, tunnel)
+        print_err_exit(
+            get_caller_name(),
+            get_function_name(),
+            err_msg,
+            None,
+            tunnel)
 
 
 def get_explorer_balance(address, tunnel=None):
     if MAINNET:
-        url  = 'https://explorer.dash.org/chain/Dash/q/addressbalance/' + address
+        url = 'https://explorer.dash.org/chain/Dash/q/addressbalance/' + address
     else:
-        url  = 'https://test.explorer.dash.org/chain/tDash/q/addressbalance/' + address
+        url = 'https://test.explorer.dash.org/chain/tDash/q/addressbalance/' + address
 
     response = make_request(url, tunnel)
 

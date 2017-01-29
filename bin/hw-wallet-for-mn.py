@@ -2,8 +2,8 @@
 
 import sys
 import os
-sys.path.append(os.path.join(os.path.dirname(__file__), '.'))
-sys.path.append(os.path.join(os.path.dirname(__file__), '.', 'dashlib'))
+sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
+sys.path.append(os.path.join(os.path.dirname(__file__), '..', 'dashlib'))
 
 from config import *
 from mnb_hwwallet import *

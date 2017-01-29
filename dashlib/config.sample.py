@@ -32,7 +32,7 @@ if MAINNET:
     SSH_LOCAL_PORT   = '29998'
 
     # masternode_config
-    masternode_conf_file = 'masternode.mainnet.conf'
+    masternode_conf_file = 'mnconf/masternode.mainnet.conf'
 
     # default address to send coins in hw wallet if reveiving_address in masternode.conf is blank
     # this is not chaing payment address of mn
@@ -63,7 +63,7 @@ else:
     SSH_LOCAL_PORT   = '39998'
 
     # masternode_config
-    masternode_conf_file = 'masternode.testnet.conf'
+    masternode_conf_file = 'mnconf/masternode.testnet.conf'
 
     # default address to send coins in hw wallet if reveiving_address in masternode.conf is blank
     # this is not chaing payment address of mn

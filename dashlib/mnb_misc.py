@@ -78,7 +78,7 @@ def print_err_exit(
         tunnel=None):
     import signal
 
-    msg = '\n\n\tversion  : 0.1a\n'
+    msg = '\n\n\tversion  : 0.2a\n'
     msg += '\tcaller   : ' + caller_name + '\n'
     msg += '\tfunction : ' + function_name + '\n'
     if errargs:

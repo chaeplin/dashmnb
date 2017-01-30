@@ -7,6 +7,10 @@ Run Dash Masternode with Hardware Wallet
     - to support Dash testnet, both trezor and keepkey has only Mainnet.
     - with Mainnet, no need to update firmware. Use official firmware.
 
+###### Q : which hw wallet supported ?
+    - Trezor
+    - Keepkey
+    - dashmnb will not run without hw wallet
 
 ###### Q : what can dashmnb do
     - config check (alias, address, ip, key, pkey, hw wallet path)
@@ -32,7 +36,7 @@ Run Dash Masternode with Hardware Wallet
 
 ###### help
 ```
-(venv3)  > $ python dashmnb.py 
+(venv3)  > $ python bin/dashmnb.py 
 usage: dashmnb.py [-h] [-c] [-s] [-a] [-b] [-m] [-x]
                   [masternode_alias_to_start/spend [masternode_alias_to_start/spend ...]]
 
@@ -60,7 +64,7 @@ optional arguments:
 ###### show masternode status and balance
 ````
 
-(venv3)  > $ python dashmnb.py  -b
+(venv3)  > $ python bin/dashmnb.py  -b
     ____             __  
    / __ \____ ______/ /_ 
   / / / / __ `/ ___/ __ \
@@ -125,7 +129,7 @@ mn8  2  1011.25000000 1022.50006680
 
 ###### re anounnunce mn 7 (no hardware wallet)
 ````
-(venv3)  > $ python dashmnb.py  -a mn7
+(venv3)  > $ python bin/dashmnb.py  -a mn7
     ____             __  
    / __ \____ ______/ /_ 
   / / / / __ `/ ___/ __ \
@@ -179,7 +183,7 @@ mn8 123.123.128.230:19999:m  ybv3cX4Gmn1ZK2ZgFgu51NADe3MXrtT7qP ENABLED
 
 ###### re anounnunce mn 7
 ````
-(venv3)  > $ python dashmnb.py  -a mn7
+(venv3)  > $ python bin/dashmnb.py  -a mn7
     ____             __  
    / __ \____ ______/ /_ 
   / / / / __ `/ ___/ __ \
@@ -295,7 +299,7 @@ Yes, will relay
 
 ###### status
 ````
-(venv3)  > $ python dashmnb.py  -s
+(venv3)  > $ python bin/dashmnb.py  -s
     ____             __  
    / __ \____ ______/ /_ 
   / / / / __ `/ ___/ __ \
@@ -350,7 +354,7 @@ mn8 123.123.128.230:19999:m  ybv3cX4Gmn1ZK2ZgFgu51NADe3MXrtT7qP ENABLED
 
 ###### show status and balance
 ```
-(venv3)  > $ python dashmnb.py  -b
+(venv3)  > $ python bin/dashmnb.py  -b
     ____             __  
    / __ \____ ______/ /_ 
   / / / / __ `/ ___/ __ \
@@ -414,7 +418,7 @@ mn8  2  1011.25000000 1022.50006680
 
 ###### transfer mn payment
 ```
-(venv3)  > $ python dashmnb.py -x mn5
+(venv3)  > $ python bin/dashmnb.py -x mn5
     ____             __  
    / __ \____ ______/ /_ 
   / / / / __ `/ ___/ __ \
@@ -529,7 +533,7 @@ Yes, will broadcast
 
 
 
-(venv3)  > $ python dashmnb.py -b
+(venv3)  > $ python bin/dashmnb.py -b
     ____             __  
    / __ \____ ______/ /_ 
   / / / / __ `/ ___/ __ \
@@ -633,7 +637,7 @@ python "pg to run"
 ```
 
 ###### How to
-- use hw-wallet-for-mn.py to gen a list of address
+- use pythin bin/hw-wallet-for-mn.py to gen a list of address
 - send 1k tDash to Address
 - set up remote masternode
 - move config.sample.py to config.py and edit parameters

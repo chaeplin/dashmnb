@@ -1,5 +1,5 @@
 ```
-$ python dashmnb.py
+$ python bin/dashmnb.py
 usage: dashmnb.py [-h] [-c] [-s] [-a] [-b] [-m] [-x]
 
 optional arguments:
@@ -14,7 +14,7 @@ optional arguments:
 
 
 ```
-$ python dashmnb.py -c
+$ python bin/dashmnb.py -c
     ____             __  
    / __ \____ ______/ /_ 
   / / / / __ `/ ___/ __ \
@@ -45,7 +45,7 @@ Network : TESTNET
 Dash-QT or dashd running ?
 
 
-$ python dashmnb.py -c
+$ python bin/dashmnb.py -c
     ____             __  
    / __ \____ ______/ /_ 
   / / / / __ `/ ___/ __ \
@@ -77,7 +77,7 @@ Network : TESTNET
 
 
 
-$ python dashmnb.py -s
+$ python bin/dashmnb.py -s
     ____             __  
    / __ \____ ______/ /_ 
   / / / / __ `/ ___/ __ \
@@ -116,7 +116,7 @@ mn3	123.123.97.225:19999:-	yM56Ai6pHh7NzsYF5SLGMHq25Hd4noHoo6 -------
 mn4	167.12.138.230:19999:-	yfaCDjViCUsZNsPdmKDchBTS38bYNizvAa -------
 
 
-$ python dashmnb.py -a
+$ python bin/dashmnb.py -a
     ____             __  
    / __ \____ ______/ /_ 
   / / / / __ `/ ___/ __ \
@@ -283,7 +283,7 @@ Yes, will relay
 }
 
 
-$ python dashmnb.py -s
+$ python bin/dashmnb.py -s
     ____             __  
    / __ \____ ______/ /_ 
   / / / / __ `/ ___/ __ \
@@ -325,7 +325,7 @@ mn4	167.12.138.230:19999:m	yfaCDjViCUsZNsPdmKDchBTS38bYNizvAa PRE_ENABLED
 
 
 
-$ python dashmnb.py -b
+$ python bin/dashmnb.py -b
     ____             __  
    / __ \____ ______/ /_ 
   / / / / __ `/ ___/ __ \

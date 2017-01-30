@@ -84,6 +84,12 @@ max_amounts = 50     # max amounts of each unspent tx
 max_unspent = 20
 min_unspent = 1
 
+# if config.py and masternode.x.conf unchanged, recheck config every 7 day
+config_cache_refresh_interval_hour = 7 * 24
+
+# txs
+txs_cache_refresh_interval_hour = 6
+
 #
 errorsnprogress = []
 

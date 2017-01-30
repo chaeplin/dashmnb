@@ -7,7 +7,7 @@ from tx import *
 from mnb_misc import *
 
 
-def get_rawtxid(alias, txid, txidn, access, tunnel=None):
+def get_rawtxid(alias, txid, txidn, access):
     #print(get_function_name(), alias)
     try:
         data = access.getrawtransaction(txid)
@@ -31,11 +31,10 @@ def get_rawtxid(alias, txid, txidn, access, tunnel=None):
             get_caller_name(),
             get_function_name(),
             err_msg,
-            e.args,
-            tunnel)
+            e.args)
 
 
-def rpcgetinfo(access, tunnel=None):
+def rpcgetinfo(access):
     try:
         getinfo = access.getinfo()
         istestnet = getinfo.get('testnet')
@@ -45,18 +44,14 @@ def rpcgetinfo(access, tunnel=None):
             print_err_exit(
                 get_caller_name(),
                 get_function_name(),
-                err_msg,
-                None,
-                tunnel)
+                err_msg)
 
         if MAINNET == False and istestnet == False:
             err_msg = 'dashd is on mainnet, check config plz'
             print_err_exit(
                 get_caller_name(),
                 get_function_name(),
-                err_msg,
-                None,
-                tunnel)
+                err_msg)
 
         return getinfo.get('protocolversion')
 
@@ -66,12 +61,11 @@ def rpcgetinfo(access, tunnel=None):
             get_caller_name(),
             get_function_name(),
             err_msg,
-            e.args,
-            tunnel)
+            e.args)
 
 
-def checksynced(access, pversion=False, tunnel=None):
-    protocolversion = rpcgetinfo(access, tunnel=None)
+def checksynced(access, pversion=False):
+    protocolversion = rpcgetinfo(access)
 
     try:
         status = access.mnsync('status')
@@ -88,8 +82,7 @@ def checksynced(access, pversion=False, tunnel=None):
                 get_caller_name(),
                 get_function_name(),
                 err_msg,
-                e.args,
-                tunnel)
+                e.args)
 
     except Exception as e:
         err_msg = 'Dash-QT or dashd running ?'
@@ -97,16 +90,15 @@ def checksynced(access, pversion=False, tunnel=None):
             get_caller_name(),
             get_function_name(),
             err_msg,
-            e.args,
-            tunnel)
+            e.args)
 
 
-def check_dashd_syncing(access, tunnel=None):
+def check_dashd_syncing(access):
     from progress.spinner import Spinner
     spinner = Spinner('---> checking dashd syncing status ')
-    protocolversion = checksynced(access, True, tunnel)
+    protocolversion = checksynced(access, True)
 
-    while(not checksynced(access, False, tunnel)):
+    while(not checksynced(access, False)):
         try:
             spinner.next()
             time.sleep(1)
@@ -115,14 +107,12 @@ def check_dashd_syncing(access, tunnel=None):
             print_err_exit(
                 get_caller_name(),
                 get_function_name(),
-                'KeyboardInterrupt',
-                None,
-                tunnel)
+                'KeyboardInterrupt')
 
     return protocolversion
 
 
-def check_wallet_lock(access, tunnel=None):
+def check_wallet_lock(access):
     try:
         getinfo = access.getinfo()
         if getinfo.get('unlocked_until', None) is not None:
@@ -134,11 +124,10 @@ def check_wallet_lock(access, tunnel=None):
             get_caller_name(),
             get_function_name(),
             err_msg,
-            e.args,
-            tunnel)
+            e.args)
 
 
-def check_masternodelist(access, tunnel=None):
+def check_masternodelist(access):
     try:
         mn_of_net = access.masternodelist()
         return mn_of_net
@@ -149,11 +138,10 @@ def check_masternodelist(access, tunnel=None):
             get_caller_name(),
             get_function_name(),
             err_msg,
-            e.args,
-            tunnel)
+            e.args)
 
 
-def check_masternodeaddr(access, tunnel=None):
+def check_masternodeaddr(access):
     try:
         mn_of_net = access.masternodelist('addr')
         return mn_of_net
@@ -164,11 +152,10 @@ def check_masternodeaddr(access, tunnel=None):
             get_caller_name(),
             get_function_name(),
             err_msg,
-            e.args,
-            tunnel)
+            e.args)
 
 
-def validateaddress(address, access, checkismine, tunnel=None):
+def validateaddress(address, access, checkismine):
     # print(address)
     r = access.validateaddress(address)
     if r.get('isvalid') and r.get('address') == address:
@@ -180,7 +167,7 @@ def validateaddress(address, access, checkismine, tunnel=None):
         return None
 
 
-def importaddress(address, access, tunnel=None):
+def importaddress(address, access):
     try:
         r = access.importaddress(address, address, False)
 
@@ -190,11 +177,10 @@ def importaddress(address, access, tunnel=None):
             get_caller_name(),
             get_function_name(),
             err_msg,
-            e.args,
-            tunnel)
+            e.args)
 
 
-def importprivkey(privkey, alias, access, tunnel=None):
+def importprivkey(privkey, alias, access):
     try:
         r = access.importprivkey(privkey, alias, False)
 
@@ -204,11 +190,10 @@ def importprivkey(privkey, alias, access, tunnel=None):
             get_caller_name(),
             get_function_name(),
             err_msg,
-            e.args,
-            tunnel)
+            e.args)
 
 
-def decoderawtransaction(signedrawtx, access, tunnel=None):
+def decoderawtransaction(signedrawtx, access):
     try:
         r = access.decoderawtransaction(signedrawtx)
         return r
@@ -219,11 +204,10 @@ def decoderawtransaction(signedrawtx, access, tunnel=None):
             get_caller_name(),
             get_function_name(),
             err_msg,
-            e.args,
-            tunnel)
+            e.args)
 
 
-def sendrawtransaction(signedrawtx, access, tunnel=None):
+def sendrawtransaction(signedrawtx, access):
     try:
         r = access.sendrawtransaction(signedrawtx)
         return r
@@ -234,11 +218,10 @@ def sendrawtransaction(signedrawtx, access, tunnel=None):
             get_caller_name(),
             get_function_name(),
             err_msg,
-            e.args,
-            tunnel)
+            e.args)
 
 
-def get_listunspent(min, max, addsress, access, tunnel=None):
+def get_listunspent(min, max, addsress, access):
     try:
         r = access.listunspent(min, max, [addsress])
         return r
@@ -249,11 +232,10 @@ def get_listunspent(min, max, addsress, access, tunnel=None):
             get_caller_name(),
             get_function_name(),
             err_msg,
-            e.args,
-            tunnel)
+            e.args)
 
 
-def get_getblockcount(access, tunnel=None):
+def get_getblockcount(access):
     try:
         r = access.getblockcount()
         return r
@@ -264,11 +246,10 @@ def get_getblockcount(access, tunnel=None):
             get_caller_name(),
             get_function_name(),
             err_msg,
-            e.args,
-            tunnel)
+            e.args)
 
 
-def get_block_hash_for_mnb(access, tunnel=None):
+def get_block_hash_for_mnb(access):
     try:
         r = access.getblockhash(get_getblockcount(access) - 12)
         return r
@@ -279,11 +260,10 @@ def get_block_hash_for_mnb(access, tunnel=None):
             get_caller_name(),
             get_function_name(),
             err_msg,
-            e.args,
-            tunnel)
+            e.args)
 
 
-def rpc_masternode(what, hexto, access, tunnel=None):
+def rpc_masternode(what, hexto, access):
     try:
         r = access.masternodebroadcast(what, hexto)
         return r
@@ -294,8 +274,7 @@ def rpc_masternode(what, hexto, access, tunnel=None):
             get_caller_name(),
             get_function_name(),
             err_msg,
-            e.args,
-            tunnel)
+            e.args)
 
 
 # end

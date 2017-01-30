@@ -14,29 +14,29 @@ def start_masternode(
         access,
         client,
         announce,
-        mpath,
-        tunnel=None):
+        mpath):
     if announce:
         print('\n[making mnbs and relay]')
     else:
         print('\n[making mnbs and quit]')
 
     masternodebroadcast = []
-    for alias in sorted(mns_to_start):
+
+    for m in mns_to_start:
         mnbhex = make_mnb(
-            mns_to_start[alias].get('alias'),
+            m.get('alias'),
             protocolversion,
-            mns_to_start[alias],
+            m,
             access,
             client,
-            mpath,
-            tunnel)
+            mpath)
+
         masternodebroadcast.append(mnbhex)
 
     vc = num_to_varint(len(masternodebroadcast)).hex()
     vm = ''.join(masternodebroadcast)
 
-    verify = rpc_masternode("decode", vc + vm, access, tunnel)
+    verify = rpc_masternode("decode", vc + vm, access)
     match1 = re.search(
         '^Successfully decoded broadcast messages for (.*) masternodes, failed to decode (.*), total (.*)$',
         verify.get('overall'))
@@ -59,9 +59,7 @@ def start_masternode(
         print_err_exit(
             get_caller_name(),
             get_function_name(),
-            err_msg,
-            None,
-            tunnel)
+            err_msg)
 
     if announce:
 
@@ -73,7 +71,7 @@ def start_masternode(
             print('No.')
             return
 
-        relay = rpc_masternode("relay", vc + vm, access, tunnel)
+        relay = rpc_masternode("relay", vc + vm, access)
         match2 = re.search(
             '^Successfully relayed broadcast messages for (.*) masternodes, failed to relay (.*), total (.*)$',
             relay.get('overall'))

@@ -2,8 +2,8 @@
 
 import sys
 import os
-sys.path.append(os.path.join(os.path.dirname(__file__), '.'))
-sys.path.append(os.path.join(os.path.dirname(__file__), '.', 'dashlib'))
+sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
+sys.path.append(os.path.join(os.path.dirname(__file__), '..', 'dashlib'))
 
 from config import *
 from mnb_hwwallet import *
@@ -12,7 +12,9 @@ from mnb_misc import *
 
 
 def main():
-    client, signing, bip32, _, _ = check_hw_wallet(None)
+    logo_show()
+
+    client, signing, bip32, _, _ = check_hw_wallet()
 
     if client is None:
         sys.exit()
@@ -74,26 +76,20 @@ def main():
             print_err_exit(
                 get_caller_name(),
                 get_function_name(),
-                err_msg,
-                None,
-                None)
+                err_msg)
 
         except Exception as e:
             err_msg = str(e.args)
             print_err_exit(
                 get_caller_name(),
                 get_function_name(),
-                err_msg,
-                None,
-                None)
+                err_msg)
 
         except KeyboardInterrupt:
             print_err_exit(
                 get_caller_name(),
                 get_function_name(),
-                "KeyboardInterrupt",
-                None,
-                None)
+                "KeyboardInterrupt")
 
     client.close()
 

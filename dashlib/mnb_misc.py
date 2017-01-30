@@ -39,7 +39,7 @@ def get_txidtxidn(txid, txidn):
         return txid + '-' + str(txidn)
 
 
-def print_mnlist(lineno, mnconfig, ipmatch, mnstatus):
+def print_mnlist(mnconfig, ipmatch, mnstatus):
     print(mnconfig.get('alias') + '\t' + mnconfig.get('ipport') + ':' +
           ipmatch + '\t' + mnconfig.get('collateral_address') + ' ' + mnstatus)
 
@@ -48,16 +48,15 @@ def print_mnstatus(mn_config, mns, mna):
     print()
     print('[masternodes status]')
     print('alias\tip (m: ip/port match)\tcollateral address\t\t   status')
-    for m in sorted(list(mn_config.keys())):
-        mna_ip = mna.get(mn_config.get(m).get(
-            'collateral_txidtxidn'), '-------')
-        mns_status = mns.get(mn_config.get(m).get(
-            'collateral_txidtxidn'), '-------')
-        if mn_config[m].get('ipport') != mna_ip:
+
+    for m in mn_config:
+        mna_ip = mna.get(m.get('collateral_txidtxidn', '-------'))
+        mns_status = mns.get(m.get('collateral_txidtxidn', '-------'))
+        if m.get('ipport') != mna_ip:
             ipmatch = '-'
         else:
             ipmatch = 'm'
-        print_mnlist(m, mn_config[m], ipmatch, mns_status)
+        print_mnlist(m, ipmatch, mns_status)
 
     print()
 
@@ -74,19 +73,18 @@ def print_err_exit(
         caller_name,
         function_name,
         err_msg,
-        errargs=None,
-        tunnel=None):
-    import signal
+        errargs=None):
+#    import signal
 
-    msg = '\n\n\tversion  : 0.1a\n'
+    msg = '\n\n\tversion  : 0.2a\n'
     msg += '\tcaller   : ' + caller_name + '\n'
     msg += '\tfunction : ' + function_name + '\n'
     if errargs:
         msg += '\terr      : ' + str(errargs) + '\n'
     msg += '\t===> ' + err_msg + '\n'
 
-    if tunnel:
-        os.kill(tunnel, signal.SIGTERM)
+#    if tunnel:
+#        os.kill(tunnel, signal.SIGTERM)
 
     raise SystemExit(msg)
 

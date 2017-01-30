@@ -4,47 +4,121 @@ sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 sys.path.append(os.path.join(os.path.dirname(__file__), '..', 'dashlib'))
 
 import collections
+import json
 
 from config import *
 from mnb_misc import *
 from mnb_rpc import *
 from mnb_explorer import *
 
+def check_mtime_of_config(config_py_file_abs_path, masternode_conf_file_abs_path, cache_config_check_abs_path):
 
-def checking_mn_config(access, signing, chain_pubkey, tunnel=None):
+    # check file mtime to do config parse again
+    mtime_of_masternode_conf = int(os.path.getmtime(masternode_conf_file_abs_path))
+    mtime_of_config_py = int(os.path.getmtime(config_py_file_abs_path))
+
+    if os.path.exists(cache_config_check_abs_path):
+        mtime_of_cache_config_check = int(os.path.getmtime(cache_config_check_abs_path))
+    else:
+        return True
+
+    cache_config_statinfo = os.stat(cache_config_check_abs_path)
+    if cache_config_statinfo.st_size == 0:
+        return True
+
+    if (mtime_of_masternode_conf >= mtime_of_cache_config_check 
+       or mtime_of_config_py >= mtime_of_cache_config_check):
+        return True
+
+    if time.time() > (mtime_of_cache_config_check + (config_cache_refresh_interval_hour * 60 * 60)): 
+        return True
+
+    return False
+
+
+def checking_mn_config(access, signing, chain_pubkey):
 
     print('\n---> checking masternode config ....')
-    lines = []
-    if os.path.exists(masternode_conf_file):
-        with open(masternode_conf_file) as mobj:
-            for line in mobj:
-                lines.append(line.strip())
 
-        mn_config, signing = parse_masternode_conf(
-            lines, access, signing, chain_pubkey, tunnel)
+    # abs path of config.py, masternode.conf and cachetime of configcache.dat
+    masternode_conf_file_abs_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), '../mnconf/' + masternode_conf_file)
+    config_py_file_abs_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'config.py')
+    cache_config_check_abs_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), '../cache/' + ('MAINNET' if MAINNET else 'TESTNET') + '-configcache.dat')
 
-    else:
-        err_msg = 'no %s file' % masternode_conf_file
-        print_err_exit(
-            get_caller_name(),
-            get_function_name(),
-            err_msg,
-            None,
-            tunnel)
+    bParseConfigAgain = check_mtime_of_config(config_py_file_abs_path, masternode_conf_file_abs_path, cache_config_check_abs_path)
+
+
+    if bParseConfigAgain:
+        lines = []
+        if os.path.exists(masternode_conf_file_abs_path):
+            with open(masternode_conf_file_abs_path) as mobj:
+                for line in mobj:
+                    lines.append(line.strip())
+    
+            parse_masternode_conf(lines, access, chain_pubkey, cache_config_check_abs_path)
+
+
+        else:
+            err_msg = 'no %s file' % masternode_conf_file
+            print_err_exit(
+                get_caller_name(),
+                get_function_name(),
+                err_msg)
+
+
+    with open(cache_config_check_abs_path) as data_file:    
+        mn_config_all = json.load(data_file)
+
+    print('\n[masternodes config]')
+    print('\tconfigured : %s' % mn_config_all.get('configured'))
+    print('\tpassed     : %s' % len(mn_config_all.get('mn_config')))
+ 
+    if 'alias' in mn_config_all.get('errorsnprogress'):
+        print('\n[duplicated alias]')
+        for x in [item for item, count in collections.Counter(
+                mn_config_all.get('mn_v_alias')).items() if count > 1]:
+            print('\t %s' % x)
+ 
+    if 'ip:port' in mn_config_all.get('errorsnprogress'):
+        print('\n[duplicated ip:port]')
+        for x in [item for item, count in collections.Counter(
+                mn_config_all.get('mn_v_ipport')).items() if count > 1]:
+            print('\t %s' % x)
+ 
+    if 'mn_private_key' in mn_config_all.get('errorsnprogress'):
+        print('\n[duplicated mn_private_key]')
+        for x in [item for item, count in collections.Counter(
+                mn_config_all.get('mn_v_mnprivkey_wif')).items() if count > 1]:
+            print('\t %s' % x)
+ 
+    if 'txid_index' in mn_config_all.get('errorsnprogress'):
+        print('\n[duplicated txid_index]')
+        for x in [item for item, count in collections.Counter(
+                mn_config_all.get('mn_v_txidtxidn')).items() if count > 1]:
+            print('\t %s' % x)
+ 
+    if len(mn_config_all.get('errorinconf')) > 0:
+        signing = False
+        print('\n[errors in config]')
+        for x in mn_config_all.get('errorinconf'):
+            print('\t %s' % x)
+
+    if MOVE_1K_COLLATERAL:
+        signing = True
 
     check_wallet_lock(access)
     mns = check_masternodelist(access)
     mna = check_masternodeaddr(access)
 
-    return mn_config, signing, mns, mna
+    return mn_config_all.get('mn_config'), signing, mns, mna
 
 
-def parse_masternode_conf(lines, access, signing, chain_pubkey, tunnel=None):
+def parse_masternode_conf(lines, access, chain_pubkey, cache_config_check_abs_path):
 
     i = 0
     lno = 0
 
-    mn_config = {}
+    mn_config = []
     errorinconf = []
 
     mn_v_alias = []
@@ -88,10 +162,10 @@ def parse_masternode_conf(lines, access, signing, chain_pubkey, tunnel=None):
         mn_v_txidtxidn.append(txidtxidn)
 
         printdbg('\trawtxid for')
-        mnaddr = get_rawtxid(alias, txid, txidn, access, tunnel)
+        mnaddr = get_rawtxid(alias, txid, txidn, access)
         if mnaddr is None:
             errorinconf.append(
-                'line: %d / %s : no matching txid with 1K collateral in blockchain' %
+                'line: %d : %s : no matching txid with 1K collateral in blockchain' %
                 (lno, alias))
             continue
 
@@ -99,33 +173,26 @@ def parse_masternode_conf(lines, access, signing, chain_pubkey, tunnel=None):
         collateral_exp_balance = float(get_explorer_balance(mnaddr))
         if collateral_exp_balance < 1000:
             errorinconf.append(
-                'line: %d / %s : collateral_address has less than 1K balance : %s' %
+                'line: %d : %s : collateral_address has less than 1K balance : %s' %
                 (lno, alias, collateral_exp_balance))
             if not MOVE_1K_COLLATERAL:
                 continue
 
         printdbg('\tprocess_chain for')
-        #check_mpath = process_chain(mnaddr, txid, txidn, alias, mpath, xpub)
-        # if check_mpath == None:
-        #    errorinconf.append('line: %d / %s : can\'t find spath and publickey' % (lno, alias))
-        #    continue
 
         if mnaddr in chain_pubkey:
             collateral_spath = chain_pubkey.get(mnaddr).get('spath', None)
-            collateral_pubkey = chain_pubkey.get(
-                mnaddr).get('addrpubkey', None)
+            collateral_pubkey = chain_pubkey.get(mnaddr).get('addrpubkey', None)
         else:
             err_msg = 'collateral_address not ip bip32 path(ex: Passphrase err) : ' + alias
             print_err_exit(
                 get_caller_name(),
                 get_function_name(),
-                err_msg,
-                None,
-                tunnel)
+                err_msg)
 
         if collateral_spath is None or collateral_pubkey is None:
             errorinconf.append(
-                'line: %d / %s : can\'t find spath and publickey' %
+                'line: %d : %s : can\'t find spath and publickey' %
                 (lno, alias))
             continue
 
@@ -136,7 +203,7 @@ def parse_masternode_conf(lines, access, signing, chain_pubkey, tunnel=None):
 
         except:
             errorinconf.append(
-                'line: %d / %s : has wrong masternode private key' %
+                'line: %d : %s : has wrong masternode private key' %
                 (lno, alias))
             continue
 
@@ -144,38 +211,32 @@ def parse_masternode_conf(lines, access, signing, chain_pubkey, tunnel=None):
 
         printdbg('\tvalidateaddress for')
 
-        if (validateaddress(mnaddr, access, False, tunnel) is None):
+        if (validateaddress(mnaddr, access, False) is None):
             err_msg = 'collateral_address error : ' + alias
             print_err_exit(
                 get_caller_name(),
                 get_function_name(),
-                err_msg,
-                None,
-                tunnel)
+                err_msg)
 
-        if (validateaddress(masternode_address, access, False, tunnel) is None):
+        if (validateaddress(masternode_address, access, False) is None):
             err_msg = 'masternode_address error : ' + alias
             print_err_exit(
                 get_caller_name(),
                 get_function_name(),
-                err_msg,
-                None,
-                tunnel)
+                err_msg)
 
-        if (validateaddress(raddr, access, False, tunnel) is None):
+        if (validateaddress(raddr, access, False) is None):
             err_msg = 'receiving_address error : ' + alias
             print_err_exit(
                 get_caller_name(),
                 get_function_name(),
-                err_msg,
-                None,
-                tunnel)
+                err_msg)
 
         printdbg('\tvalidateaddress for')
 
         # import mnprivkey_wif
         validate_masternode_address = validateaddress(
-            masternode_address, access, True, tunnel)
+            masternode_address, access, True)
         # None or validate_masternode_address == False:
         if not validate_masternode_address:
             printdbg('\timportprivkey for')
@@ -183,13 +244,13 @@ def parse_masternode_conf(lines, access, signing, chain_pubkey, tunnel=None):
 
         # import watch only address
         validate_collateral_address = validateaddress(
-            mnaddr, access, False, tunnel)
+            mnaddr, access, False)
         # or validate_collateral_address == False:
         if not validate_collateral_address:
             printdbg('\timportaddress for')
-            importaddress(mnaddr, access, tunnel)
+            importaddress(mnaddr, access)
 
-        mn_config[lineno] = {
+        mn_config.append({
             "alias": alias,
             "lineno": str(lineno),
             "ipport": ipport,
@@ -204,7 +265,7 @@ def parse_masternode_conf(lines, access, signing, chain_pubkey, tunnel=None):
             "collateral_address": mnaddr,
             "collateral_exp_balance": collateral_exp_balance,
             "receiving_address": raddr
-        }
+        })
 
         printdbg('\tdone for')
 
@@ -223,48 +284,20 @@ def parse_masternode_conf(lines, access, signing, chain_pubkey, tunnel=None):
 
     ############################################
 
-    print('\n[masternodes config]')
-    print('\tconfigured : %s' % i)
-    print('\tpassed     : %s' % len(mn_config))
-    # if len(errorsnprogress) > 0:
-    #    signing  = False
-    #    print('\tdups       : %s' % errorsnprogress)
+    mn_config_all = {
+                "mn_config": mn_config,
+                "configured": i,
+                "mn_v_alias": mn_v_alias,
+                "mn_v_ipport": mn_v_ipport,
+                "mn_v_mnprivkey_wif": mn_v_mnprivkey_wif,
+                "mn_v_txidtxidn": mn_v_txidtxidn,
+                "errorinconf": errorinconf,
+                "errorsnprogress": errorsnprogress
+    }
 
-    if 'alias' in errorsnprogress:
-        print('\n[duplicated alias]')
-        for x in [item for item, count in collections.Counter(
-                mn_v_alias).items() if count > 1]:
-            print('\t %s' % x)
+    with open(cache_config_check_abs_path, 'w') as outfile:
+        json.dump(mn_config_all, outfile)
 
-    if 'ip:port' in errorsnprogress:
-        print('\n[duplicated ip:port]')
-        for x in [item for item, count in collections.Counter(
-                mn_v_ipport).items() if count > 1]:
-            print('\t %s' % x)
-
-    if 'mn_private_key' in errorsnprogress:
-        print('\n[duplicated mn_private_key]')
-        for x in [item for item, count in collections.Counter(
-                mn_v_mnprivkey_wif).items() if count > 1]:
-            print('\t %s' % x)
-
-    if 'txid_index' in errorsnprogress:
-        print('\n[duplicated txid_index]')
-        for x in [item for item, count in collections.Counter(
-                mn_v_txidtxidn).items() if count > 1]:
-            print('\t %s' % x)
-
-    if len(errorinconf) > 0:
-        signing = False
-        print('\n[errors in config]')
-        for x in errorinconf:
-            print('\t %s' % x)
-
-    print()
-    if MOVE_1K_COLLATERAL:
-        return mn_config, True
-
-    else:
-        return mn_config, signing
+    #return mn_config_all
 
 # end

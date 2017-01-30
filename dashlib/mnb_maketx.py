@@ -201,6 +201,13 @@ def make_inputs_for_hw_wallet(
 
     try:
         (signatures, serialized_tx) = client.sign_tx(coin_name, inputs, outputs)
+        # check tx size
+        if len(serialized_tx.hex()) > 90000:
+            print_err_exit(
+                get_caller_name(),
+                get_function_name(),
+                err_msg)
+
         return serialized_tx.hex()
 
     except Exception as e:

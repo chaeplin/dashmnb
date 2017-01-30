@@ -11,7 +11,7 @@ MAINNET = False  # testnet
 # tDash : 44'/165'/account'/0/0
 # bip32 path 
 # 10 selected randomly
-account_no = 10
+account_no = 1
 
 #
 if MAINNET:
@@ -84,7 +84,7 @@ max_amounts = 50     # max amounts of each unspent tx
 max_unspent = 20
 min_unspent = 1
 
-# if config.py and masternode.x.conf unchanged, recheck config every 7 day
+# if config.py and masternode.x.conf unchanged, recheck config every 7 day, and 6 hour
 config_cache_refresh_interval_hour = 7 * 24
 
 # txs

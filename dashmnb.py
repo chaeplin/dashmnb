@@ -215,12 +215,6 @@ def parse_args(tunnel=None):
                         help='broadcast signed raw tx')
 
     if len(sys.argv) < 2:
-        if MOVE_1K_COLLATERAL:
-            print()
-            print('**** MOVE_1K_COLLATERAL is True *******')
-            print()
-            time.sleep(5)
-
         parser.print_help()
         print_err_exit(
             get_caller_name(),
@@ -249,8 +243,8 @@ if __name__ == "__main__":
             tunnel = start_ssh_tunnel()
             tunnel_pid = tunnel._getpid()
 
-        args = parse_args(tunnel_pid)
         atexit.register(killsubprocess)
+        args = parse_args(tunnel_pid)
         main(args, tunnel_pid)
 
     except KeyboardInterrupt:

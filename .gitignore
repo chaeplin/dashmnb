@@ -12,3 +12,5 @@ no_sync
 masternode.mainnet.conf
 
 masternode.testnet.conf
+
+*.dat

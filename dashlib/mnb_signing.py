@@ -1,10 +1,9 @@
 import sys
 import os
-sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
-sys.path.append(os.path.join(os.path.dirname(__file__), '..', 'dashlib'))
+sys.path.append(os.path.join(os.path.dirname(__file__), '.'))
 
 from config import *
-#from mnb_bip32 import *
+from dash_ecdsa import *
 from mnb_misc import *
 from mnb_hwwallet import *
 
@@ -42,6 +41,22 @@ def signmessage(last_ping_serialize_for_sig, address, access):
             get_function_name(),
             err_msg,
             e.args)
+
+
+def signmessage_ecdsa(last_ping_serialize_for_sig, privkeywif):
+    import base64
+    try:
+        r = ecdsa_sign(last_ping_serialize_for_sig, privkeywif)
+        return(base64.b64decode(r).hex())
+
+    except Exception as e:
+        err_msg = 'dash_ecdsa has problem'
+        print_err_exit(
+            get_caller_name(),
+            get_function_name(),
+            err_msg,
+            e.args)    
+
 
 
 def hwwallet_signmessage(

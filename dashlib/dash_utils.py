@@ -1,4 +1,6 @@
-# utils.py
+import sys
+import os
+sys.path.append(os.path.join(os.path.dirname(__file__), '.'))
 
 # Elliptic curve parameters (secp256k1)
 
@@ -58,5 +60,9 @@ def varint_to_num(a):
         return int.from_bytes(bytes.fromhex(a[2:34]), byteorder='little')
     else:
         return int.from_bytes(bytes.fromhex(a[2:66]), byteorder='little')
+
+def from_string_to_bytes(a):
+    return a if isinstance(a, bytes) else bytes(a, 'utf-8')
+
 
 #

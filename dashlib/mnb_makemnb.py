@@ -1,16 +1,15 @@
 import sys
 import os
-sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
-sys.path.append(os.path.join(os.path.dirname(__file__), '..', 'dashlib'))
+sys.path.append(os.path.join(os.path.dirname(__file__), '.'))
 
 import time
-from utils import *
-from tx import *
+
+from dash_utils import *
+from dash_tx import *
 from mnb_misc import *
 from mnb_signing import *
 from mnb_rpc import *
 from mnb_maketx import *
-
 
 def make_mnb(
         alias,
@@ -92,10 +91,14 @@ def make_mnb(
         sequence,
         scriptSig) + block_hash + str(sig_time)
 
-    sig2 = signmessage(
+#    sig2 = signmessage(
+#            last_ping_serialize_for_sig, 
+#            mnconfig['masternode_address'],
+#            access)
+
+    sig2 = signmessage_ecdsa(
             last_ping_serialize_for_sig, 
-            mnconfig['masternode_address'],
-            access)
+            mnconfig['masternode_privkey'])
 
     work = vintx + vinno + vinsig + vinseq \
         + ipv6map + collateral_in + delegate_in \

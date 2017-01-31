@@ -1,10 +1,8 @@
-# jacobian.py
 import sys
 import os
-sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
-sys.path.append(os.path.join(os.path.dirname(__file__), '..', 'dashlib'))
+sys.path.append(os.path.join(os.path.dirname(__file__), '.'))
 
-from utils import *
+from dash_utils import *
 
 # private to public key x, y
 
@@ -84,4 +82,6 @@ def fast_multiply(a, n):
     return from_jacobian(jacobian_multiply(to_jacobian(a), n))
 
 
+def fast_add(a, b):
+    return from_jacobian(jacobian_add(to_jacobian(a), to_jacobian(b)))
 #

@@ -1,10 +1,8 @@
 import sys
 import os
-import time
-sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
-sys.path.append(os.path.join(os.path.dirname(__file__), '..', 'dashlib'))
+sys.path.append(os.path.join(os.path.dirname(__file__), '.'))
 
-
+import time 
 def clear_screen():
     os.system('clear')
 

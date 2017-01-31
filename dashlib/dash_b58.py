@@ -1,4 +1,7 @@
 # b58.py
+import sys
+import os
+sys.path.append(os.path.join(os.path.dirname(__file__), '.'))
 
 __b58chars = '123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz'
 __b58base = len(__b58chars)

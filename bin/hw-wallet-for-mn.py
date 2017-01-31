@@ -5,11 +5,12 @@ import os
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 sys.path.append(os.path.join(os.path.dirname(__file__), '..', 'dashlib'))
 
-from config import *
-from mnb_hwwallet import *
-from bip32utils import BIP32Key
-from mnb_misc import *
+#from config import *
+#from mnb_hwwallet import *
 
+from bip32utils import BIP32Key
+#from mnb_misc import *
+from dashlib import *
 
 def main():
     logo_show()

@@ -81,8 +81,7 @@ def checksynced(access, pversion=False):
             print_err_exit(
                 get_caller_name(),
                 get_function_name(),
-                err_msg,
-                e.args)
+                err_msg)
 
     except Exception as e:
         err_msg = 'Dash-QT or dashd running ?'

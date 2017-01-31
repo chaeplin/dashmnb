@@ -91,11 +91,13 @@ def make_mnb(
         sequence,
         scriptSig) + block_hash + str(sig_time)
 
+# rpc
 #    sig2 = signmessage(
 #            last_ping_serialize_for_sig, 
 #            mnconfig['masternode_address'],
 #            access)
 
+# local ecdsa
     sig2 = signmessage_ecdsa(
             last_ping_serialize_for_sig, 
             mnconfig['masternode_privkey'])

@@ -1,7 +1,6 @@
 import sys
 import os
-sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
-sys.path.append(os.path.join(os.path.dirname(__file__), '..', 'dashlib'))
+sys.path.append(os.path.join(os.path.dirname(__file__), '.'))
 
 import collections
 import json
@@ -218,12 +217,12 @@ def parse_masternode_conf(lines, access, chain_pubkey, cache_config_check_abs_pa
                 get_function_name(),
                 err_msg)
 
-        if (validateaddress(masternode_address, access, False) is None):
-            err_msg = 'masternode_address error : ' + alias
-            print_err_exit(
-                get_caller_name(),
-                get_function_name(),
-                err_msg)
+#        if (validateaddress(masternode_address, access, False) is None):
+#            err_msg = 'masternode_address error : ' + alias
+#            print_err_exit(
+#                get_caller_name(),
+#                get_function_name(),
+#                err_msg)
 
         if (validateaddress(raddr, access, False) is None):
             err_msg = 'receiving_address error : ' + alias
@@ -235,12 +234,12 @@ def parse_masternode_conf(lines, access, chain_pubkey, cache_config_check_abs_pa
         printdbg('\tvalidateaddress for')
 
         # import mnprivkey_wif
-        validate_masternode_address = validateaddress(
-            masternode_address, access, True)
-        # None or validate_masternode_address == False:
-        if not validate_masternode_address:
-            printdbg('\timportprivkey for')
-            importprivkey(mnprivkey_wif, masternode_address, access)
+#        validate_masternode_address = validateaddress(
+#            masternode_address, access, True)
+#        # None or validate_masternode_address == False:
+#        if not validate_masternode_address:
+#            printdbg('\timportprivkey for')
+#            importprivkey(mnprivkey_wif, masternode_address, access)
 
         # import watch only address
         validate_collateral_address = validateaddress(

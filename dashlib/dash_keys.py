@@ -1,8 +1,6 @@
-# keys.py
 import sys
 import os
-sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
-sys.path.append(os.path.join(os.path.dirname(__file__), '..', 'dashlib'))
+sys.path.append(os.path.join(os.path.dirname(__file__), '.'))
 
 import time
 import random
@@ -10,10 +8,10 @@ import binascii
 import hashlib
 
 from config import *
-from hashs import *
-from utils import *
-from b58 import *
-from jacobian import *
+from dash_hashs import *
+from dash_utils import *
+from dash_b58 import *
+from dash_jacobian import *
 
 long = int
 _bchr = lambda x: bytes([x])

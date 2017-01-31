@@ -3,6 +3,7 @@
 # mnb.py
 
 # code from https://github.com/dashpay/electrum-dash
+# most bitcoin code from https://github.com/vbuterin/pybitcointools
 # ref :
 # https://github.com/dashpay/dash/blob/v0.12.1.x/dash-docs/protocol-documentation.md
 
@@ -13,17 +14,11 @@ sys.path.append(os.path.join(os.path.dirname(__file__), '..', 'dashlib'))
 
 import argparse
 import time
-
-from config import *
-from mnb_misc import *
-from mnb_mnconf import *
-from mnb_rpc import *
-from mnb_start import *
-from mnb_xfer import *
-from mnb_sshtunnel import *
-from mnb_hwwallet import *
 import signal
 import atexit
+
+from config import *
+from dashlib import *
 
 from bitcoinrpc.authproxy import AuthServiceProxy, JSONRPCException
 

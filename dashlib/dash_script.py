@@ -1,15 +1,13 @@
-# script.py
 import sys
 import os
-sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
-sys.path.append(os.path.join(os.path.dirname(__file__), '..', 'dashlib'))
+sys.path.append(os.path.join(os.path.dirname(__file__), '.'))
 
 from config import *
-from b58 import *
-from hashs import *
-from jacobian import *
-from keys import *
-from utils import *
+from dash_b58 import *
+from dash_hashs import *
+from dash_jacobian import *
+from dash_keys import *
+from dash_utils import *
 
 long = int
 _bchr = lambda x: bytes([x])

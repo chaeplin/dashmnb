@@ -1,38 +1,14 @@
-# tx.py
 import sys
 import os
-sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
-sys.path.append(os.path.join(os.path.dirname(__file__), '..', 'dashlib'))
+sys.path.append(os.path.join(os.path.dirname(__file__), '.'))
 
 import re
 import binascii
 import hashlib
 import simplejson as json
 
-from hashs import *
-from script import *
-
-
-def decode(string, base):
-    if base == 256 and isinstance(string, str):
-        string = bytes(bytearray.fromhex(string))
-    base = int(base)
-    code_string = get_code_string(base)
-    result = 0
-    if base == 256:
-        def extract(d, cs):
-            return d
-    else:
-        def extract(d, cs):
-            return cs.find(d if isinstance(d, str) else chr(d))
-
-    if base == 16:
-        string = string.lower()
-    while len(string) > 0:
-        result *= base
-        result += extract(string[0], code_string)
-        string = string[1:]
-    return result
+from dash_hashs import *
+from dash_script import *
 
 
 def deserialize_script(script):

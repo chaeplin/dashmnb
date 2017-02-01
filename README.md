@@ -22,17 +22,14 @@ Run Dash Masternode with Hardware Wallet
 
 ###### Q : why Dash-QT or dashd needed ?
     - instead of block explorer 
-    - to sign mnp included in mnb(mnb signed by hw wallet)
     - to check address, collateral, masternode status
     - to get unspent tx of collateral using watch only address
     - to relay mnb and txs
-
 
 ###### Q : why do -rescan
     - -rescan means restaring dashd or Dash-QT with -rescan option
     - while dashmnb do importaddress, dashmnb set rescan 'False' cause rescan usually takes more than 30 secs and rpc timeout occured.
     - after initial checking of masternode config, dashmnb will ask you to do rescan
-
 
 ###### help
 ```
@@ -53,7 +50,7 @@ optional arguments:
   -x, --xfer            broadcast signed raw tx
 
 
-  version  : 0.1a
+  version  : 0.2a
   caller   : <module>
   function : parse_args
   ===> print help
@@ -119,7 +116,7 @@ mn8  2  1011.25000000 1022.50006680
 
 
 
-  version  : 0.1a
+  version  : 0.2a
   caller   : <module>
   function : main
   ===> need HW wallet to spend
@@ -174,7 +171,7 @@ mn8 123.123.128.230:19999:m  ybv3cX4Gmn1ZK2ZgFgu51NADe3MXrtT7qP ENABLED
 
 
 
-  version  : 0.1a
+  version  : 0.2a
   caller   : <module>
   function : main
   ===> need HW wallet to anounce
@@ -290,7 +287,7 @@ Yes, will relay
 }
 
 
-  version  : 0.1a
+  version  : 0.2a
   caller   : <module>
   function : main
   ===> end of pg
@@ -344,7 +341,7 @@ mn8 123.123.128.230:19999:m  ybv3cX4Gmn1ZK2ZgFgu51NADe3MXrtT7qP ENABLED
 
 
 
-  version  : 0.1a
+  version  : 0.2a
   caller   : <module>
   function : main
   ===> end of pg
@@ -409,7 +406,7 @@ mn8  2  1011.25000000 1022.50006680
 
 
 
-  version  : 0.1a
+  version  : 0.2a
   caller   : <module>
   function : main
   ===> end of pg
@@ -523,7 +520,7 @@ Yes, will broadcast
   1e07a3ded6ec6ba768b1e7334141a8074590a487003b313d7776fd94e313d6b2
 
 
-  version  : 0.1a
+  version  : 0.2a
   caller   : <module>
   function : main
   ===> end of pg
@@ -588,7 +585,7 @@ mn8  2  1011.25000000 1022.50006680
 
 
 
-  version  : 0.1a
+  version  : 0.2a
   caller   : <module>
   function : main
   ===> end of pg
@@ -643,7 +640,7 @@ python "pg to run"
 - move dashlib/config.sample.py to dashlib/config.py and edit parameters
 - move mnconf/masternode.conf.sample to mnconf/masternode.conf and edit
 - run Dash-QT or dashd
-- run dashmnb.py
+- run pythin bin/dashmnb.py
 
 ###### Thanks to
 - codes form https://github.com/dashpay/electrum-dash

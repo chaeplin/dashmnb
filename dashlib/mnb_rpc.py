@@ -8,7 +8,6 @@ from mnb_misc import *
 
 
 def get_rawtxid(alias, txid, txidn, access):
-    #print(get_function_name(), alias)
     try:
         data = access.getrawtransaction(txid)
         rawtx = decoderawtx(data)
@@ -112,21 +111,6 @@ def check_dashd_syncing(access):
     return protocolversion
 
 
-def check_wallet_lock(access):
-    try:
-        getinfo = access.getinfo()
-        if getinfo.get('unlocked_until', None) is not None:
-            print('\n---> please unlock wallet \n\t==> Menu | Setting | Unlock Wallet or \n\t==> (dash-cli) walletpassphrase "passphrase" timeout')
-
-    except Exception as e:
-        err_msg = 'Dash-QT or dashd running ?'
-        print_err_exit(
-            get_caller_name(),
-            get_function_name(),
-            err_msg,
-            e.args)
-
-
 def check_masternodelist(access):
     try:
         mn_of_net = access.masternodelist()
@@ -155,37 +139,13 @@ def check_masternodeaddr(access):
             e.args)
 
 
-def validateaddress(address, access, checkismine):
-    # print(address)
-    r = access.validateaddress(address)
-    if r.get('isvalid') and r.get('address') == address:
-        if checkismine:
-            return r.get('ismine')
-        else:
-            return r.get('iswatchonly', False)
-    else:
-        return None
-
-
-def importaddress(address, access):
+def validateaddress(address, access):
     try:
-        r = access.importaddress(address, address, False)
+        r = access.validateaddress(address)
+        return r.get('isvalid')
 
     except Exception as e:
-        err_msg = 'Please enter the wallet passphrase with walletpassphrase first'
-        print_err_exit(
-            get_caller_name(),
-            get_function_name(),
-            err_msg,
-            e.args)
-
-
-def importprivkey(privkey, alias, access):
-    try:
-        r = access.importprivkey(privkey, alias, False)
-
-    except Exception as e:
-        err_msg = 'Please enter the wallet passphrase with walletpassphrase first'
+        err_msg = 'Dash-QT or dashd running ?'
         print_err_exit(
             get_caller_name(),
             get_function_name(),
@@ -210,6 +170,40 @@ def decoderawtransaction(signedrawtx, access):
 def sendrawtransaction(signedrawtx, access):
     try:
         r = access.sendrawtransaction(signedrawtx)
+        return r
+
+    except Exception as e:
+        err_msg = 'Dash-QT or dashd running ?'
+        print_err_exit(
+            get_caller_name(),
+            get_function_name(),
+            err_msg,
+            e.args)
+
+
+def getaddressbalance(addsress, access):
+    try:
+        params = {
+            "addresses": [addsress]
+        }        
+        r = access.getaddressbalance(params)
+        return r.get('balance')
+
+    except Exception as e:
+        err_msg = 'Dash-QT or dashd running ?'
+        print_err_exit(
+            get_caller_name(),
+            get_function_name(),
+            err_msg,
+            e.args)    
+
+
+def getaddressutxos(addsress, access):
+    try:
+        params = {
+            "addresses": [addsress]
+        }
+        r = access.getaddressutxos(params)
         return r
 
     except Exception as e:

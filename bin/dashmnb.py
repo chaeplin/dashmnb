@@ -40,6 +40,7 @@ def main(args):
             err_msg)
 
     protocolversion = check_dashd_syncing(access)
+    blockcount = get_getblockcount(access)
 
     if args.check or args.status or args.anounce or args.balance or args.maketx or args.xfer:
 
@@ -85,7 +86,8 @@ def main(args):
     # wallet rescan
     if args.balance or args.maketx or args.xfer:
         for m in mn_config:
-            m["unspent"], m["txs"], m["collateral_dashd_balance"] = get_unspent_txs(m, access)
+            #m["unspent"], m["txs"], m["collateral_dashd_balance"] = get_unspent_txs(m, access)
+            m["txs"], m["collateral_dashd_balance"] = get_unspent_txs(m, blockcount, access)
 
         need_wallet_rescan = print_balance(mn_config)
 

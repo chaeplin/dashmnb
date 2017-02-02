@@ -23,13 +23,19 @@ Run Dash Masternode with Hardware Wallet
 ###### Q : why Dash-QT or dashd needed ?
     - instead of block explorer 
     - to check address, collateral, masternode status
-    - to get unspent tx of collateral using watch only address
+    - to get unspent tx of collateral
     - to relay mnb and txs
 
 ###### Q : why do -rescan
     - -rescan means restaring dashd or Dash-QT with -rescan option
-    - while dashmnb do importaddress, dashmnb set rescan 'False' cause rescan usually takes more than 30 secs and rpc timeout occured.
     - after initial checking of masternode config, dashmnb will ask you to do rescan
+    - add following to dash.con and run dashd with dashd -rescan
+    ```
+    addressindex=1
+    spentindex=1
+    timestampindex=1
+    txindex=1
+    ```
 
 ###### help
 ```

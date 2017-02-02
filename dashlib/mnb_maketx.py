@@ -14,13 +14,10 @@ def print_balance(mn_config):
     need_wallet_rescan = False
 
     print('[masternodes balance]')
-    print('alias\tcnt\tbalance(dashd)\tbalance(explorer)')
+    print('alias\tcnt\tbalance')
 
     for m in mn_config:
         alias = m.get('alias')
-        exp_balance = m.get('collateral_exp_balance')
-        if exp_balance is None:
-            exp_balance = '---'
         unspent = m.get('collateral_dashd_balance')
         sumofunspent = sum(unspent)
         cnt = len(unspent)
@@ -31,13 +28,12 @@ def print_balance(mn_config):
         print(
             alias +
             '\t' +
-            '{:2d}\t{:13.8f}\t{:13.8f}'.format(
+            '{:2d}\t{:13.8f}'.format(
                 cnt,
-                sumofunspent,
-                exp_balance))
+                sumofunspent))
 
     print(
-        '\n* count / balance of dashd is spendable\n(over [6 - received, 100 - mnpayment] confirmations)\n')
+        '\n* count / balance : including collateral and unmature mn payment\n')
 
     if MOVE_1K_COLLATERAL:
         return False
@@ -61,7 +57,8 @@ def check_mtime_of_tx(unspent_cache_abs_path):
 
     return False
 
-def get_unspent_txs(mnconfig, access):
+def get_unspent_txs(mnconfig, blockcount, access):
+
     collateral_address = mnconfig.get('collateral_address')
     collateral_txidtxidn = mnconfig.get('collateral_txidtxidn')
 
@@ -69,7 +66,8 @@ def get_unspent_txs(mnconfig, access):
 
     bgetListUnspentAgain  = check_mtime_of_tx(unspent_cache_abs_path)
     if bgetListUnspentAgain:
-        listunspent = get_listunspent(6, 999999999, collateral_address, access)
+        #listunspent = get_listunspent(6, 999999999, collateral_address, access)
+        listunspent = getaddressutxos(collateral_address, access)
         with open(unspent_cache_abs_path, 'w') as outfile:
             json.dump(listunspent, outfile)
     else:
@@ -80,8 +78,9 @@ def get_unspent_txs(mnconfig, access):
     balance_mine = []
 
     for m in listunspent:
-        unspent_txidtxidn = get_txidtxidn(m['txid'], m['vout'])
-        unspent_amount = m['amount']
+        unspent_txidtxidn = get_txidtxidn(m['txid'], m['outputIndex'])
+        #unspent_amount = m['amount']
+        unspent_amount = round(Decimal(float(m['satoshis'] / 1e8)), 8)
 
         balance_mine.append(unspent_amount)
 
@@ -95,18 +94,18 @@ def get_unspent_txs(mnconfig, access):
 
     txs = []
     for x in unspent_mine:
-        if x.get('address') == collateral_address:
+        if (x.get('address') == collateral_address) and ((blockcount -100) > x.get('height')):
             tx = {
-                "amount": x.get('amount'),
+                "amount": round(Decimal(float(x.get('satoshis') / 1e8)), 8),
                 "txid": x.get('txid'),
-                "vout": x.get('vout')
+                "vout": x.get('outputIndex')
             }
             txs.append(tx)
 
     sublist = [txs[i:i + max_unspent] for i in range(0, len(txs), max_unspent)]
 
-    return unspent_mine, sublist, balance_mine
-
+    #return unspent_mine, sublist, balance_mine
+    return sublist, balance_mine
 
 def make_inputs_for_hw_wallet(
         tx,
@@ -193,7 +192,7 @@ def make_inputs_for_hw_wallet(
         ))
 
     feetohuman = round(Decimal(txsizefee / 1e8), 4)
-    print('\tsend %s, %s txs to %s with fee of %s : total amount : %s\n' % (
+    print('\n\tsend %s\n\t%s txs to %s\n\twith fee of %s\n\ttotal amount : %s\n' % (
         amount_total - feetohuman, len(tx), receiving_address, feetohuman, amount_total))
 
     print_hw_wallet_check()

@@ -32,10 +32,6 @@ def main(args):
         rpcbindip + ':' + str(rpcport if USE_SSH_TUNNEL is False else SSH_LOCAL_PORT)
     access = AuthServiceProxy(serverURL)
 
-    client, signing, bip32, mpath, xpub = check_hw_wallet()
-    chain_pubkey = get_chain_pubkey(client, bip32)
-
-
     if len(str(account_no)) == 0:
         err_msg = 'please configure bip32 path : account_no'
         print_err_exit(
@@ -46,6 +42,10 @@ def main(args):
     protocolversion = check_dashd_syncing(access)
 
     if args.check or args.status or args.anounce or args.balance or args.maketx or args.xfer:
+
+        client, signing, bip32, mpath, xpub = check_hw_wallet()
+        chain_pubkey = get_chain_pubkey(client, bip32)
+
         mn_config, signing, mns, mna = checking_mn_config(
             access, signing, chain_pubkey)
 

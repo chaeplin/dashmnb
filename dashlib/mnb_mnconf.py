@@ -46,7 +46,6 @@ def checking_mn_config(access, signing, chain_pubkey):
 
     bParseConfigAgain = check_mtime_of_config(config_py_file_abs_path, masternode_conf_file_abs_path, cache_config_check_abs_path)
 
-
     if bParseConfigAgain:
         lines = []
         if os.path.exists(masternode_conf_file_abs_path):
@@ -67,6 +66,19 @@ def checking_mn_config(access, signing, chain_pubkey):
 
     with open(cache_config_check_abs_path) as data_file:    
         mn_config_all = json.load(data_file)
+
+    # check collateral_address and chain_pubkey again
+    for x in mn_config_all['mn_config']:
+        collateral_address = x.get('collateral_address')
+        if collateral_address in chain_pubkey.keys():
+            pass
+        else:
+            err_msg = 'collateral_address not in bip32 path(ex: Passphrase err) : ' + x.get('alias')
+            print_err_exit(
+                get_caller_name(),
+                get_function_name(),
+                err_msg)
+
 
     print('\n[masternodes config]')
     print('\tconfigured : %s' % mn_config_all.get('configured'))
@@ -183,7 +195,7 @@ def parse_masternode_conf(lines, access, chain_pubkey, cache_config_check_abs_pa
             collateral_spath = chain_pubkey.get(mnaddr).get('spath', None)
             collateral_pubkey = chain_pubkey.get(mnaddr).get('addrpubkey', None)
         else:
-            err_msg = 'collateral_address not ip bip32 path(ex: Passphrase err) : ' + alias
+            err_msg = 'collateral_address not in bip32 path(ex: Passphrase err) : ' + alias
             print_err_exit(
                 get_caller_name(),
                 get_function_name(),

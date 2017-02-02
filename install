@@ -2,9 +2,8 @@ pip install git+https://github.com/chaeplin/bip32utils
 pip install git+https://github.com/chaeplin/python-bitcoinrpc
 pip install git+https://github.com/chaeplin/python-keepkey
 pip install git+https://github.com/chaeplin/python-trezor
-pip install git+https://github.com/verigak/progress
-pip install git+https://github.com/pwaller/pyfiglet
 pip install x11_hash
 pip install simplejson
 pip install requests
+pip install progress
 pip install pyfiglet

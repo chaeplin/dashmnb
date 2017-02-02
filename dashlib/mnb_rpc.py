@@ -94,7 +94,7 @@ def checksynced(access, pversion=False):
 
 def check_dashd_syncing(access):
     from progress.spinner import Spinner
-    spinner = Spinner('---> checking dashd syncing status ')
+    spinner = Spinner('\n---> checking dashd syncing status ')
     protocolversion = checksynced(access, True)
 
     while(not checksynced(access, False)):
@@ -108,6 +108,7 @@ def check_dashd_syncing(access):
                 get_function_name(),
                 'KeyboardInterrupt')
 
+    print('\n')
     return protocolversion
 
 

@@ -30,12 +30,13 @@ Run Dash Masternode with Hardware Wallet
     - -rescan means restaring dashd or Dash-QT with -rescan option
     - after initial checking of masternode config, dashmnb will ask you to do rescan
     - add following to dash.con and run dashd with dashd -rescan
-    ```
+    
+```
     addressindex=1
     spentindex=1
     timestampindex=1
     txindex=1
-    ```
+```
 
 ###### help
 ```

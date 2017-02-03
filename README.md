@@ -74,11 +74,11 @@ Clone the dashmnb repo and install Python dependencies.
 
 ## Configuration
 
-- Use pythin bin/hw-wallet-for-mn.py to gen a list of address
+- Use python bin/hw-wallet-for-mn.py to gen a list of address
 
         $ cd dashmnb
         $ . venv3/bin/activate
-        $ pythin bin/hw-wallet-for-mn.py
+        $ python bin/hw-wallet-for-mn.py
 
 - Send 1k tDash to Address
 
@@ -101,7 +101,7 @@ Clone the dashmnb repo and install Python dependencies.
 
         $ cd dashmnb
         $ . venv3/bin/activate
-        $ pythin bin/dashmnb.py
+        $ python bin/dashmnb.py
 
 
 

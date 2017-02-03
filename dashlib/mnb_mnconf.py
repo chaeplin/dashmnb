@@ -87,6 +87,13 @@ def checking_mn_config(access, signing, chain_pubkey):
     cache_config_check_abs_path = os.path.join(os.path.dirname(os.path.abspath(
         __file__)), '../cache/' + ('MAINNET' if MAINNET else 'TESTNET') + '-configcache.dat')
 
+    if not os.path.exists(masternode_conf_file_abs_path):
+        err_msg = 'no %s file' % masternode_conf_file
+        print_err_exit(
+            get_caller_name(),
+            get_function_name(),
+            err_msg)
+
     bParseConfigAgain = check_mtime_of_config(
         config_py_file_abs_path,
         masternode_conf_file_abs_path,

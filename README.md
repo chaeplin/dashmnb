@@ -82,7 +82,16 @@ Clone the dashmnb repo and install Python dependencies.
 
 - Send 1k tDash to Address
 
-- Set up remote masternode
+- Set up remote masternode, add following to dashd.conf.
+
+        addressindex=1
+        spentindex=1
+        timestampindex=1
+        txindex=1
+
+- Run once with -rescan, to make index
+
+        $ dashd -rescan
 
 - Move dashlib/config.sample.py to dashlib/config.py and edit parameters
 

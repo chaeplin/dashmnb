@@ -1,0 +1,28 @@
+rpcuser=dashrpc#change
+rpcpassword=veryvey-long-complicatedpassword=#change
+rpcallowip=127.0.0.1
+rpcbind=127.0.0.1
+# mainet
+#rpcport=9998
+# testnet
+#rpcport=19998
+#
+listen=1
+server=1
+daemon=1
+logips=1
+#
+logtimestamps=1
+addressindex=1
+spentindex=1
+timestampindex=1
+txindex=1
+#
+maxconnections=256
+# testnet
+#testnet=1
+#
+externalip=ip_of_masternode#change
+masternode=1
+masternodeprivkey=mnprivkey#change
+#

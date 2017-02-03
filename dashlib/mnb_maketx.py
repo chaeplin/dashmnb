@@ -14,7 +14,7 @@ def print_balance(mn_config):
     need_wallet_rescan = False
 
     print('[masternodes balance]')
-    print('alias\tcnt\tbalance')
+    print('alias\tcnt\tbalance\t\taddress to send')
 
     for m in mn_config:
         alias = m.get('alias')
@@ -25,12 +25,7 @@ def print_balance(mn_config):
         if cnt == 0:
             need_wallet_rescan = True
 
-        print(
-            alias +
-            '\t' +
-            '{:2d}\t{:13.8f}'.format(
-                cnt,
-                sumofunspent))
+        print(alias + '\t' + '{:2d}\t{:13.8f}'.format(cnt,sumofunspent) + '\t' + m.get('receiving_address'))
 
     print(
         '\n* count / balance : including collateral and unmature mn payment\n')

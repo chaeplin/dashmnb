@@ -42,17 +42,13 @@ def main(args):
     protocolversion = check_dashd_syncing(access)
     blockcount = get_getblockcount(access)
 
-    if args.check or args.status or args.anounce or args.balance or args.maketx or args.xfer:
+    client, signing, bip32, mpath, xpub = check_hw_wallet()
+    chain_pubkey = get_chain_pubkey(client, bip32)
 
-        client, signing, bip32, mpath, xpub = check_hw_wallet()
-        chain_pubkey = get_chain_pubkey(client, bip32)
+    mn_config, signing, mns, mna = checking_mn_config(
+        access, signing, chain_pubkey)
 
-        mn_config, signing, mns, mna = checking_mn_config(
-            access, signing, chain_pubkey)
-
-
-    if args.status or args.anounce or args.balance or args.maketx or args.xfer:
-        print_mnstatus(mn_config, mns, mna)
+    print_mnstatus(mn_config, mns, mna)
 
 
     if args.anounce and MOVE_1K_COLLATERAL == False:

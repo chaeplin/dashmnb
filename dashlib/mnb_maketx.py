@@ -9,6 +9,7 @@ from mnb_mnconf import *
 from mnb_hwwallet import *
 from decimal import Decimal
 
+
 def print_balance(mn_config):
 
     need_wallet_rescan = False
@@ -25,7 +26,14 @@ def print_balance(mn_config):
         if cnt == 0:
             need_wallet_rescan = True
 
-        print(alias + '\t' + '{:2d}\t{:13.8f}'.format(cnt,sumofunspent) + '\t' + m.get('receiving_address'))
+        print(
+            alias +
+            '\t' +
+            '{:2d}\t{:13.8f}'.format(
+                cnt,
+                sumofunspent) +
+            '\t' +
+            m.get('receiving_address'))
 
     print(
         '\n* count / balance : including collateral and unmature mn payment\n')
@@ -36,37 +44,47 @@ def print_balance(mn_config):
     else:
         return need_wallet_rescan
 
+
 def check_mtime_of_tx(unspent_cache_abs_path):
     if os.path.exists(unspent_cache_abs_path):
         mtime_of_unspent_cache = int(os.path.getmtime(unspent_cache_abs_path))
         cache_unspent_statinfo = os.stat(unspent_cache_abs_path)
-    
+
     else:
         return True
 
     if cache_unspent_statinfo.st_size == 0:
         return True
 
-    if time.time() > (mtime_of_unspent_cache + (txs_cache_refresh_interval_hour * 60 * 60)): 
+    if time.time() > (mtime_of_unspent_cache + (txs_cache_refresh_interval_hour * 60 * 60)):
         return True
 
     return False
+
 
 def get_unspent_txs(mnconfig, blockcount, access):
 
     collateral_address = mnconfig.get('collateral_address')
     collateral_txidtxidn = mnconfig.get('collateral_txidtxidn')
 
-    unspent_cache_abs_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), '../cache/' + ('MAINNET' if MAINNET else 'TESTNET') + '-' + collateral_txidtxidn  + '-unspent.dat')
+    unspent_cache_abs_path = os.path.join(
+        os.path.dirname(
+            os.path.abspath(__file__)),
+        '../cache/' +
+        (
+            'MAINNET' if MAINNET else 'TESTNET') +
+        '-' +
+        collateral_txidtxidn +
+        '-unspent.dat')
 
-    bgetListUnspentAgain  = check_mtime_of_tx(unspent_cache_abs_path)
+    bgetListUnspentAgain = check_mtime_of_tx(unspent_cache_abs_path)
     if bgetListUnspentAgain:
         #listunspent = get_listunspent(6, 999999999, collateral_address, access)
         listunspent = getaddressutxos(collateral_address, access)
         with open(unspent_cache_abs_path, 'w') as outfile:
             json.dump(listunspent, outfile)
     else:
-        with open(unspent_cache_abs_path) as data_file:    
+        with open(unspent_cache_abs_path) as data_file:
             listunspent = json.load(data_file, parse_float=Decimal)
 
     unspent_mine = []
@@ -89,7 +107,8 @@ def get_unspent_txs(mnconfig, blockcount, access):
 
     txs = []
     for x in unspent_mine:
-        if (x.get('address') == collateral_address) and ((blockcount -100) > x.get('height')):
+        if (x.get('address') == collateral_address) and (
+                (blockcount - 100) > x.get('height')):
             tx = {
                 "amount": round(Decimal(float(x.get('satoshis') / 1e8)), 8),
                 "txid": x.get('txid'),
@@ -99,8 +118,9 @@ def get_unspent_txs(mnconfig, blockcount, access):
 
     sublist = [txs[i:i + max_unspent] for i in range(0, len(txs), max_unspent)]
 
-    #return unspent_mine, sublist, balance_mine
+    # return unspent_mine, sublist, balance_mine
     return sublist, balance_mine
+
 
 def make_inputs_for_hw_wallet(
         tx,

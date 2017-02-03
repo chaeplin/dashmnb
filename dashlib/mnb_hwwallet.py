@@ -5,6 +5,7 @@ sys.path.append(os.path.join(os.path.dirname(__file__), '.'))
 from config import *
 from mnb_misc import *
 
+
 def chain_path(mpath):
     import re
     pathmatch = re.search("^(.*)'/(.*)'/(.*)'/(.*)$", mpath)
@@ -34,12 +35,14 @@ def get_chain_pubkey(client, bip32):
 
         print('---> get address from hw wallet : %s' % max_gab)
         chargingBar = ChargingBar('---> processing', max=max_gab)
-        
+
         for i in range(max_gab):
             chargingBar.next()
             child_path = '%s%s' % (mpath + '/', str(i))
-            address = client.get_address(coin_name, client.expand_path(child_path))
-            publicnode = client.get_public_node(client.expand_path(child_path)).node.public_key.hex()
+            address = client.get_address(
+                coin_name, client.expand_path(child_path))
+            publicnode = client.get_public_node(
+                client.expand_path(child_path)).node.public_key.hex()
 
             chain_pubkey[address] = {"spath": i, "addrpubkey": publicnode}
 

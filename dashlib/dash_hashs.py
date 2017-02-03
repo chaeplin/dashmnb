@@ -26,15 +26,18 @@ def bin_sha256(string):
 def sha256(string):
     return bin_sha256(string).hex()
 
+
 def get_code_string(base):
     if base in code_strings:
         return code_strings[base]
     else:
         raise ValueError("Invalid base!")
 
+
 def format_hash(hash_):
     return hash_[::-1].hex()
     # return str(binascii.hexlify(hash_[::-1]).decode("utf-8"))
+
 
 def changebase(string, frm, to, minlen=0):
     if frm == to:
@@ -64,6 +67,7 @@ def safe_hexlify(a):
     return a.hex()
     # return str(binascii.hexlify(a), 'utf-8')
 
+
 def decode(string, base):
     if base == 256 and isinstance(string, str):
         string = bytes(bytearray.fromhex(string))
@@ -85,6 +89,7 @@ def decode(string, base):
         string = string[1:]
     return result
 
+
 def encode(val, base, minlen=0):
     base, minlen = int(base), int(minlen)
     code_string = get_code_string(base)
@@ -99,7 +104,7 @@ def encode(val, base, minlen=0):
     padding_element = b'\x00' if base == 256 else b'1' \
         if base == 58 else b'0'
     if (pad_size > 0):
-        result_bytes = padding_element*pad_size + result_bytes
+        result_bytes = padding_element * pad_size + result_bytes
 
     result_string = ''.join([chr(y) for y in result_bytes])
     result = result_bytes if base == 256 else result_string

@@ -2,7 +2,9 @@ import sys
 import os
 sys.path.append(os.path.join(os.path.dirname(__file__), '.'))
 
-import time 
+import time
+
+
 def clear_screen():
     os.system('clear')
 
@@ -72,7 +74,7 @@ def print_err_exit(
         function_name,
         err_msg,
         errargs=None):
-#    import signal
+    #    import signal
 
     msg = '\n\n\tversion  : 0.2a\n'
     msg += '\tcaller   : ' + caller_name + '\n'

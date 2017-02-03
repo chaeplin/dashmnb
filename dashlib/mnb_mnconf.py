@@ -10,14 +10,20 @@ from mnb_misc import *
 from mnb_rpc import *
 from mnb_explorer import *
 
-def check_mtime_of_config(config_py_file_abs_path, masternode_conf_file_abs_path, cache_config_check_abs_path):
+
+def check_mtime_of_config(
+        config_py_file_abs_path,
+        masternode_conf_file_abs_path,
+        cache_config_check_abs_path):
 
     # check file mtime to do config parse again
-    mtime_of_masternode_conf = int(os.path.getmtime(masternode_conf_file_abs_path))
+    mtime_of_masternode_conf = int(
+        os.path.getmtime(masternode_conf_file_abs_path))
     mtime_of_config_py = int(os.path.getmtime(config_py_file_abs_path))
 
     if os.path.exists(cache_config_check_abs_path):
-        mtime_of_cache_config_check = int(os.path.getmtime(cache_config_check_abs_path))
+        mtime_of_cache_config_check = int(
+            os.path.getmtime(cache_config_check_abs_path))
     else:
         return True
 
@@ -25,11 +31,12 @@ def check_mtime_of_config(config_py_file_abs_path, masternode_conf_file_abs_path
     if cache_config_statinfo.st_size == 0:
         return True
 
-    if (mtime_of_masternode_conf >= mtime_of_cache_config_check 
-       or mtime_of_config_py >= mtime_of_cache_config_check):
+    if (mtime_of_masternode_conf >= mtime_of_cache_config_check
+            or mtime_of_config_py >= mtime_of_cache_config_check):
         return True
 
-    if time.time() > (mtime_of_cache_config_check + (config_cache_refresh_interval_hour * 60 * 60)): 
+    if time.time() > (mtime_of_cache_config_check +
+                      (config_cache_refresh_interval_hour * 60 * 60)):
         return True
 
     return False
@@ -43,41 +50,58 @@ def check_collateral_in_chain_pubkey(addrs, chain_pubkey, alias=None):
             if collateral_address in chain_pubkey.keys():
                 pass
             else:
-                err_msg = 'collateral_address %s\n\tnot in bip32 path(ex: Passphrase err) : %s' % (collateral_address, x.get('alias'))
+                err_msg = 'collateral_address %s\n\tnot in bip32 path(ex: Passphrase err) : %s' % (
+                    collateral_address, x.get('alias'))
                 print_err_exit(
                     get_caller_name(),
                     get_function_name(),
-                    err_msg)    
+                    err_msg)
     else:
         collateral_address = addrs
         if collateral_address in chain_pubkey.keys():
             return True
         else:
-            err_msg = 'collateral_address %s\n\tnot in bip32 path(ex: Passphrase err) : %s' % (collateral_address, alias)
+            err_msg = 'collateral_address %s\n\tnot in bip32 path(ex: Passphrase err) : %s' % (
+                collateral_address, alias)
             print_err_exit(
                 get_caller_name(),
                 get_function_name(),
-                err_msg)            
+                err_msg)
+
 
 def checking_mn_config(access, signing, chain_pubkey):
 
     # abs path of config.py, masternode.conf and cachetime of configcache.dat
-    masternode_conf_file_abs_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), '../mnconf/' + masternode_conf_file)
-    config_py_file_abs_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'config.py')
-    cache_config_check_abs_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), '../cache/' + ('MAINNET' if MAINNET else 'TESTNET') + '-configcache.dat')
+    masternode_conf_file_abs_path = os.path.join(
+        os.path.dirname(
+            os.path.abspath(__file__)),
+        '../mnconf/' +
+        masternode_conf_file)
+    config_py_file_abs_path = os.path.join(
+        os.path.dirname(os.path.abspath(__file__)), 'config.py')
+    cache_config_check_abs_path = os.path.join(os.path.dirname(os.path.abspath(
+        __file__)), '../cache/' + ('MAINNET' if MAINNET else 'TESTNET') + '-configcache.dat')
 
-    bParseConfigAgain = check_mtime_of_config(config_py_file_abs_path, masternode_conf_file_abs_path, cache_config_check_abs_path)
+    bParseConfigAgain = check_mtime_of_config(
+        config_py_file_abs_path,
+        masternode_conf_file_abs_path,
+        cache_config_check_abs_path)
 
     if bParseConfigAgain:
-        print('\n---> checking masternode config using %s ....' % masternode_conf_file)
+        print(
+            '\n---> checking masternode config using %s ....' %
+            masternode_conf_file)
         lines = []
         if os.path.exists(masternode_conf_file_abs_path):
             with open(masternode_conf_file_abs_path) as mobj:
                 for line in mobj:
                     lines.append(line.strip())
-    
-            parse_masternode_conf(lines, access, chain_pubkey, cache_config_check_abs_path)
 
+            parse_masternode_conf(
+                lines,
+                access,
+                chain_pubkey,
+                cache_config_check_abs_path)
 
         else:
             err_msg = 'no %s file' % masternode_conf_file
@@ -89,8 +113,7 @@ def checking_mn_config(access, signing, chain_pubkey):
     else:
         print('\n---> checking masternode config using cache ....')
 
-
-    with open(cache_config_check_abs_path) as data_file:    
+    with open(cache_config_check_abs_path) as data_file:
         mn_config_all = json.load(data_file)
 
     check_collateral_in_chain_pubkey(mn_config_all['mn_config'], chain_pubkey)
@@ -98,31 +121,31 @@ def checking_mn_config(access, signing, chain_pubkey):
     print('\n[masternodes config]')
     print('\tconfigured : %s' % mn_config_all.get('configured'))
     print('\tpassed     : %s' % len(mn_config_all.get('mn_config')))
- 
+
     if 'alias' in mn_config_all.get('errorsnprogress'):
         print('\n[duplicated alias]')
         for x in [item for item, count in collections.Counter(
                 mn_config_all.get('mn_v_alias')).items() if count > 1]:
             print('\t %s' % x)
- 
+
     if 'ip:port' in mn_config_all.get('errorsnprogress'):
         print('\n[duplicated ip:port]')
         for x in [item for item, count in collections.Counter(
                 mn_config_all.get('mn_v_ipport')).items() if count > 1]:
             print('\t %s' % x)
- 
+
     if 'mn_private_key' in mn_config_all.get('errorsnprogress'):
         print('\n[duplicated mn_private_key]')
         for x in [item for item, count in collections.Counter(
                 mn_config_all.get('mn_v_mnprivkey_wif')).items() if count > 1]:
             print('\t %s' % x)
- 
+
     if 'txid_index' in mn_config_all.get('errorsnprogress'):
         print('\n[duplicated txid_index]')
         for x in [item for item, count in collections.Counter(
                 mn_config_all.get('mn_v_txidtxidn')).items() if count > 1]:
             print('\t %s' % x)
- 
+
     if len(mn_config_all.get('errorinconf')) > 0:
         signing = False
         print('\n[errors in config]')
@@ -132,7 +155,7 @@ def checking_mn_config(access, signing, chain_pubkey):
     if MOVE_1K_COLLATERAL:
         signing = True
 
-    #check_wallet_lock(access)
+    # check_wallet_lock(access)
 
     mns = check_masternodelist(access)
     mna = check_masternodeaddr(access)
@@ -140,7 +163,11 @@ def checking_mn_config(access, signing, chain_pubkey):
     return mn_config_all.get('mn_config'), signing, mns, mna
 
 
-def parse_masternode_conf(lines, access, chain_pubkey, cache_config_check_abs_path):
+def parse_masternode_conf(
+        lines,
+        access,
+        chain_pubkey,
+        cache_config_check_abs_path):
 
     i = 0
     lno = 0
@@ -207,10 +234,11 @@ def parse_masternode_conf(lines, access, chain_pubkey, cache_config_check_abs_pa
         printdbg('\tprocess_chain for')
 
         #print(check_collateral_in_chain_pubkey(mnaddr, chain_pubkey, alias))
-        #if mnaddr in chain_pubkey:
+        # if mnaddr in chain_pubkey:
         if check_collateral_in_chain_pubkey(mnaddr, chain_pubkey, alias):
             collateral_spath = chain_pubkey.get(mnaddr).get('spath', None)
-            collateral_pubkey = chain_pubkey.get(mnaddr).get('addrpubkey', None)
+            collateral_pubkey = chain_pubkey.get(
+                mnaddr).get('addrpubkey', None)
         else:
             err_msg = 'collateral_address not in bip32 path(ex: Passphrase err) : ' + alias
             print_err_exit(
@@ -297,19 +325,19 @@ def parse_masternode_conf(lines, access, chain_pubkey, cache_config_check_abs_pa
     ############################################
 
     mn_config_all = {
-                "mn_config": mn_config,
-                "configured": i,
-                "mn_v_alias": mn_v_alias,
-                "mn_v_ipport": mn_v_ipport,
-                "mn_v_mnprivkey_wif": mn_v_mnprivkey_wif,
-                "mn_v_txidtxidn": mn_v_txidtxidn,
-                "errorinconf": errorinconf,
-                "errorsnprogress": errorsnprogress
+        "mn_config": mn_config,
+        "configured": i,
+        "mn_v_alias": mn_v_alias,
+        "mn_v_ipport": mn_v_ipport,
+        "mn_v_mnprivkey_wif": mn_v_mnprivkey_wif,
+        "mn_v_txidtxidn": mn_v_txidtxidn,
+        "errorinconf": errorinconf,
+        "errorsnprogress": errorsnprogress
     }
 
     with open(cache_config_check_abs_path, 'w') as outfile:
         json.dump(mn_config_all, outfile)
 
-    #return mn_config_all
+    # return mn_config_all
 
 # end

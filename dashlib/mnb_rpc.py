@@ -185,7 +185,7 @@ def getaddressbalance(addsress, access):
     try:
         params = {
             "addresses": [addsress]
-        }        
+        }
         r = access.getaddressbalance(params)
         return r.get('balance')
 
@@ -195,7 +195,7 @@ def getaddressbalance(addsress, access):
             get_caller_name(),
             get_function_name(),
             err_msg,
-            e.args)    
+            e.args)
 
 
 def getaddressutxos(addsress, access):

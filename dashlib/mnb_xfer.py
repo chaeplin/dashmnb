@@ -39,9 +39,17 @@ def broadcast_signedrawtx(mn_config, access):
 
                 collateral_txidtxidn = x.get('collateral_txidtxidn')
 
-                unspent_cache_abs_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), '../cache/' + ('MAINNET' if MAINNET else 'TESTNET') + '-' + collateral_txidtxidn  + '-unspent.dat')
+                unspent_cache_abs_path = os.path.join(
+                    os.path.dirname(
+                        os.path.abspath(__file__)),
+                    '../cache/' +
+                    (
+                        'MAINNET' if MAINNET else 'TESTNET') +
+                    '-' +
+                    collateral_txidtxidn +
+                    '-unspent.dat')
+                
                 open(unspent_cache_abs_path, 'w').close()
-
 
     if len(xfertxid) > 0:
         return xfertxid

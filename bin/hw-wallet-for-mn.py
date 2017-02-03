@@ -12,6 +12,7 @@ from bip32utils import BIP32Key
 #from mnb_misc import *
 from dashlib import *
 
+
 def main():
     logo_show()
 
@@ -63,7 +64,12 @@ def main():
                 #print(address, bip32_addrpkey, publicnode)
                 # print(publicnode)
 
-                print(coin_name +' address: ' + '{:20}'.format(child_path) + ' ' + address)
+                print(
+                    coin_name +
+                    ' address: ' +
+                    '{:20}'.format(child_path) +
+                    ' ' +
+                    address)
                 assert bip32_address == address, "address mismatch, bip32 : %s <--> hw : %s" % (
                     bip32_address, address)
                 assert publicnode == bip32_addrpkey, "pubkey mismatch, bip32 : %s <--> hw : %s" % (

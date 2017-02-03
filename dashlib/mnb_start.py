@@ -6,6 +6,7 @@ import re
 from mnb_makemnb import *
 from mnb_misc import *
 
+
 def start_masternode(
         mns_to_start,
         protocolversion,

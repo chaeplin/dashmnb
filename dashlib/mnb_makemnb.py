@@ -11,6 +11,7 @@ from mnb_signing import *
 from mnb_rpc import *
 from mnb_maketx import *
 
+
 def make_mnb(
         alias,
         protocolversion,
@@ -33,7 +34,8 @@ def make_mnb(
     block_hash = get_block_hash_for_mnb(access)
 
     vintx = bytes.fromhex(mnconfig['collateral_txid'])[::-1].hex()
-    vinno = mnconfig['collateral_txidn'].to_bytes(4, byteorder='big')[::-1].hex()
+    vinno = mnconfig['collateral_txidn'].to_bytes(4, byteorder='big')[
+        ::-1].hex()
     vinsig = num_to_varint(len(scriptSig) / 2).hex() + \
         bytes.fromhex(scriptSig)[::-1].hex()
     vinseq = sequence.to_bytes(4, byteorder='big')[::-1].hex()
@@ -93,14 +95,14 @@ def make_mnb(
 
 # rpc
 #    sig2 = signmessage(
-#            last_ping_serialize_for_sig, 
+#            last_ping_serialize_for_sig,
 #            mnconfig['masternode_address'],
 #            access)
 
 # local ecdsa
     sig2 = signmessage_ecdsa(
-            last_ping_serialize_for_sig, 
-            mnconfig['masternode_privkey'])
+        last_ping_serialize_for_sig,
+        mnconfig['masternode_privkey'])
 
     work = vintx + vinno + vinsig + vinseq \
         + ipv6map + collateral_in + delegate_in \

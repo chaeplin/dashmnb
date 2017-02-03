@@ -55,8 +55,7 @@ def signmessage_ecdsa(last_ping_serialize_for_sig, privkeywif):
             get_caller_name(),
             get_function_name(),
             err_msg,
-            e.args)    
-
+            e.args)
 
 
 def hwwallet_signmessage(
@@ -72,12 +71,12 @@ def hwwallet_signmessage(
 
     try:
         sig = client.sign_message(coin_name,
-                                [purpose | 0x80000000,
-                                coin_type | 0x80000000,
-                                account | 0x80000000,
-                                change,
-                                int(spath)],
-                                serialize_for_sig)
+                                  [purpose | 0x80000000,
+                                   coin_type | 0x80000000,
+                                   account | 0x80000000,
+                                   change,
+                                   int(spath)],
+                                  serialize_for_sig)
 
     except Exception as e:
         err_msg = str(e.args)

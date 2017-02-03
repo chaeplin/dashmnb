@@ -28,8 +28,8 @@ def main(args):
     logo_show()
 
     # access
-    serverURL = 'http://' + rpcuser + ':' + rpcpassword + '@' + \
-        rpcbindip + ':' + str(rpcport if USE_SSH_TUNNEL is False else SSH_LOCAL_PORT)
+    serverURL = 'http://' + rpcuser + ':' + rpcpassword + '@' + rpcbindip + \
+        ':' + str(rpcport if USE_SSH_TUNNEL is False else SSH_LOCAL_PORT)
     access = AuthServiceProxy(serverURL)
 
     if len(str(account_no)) == 0:
@@ -50,7 +50,6 @@ def main(args):
 
     print_mnstatus(mn_config, mns, mna)
 
-
     if args.anounce and MOVE_1K_COLLATERAL == False:
         if not signing:
             err_msg = 'need HW wallet to anounce'
@@ -63,7 +62,7 @@ def main(args):
         for m in mn_config:
             txidtxidn = m.get('collateral_txidtxidn')
             if len(args.masternode_to_start) > 0:
-                 if m.get('alias') in args.masternode_to_start:
+                if m.get('alias') in args.masternode_to_start:
                     mns_to_start.append(m)
             else:
                 if ((mns.get(txidtxidn, None) != 'ENABLED'
@@ -83,7 +82,8 @@ def main(args):
     if args.balance or args.maketx or args.xfer:
         for m in mn_config:
             #m["unspent"], m["txs"], m["collateral_dashd_balance"] = get_unspent_txs(m, access)
-            m["txs"], m["collateral_dashd_balance"] = get_unspent_txs(m, blockcount, access)
+            m["txs"], m["collateral_dashd_balance"] = get_unspent_txs(
+                m, blockcount, access)
 
         need_wallet_rescan = print_balance(mn_config)
 
@@ -113,15 +113,23 @@ def main(args):
         if signing:
             print('[making txs]')
             for m in mn_config:
-                if len(m.get('collateral_dashd_balance')) > 0 and len(m.get('txs', None)) > 0:
+                if len(
+                    m.get('collateral_dashd_balance')) > 0 and len(
+                    m.get(
+                        'txs',
+                        None)) > 0:
                     if len(args.masternode_to_start) > 0:
                         if m.get('alias') in args.masternode_to_start:
-                            print('---> signing txs for mn %s: ' % m.get('alias'))
-                            m["signedrawtx"] = make_txs_for_hwwallet(m, client, mpath)
+                            print(
+                                '---> signing txs for mn %s: ' %
+                                m.get('alias'))
+                            m["signedrawtx"] = make_txs_for_hwwallet(
+                                m, client, mpath)
 
                     else:
                         print('---> signing txs for mn %s: ' % m.get('alias'))
-                        m["signedrawtx"] = make_txs_for_hwwallet(m, client, mpath)
+                        m["signedrawtx"] = make_txs_for_hwwallet(
+                            m, client, mpath)
 
     if args.xfer and signing:
         xfertxid = broadcast_signedrawtx(mn_config, access)
@@ -131,11 +139,10 @@ def main(args):
             for x in xfertxid:
                 print('\t' + x)
 
-
     print_err_exit(
         get_caller_name(),
         get_function_name(),
-            'end of pg')
+        'end of pg')
 
 
 def parse_args():

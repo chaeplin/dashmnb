@@ -61,6 +61,7 @@ def varint_to_num(a):
     else:
         return int.from_bytes(bytes.fromhex(a[2:66]), byteorder='little')
 
+
 def from_string_to_bytes(a):
     return a if isinstance(a, bytes) else bytes(a, 'utf-8')
 

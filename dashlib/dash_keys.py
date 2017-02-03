@@ -7,7 +7,12 @@ import random
 import binascii
 import hashlib
 
-from config import *
+try:
+    from config import *
+except:
+    print('please config dashlib/config.py')
+    sys.exit()
+    
 from dash_hashs import *
 from dash_utils import *
 from dash_b58 import *

@@ -2,7 +2,12 @@ import sys
 import os
 sys.path.append(os.path.join(os.path.dirname(__file__), '.'))
 
-from config import *
+try:
+    from config import *
+except:
+    print('please config dashlib/config.py')
+    sys.exit()
+    
 from dash_b58 import *
 from dash_hashs import *
 from dash_jacobian import *

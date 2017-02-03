@@ -2,7 +2,12 @@ import sys
 import os
 sys.path.append(os.path.join(os.path.dirname(__file__), '.'))
 
-from config import *
+try:
+    from config import *
+except:
+    print('please config dashlib/config.py')
+    sys.exit()
+
 from dash_ecdsa import *
 from mnb_misc import *
 from mnb_hwwallet import *

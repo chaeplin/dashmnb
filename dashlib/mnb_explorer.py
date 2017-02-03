@@ -6,7 +6,12 @@ sys.path.append(os.path.join(os.path.dirname(__file__), '.'))
 
 import requests
 
-from config import *
+try:
+    from config import *
+except:
+    print('please config dashlib/config.py')
+    sys.exit()
+    
 from mnb_misc import *
 
 

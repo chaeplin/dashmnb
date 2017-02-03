@@ -2,8 +2,13 @@ import sys
 import os
 sys.path.append(os.path.join(os.path.dirname(__file__), '.'))
 
+try:
+    from config import *
+except:
+    print('please config dashlib/config.py')
+    sys.exit()
+    
 from dash_tx import *
-from config import *
 from mnb_misc import *
 
 

@@ -243,9 +243,9 @@ def get_getblockcount(access):
             e.args)
 
 
-def get_block_hash_for_mnb(access):
+def get_block_hash(no, access):
     try:
-        r = access.getblockhash(get_getblockcount(access) - 12)
+        r = access.getblockhash(no)
         return r
 
     except Exception as e:

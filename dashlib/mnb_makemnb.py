@@ -15,6 +15,7 @@ from mnb_maketx import *
 def make_mnb(
         alias,
         protocolversion,
+        blockcount,
         mnconfig,
         access,
         client,
@@ -31,7 +32,7 @@ def make_mnb(
     #cur_block_height = access.getblockcount()
     #block_hash = access.getblockhash(cur_block_height - 12)
 
-    block_hash = get_block_hash_for_mnb(access)
+    block_hash = get_block_hash(blockcount - 12, access)
 
     vintx = bytes.fromhex(mnconfig['collateral_txid'])[::-1].hex()
     vinno = mnconfig['collateral_txidn'].to_bytes(4, byteorder='big')[

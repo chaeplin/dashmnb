@@ -48,7 +48,7 @@ def broadcast_signedrawtx(mn_config, access):
                     '-' +
                     collateral_txidtxidn +
                     '-unspent.dat')
-                
+
                 open(unspent_cache_abs_path, 'w').close()
 
     if len(xfertxid) > 0:

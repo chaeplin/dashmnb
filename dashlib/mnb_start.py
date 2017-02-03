@@ -10,6 +10,7 @@ from mnb_misc import *
 def start_masternode(
         mns_to_start,
         protocolversion,
+        blockcount,
         access,
         client,
         announce,
@@ -25,6 +26,7 @@ def start_masternode(
         mnbhex = make_mnb(
             m.get('alias'),
             protocolversion,
+            blockcount,
             m,
             access,
             client,

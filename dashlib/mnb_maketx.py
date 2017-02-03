@@ -36,7 +36,7 @@ def print_balance(mn_config):
             m.get('receiving_address'))
 
     print(
-        '\n* count / balance : including collateral and unmature mn payment\n')
+        '\n* count / balance : including collateral and unmature mn payment\n* can be inaccurate after transfer(xfer), need 1 confirmation')
 
     if MOVE_1K_COLLATERAL:
         return False

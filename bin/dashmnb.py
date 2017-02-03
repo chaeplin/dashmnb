@@ -24,7 +24,6 @@ from bitcoinrpc.authproxy import AuthServiceProxy, JSONRPCException
 
 
 def main(args):
-    # clear_screen()
     logo_show()
 
     # access
@@ -41,6 +40,12 @@ def main(args):
 
     protocolversion = check_dashd_syncing(access)
     blockcount = get_getblockcount(access)
+    blockhash = get_block_hash(blockcount, access)
+
+    print('-> protocolv : %s' % str(protocolversion))
+    print('-> blockcnt  : %s' % blockcount)
+    print('-> blockhash : %s\n' % blockhash)
+
 
     client, signing, bip32, mpath, xpub = check_hw_wallet()
     chain_pubkey = get_chain_pubkey(client, bip32)
@@ -73,6 +78,7 @@ def main(args):
             start_masternode(
                 mns_to_start,
                 protocolversion,
+                blockcount,
                 access,
                 client,
                 args.anounce,

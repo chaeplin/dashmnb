@@ -2,17 +2,13 @@ import sys
 import os
 sys.path.append(os.path.join(os.path.dirname(__file__), '.'))
 
-try:
-    from config import *
-except:
-    print('please config dashlib/config.py')
-    sys.exit()
-    
+from config import *
 from dash_b58 import *
 from dash_hashs import *
 from dash_jacobian import *
 from dash_keys import *
 from dash_utils import *
+
 
 long = int
 _bchr = lambda x: bytes([x])

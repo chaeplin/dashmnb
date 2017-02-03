@@ -4,7 +4,6 @@ sys.path.append(os.path.join(os.path.dirname(__file__), '.'))
 
 from mnb_rpc import *
 
-
 def broadcast_signedrawtx(mn_config, access):
     xfertxid = []
     for x in mn_config:

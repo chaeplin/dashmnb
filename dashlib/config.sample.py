@@ -10,8 +10,8 @@ MAINNET = False  # testnet
 # Dash  : 44'/5'/account'/0/0
 # tDash : 44'/165'/account'/0/0
 # bip32 path
-# use 1 to use  trezor web wallet(0 is account 0, 1 is account 1)
-account_no = 1
+# 10 is selected randomly
+account_no = 10
 
 #
 if MAINNET:
@@ -37,12 +37,6 @@ if MAINNET:
     # default address to send coins in hw wallet if reveiving_address in masternode.conf is blank
     # this is not chaing payment address of mn
     default_receiving_address = ''
-
-    # dash mainnet
-    wif_prefix = 204  # cc
-    addr_prefix = 76   # 4c
-    coin_name = 'Dash'
-    # don't change
 
 
 else:
@@ -70,12 +64,6 @@ else:
     # this is not chaing payment address of mn
     default_receiving_address = 'yNYJy9ShtJWo2NFcT7sjRa2ucktTFFe71b'
 
-    # dash testnet
-    wif_prefix = 239  # ef
-    addr_prefix = 140  # 8c
-    coin_name = 'tDash'
-    # don't change
-
 #
 min_fee = 10000  # fee for tx
 
@@ -97,4 +85,21 @@ errorsnprogress = []
 
 # caution this config move 1K collateral to configured address with fee 0.0001
 MOVE_1K_COLLATERAL = False
+
+
+
+# don't change
+if MAINNET:
+    # dash mainnet
+    wif_prefix = 204  # cc
+    addr_prefix = 76   # 4c
+    coin_name = 'Dash'
+    # don't change
+
+else:
+    # dash testnet
+    wif_prefix = 239  # ef
+    addr_prefix = 140  # 8c
+    coin_name = 'tDash'
+    # don't change  
 # end of config.py

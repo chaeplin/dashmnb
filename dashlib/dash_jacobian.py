@@ -4,8 +4,6 @@ sys.path.append(os.path.join(os.path.dirname(__file__), '.'))
 
 from dash_utils import *
 
-# private to public key x, y
-
 
 def inv(a, n):
     if a == 0:

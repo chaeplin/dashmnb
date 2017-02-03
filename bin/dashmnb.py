@@ -17,7 +17,6 @@ import time
 import signal
 import atexit
 
-from config import *
 from dashlib import *
 
 from bitcoinrpc.authproxy import AuthServiceProxy, JSONRPCException

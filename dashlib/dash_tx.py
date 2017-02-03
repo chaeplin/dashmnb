@@ -10,7 +10,6 @@ import simplejson as json
 from dash_hashs import *
 from dash_script import *
 
-
 def deserialize_script(script):
     if isinstance(script, str) and re.match('^[0-9a-fA-F]*$', script):
         return json_changebase(deserialize_script(bytes.fromhex(script)),

@@ -11,7 +11,6 @@ from mnb_signing import *
 from mnb_rpc import *
 from mnb_maketx import *
 
-
 def make_mnb(
         alias,
         protocolversion,

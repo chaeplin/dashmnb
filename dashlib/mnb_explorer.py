@@ -5,15 +5,8 @@ sys.path.append(os.path.join(os.path.dirname(__file__), '.'))
 # use block explorer to check balance, block height to check fork
 
 import requests
-
-try:
-    from config import *
-except:
-    print('please config dashlib/config.py')
-    sys.exit()
-    
+from config import *
 from mnb_misc import *
-
 
 def make_request(url):
     USERAGET = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_1) AppleWebKit/602.2.14 (KHTML, like Gecko) Version/10.0.1 Safari/602.2.14'

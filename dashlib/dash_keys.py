@@ -7,16 +7,12 @@ import random
 import binascii
 import hashlib
 
-try:
-    from config import *
-except:
-    print('please config dashlib/config.py')
-    sys.exit()
-    
+from config import *
 from dash_hashs import *
 from dash_utils import *
 from dash_b58 import *
 from dash_jacobian import *
+
 
 long = int
 _bchr = lambda x: bytes([x])

@@ -10,7 +10,7 @@ MAINNET = False  # testnet
 # Dash  : 44'/5'/account'/0/0
 # tDash : 44'/165'/account'/0/0
 # bip32 path
-# 10 selected randomly
+# use 1 to use  trezor web wallet(0 is account 0, 1 is account 1)
 account_no = 1
 
 #
@@ -96,6 +96,5 @@ txs_cache_refresh_interval_hour = 6
 errorsnprogress = []
 
 # caution this config move 1K collateral to configured address with fee 0.0001
-# destroy mode ><
 MOVE_1K_COLLATERAL = False
 # end of config.py

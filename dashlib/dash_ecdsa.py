@@ -9,7 +9,6 @@ from dash_utils import *
 from dash_hashs import *
 from dash_jacobian import *
 
-
 def get_pubkey_format(pub):
     two = 2
     three = 3

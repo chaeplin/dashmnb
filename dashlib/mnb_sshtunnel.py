@@ -2,16 +2,13 @@ import sys
 import os
 sys.path.append(os.path.join(os.path.dirname(__file__), '.'))
 
-try:
-    from config import *
-except:
-    print('please config dashlib/config.py')
-    sys.exit()
     
 import subprocess
 import time
 import threading
 import signal
+
+from config import *
 
 
 class SshTunnel(threading.Thread):

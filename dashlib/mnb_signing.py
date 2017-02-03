@@ -2,16 +2,11 @@ import sys
 import os
 sys.path.append(os.path.join(os.path.dirname(__file__), '.'))
 
-try:
-    from config import *
-except:
-    print('please config dashlib/config.py')
-    sys.exit()
 
+from config import *
 from dash_ecdsa import *
 from mnb_misc import *
 from mnb_hwwallet import *
-
 
 def serialize_input_str(tx, prevout_n, sequence, scriptSig):
     """Used by MasternodePing in its serialization for signing."""

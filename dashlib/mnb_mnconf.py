@@ -5,16 +5,8 @@ sys.path.append(os.path.join(os.path.dirname(__file__), '.'))
 import collections
 import json
 
-try:
-    from config import *
-except:
-    print('please config dashlib/config.py')
-    sys.exit()
-
-from mnb_misc import *
+from config import *
 from mnb_rpc import *
-from mnb_explorer import *
-
 
 def check_mtime_of_config(
         config_py_file_abs_path,

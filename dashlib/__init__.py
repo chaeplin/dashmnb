@@ -2,6 +2,14 @@ import sys
 import os
 sys.path.append(os.path.join(os.path.dirname(__file__), '.'))
 
+import traceback
+
+try:
+    from config import *
+except:
+    print('please config dashlib/config.py')
+    sys.exit()
+
 from dash_b58 import *
 from dash_block import *
 from dash_ecdsa import *
@@ -22,3 +30,20 @@ from mnb_signing import *
 from mnb_sshtunnel import *
 from mnb_start import *
 from mnb_xfer import *
+
+try:
+	assert isinstance(MAINNET, bool) == True
+	assert isinstance(account_no, int) == True
+	assert (account_no > 0) == True
+
+except AssertionError:
+    _, _, tb = sys.exc_info()
+    traceback.print_tb(tb) # Fixed format
+    tb_info = traceback.extract_tb(tb)
+    filename, line, func, text = tb_info[-1]
+
+    err_msg = 'An error occurred on line {} in statement {}'.format(line, text)
+    print_err_exit(
+        get_caller_name(),
+        get_function_name(),
+        err_msg)

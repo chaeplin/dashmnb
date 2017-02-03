@@ -2,18 +2,14 @@ import sys
 import os
 sys.path.append(os.path.join(os.path.dirname(__file__), '.'))
 
-try:
-    from config import *
-except:
-    print('please config dashlib/config.py')
-    sys.exit()
-    
+from dashlib import *
+from decimal import Decimal
+
+from config import *
 from mnb_misc import *
 from mnb_rpc import *
 from mnb_mnconf import *
 from mnb_hwwallet import *
-from decimal import Decimal
-
 
 def print_balance(mn_config):
 

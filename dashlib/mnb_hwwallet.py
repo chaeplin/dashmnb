@@ -2,14 +2,9 @@ import sys
 import os
 sys.path.append(os.path.join(os.path.dirname(__file__), '.'))
 
-try:
-    from config import *
-except:
-    print('please config dashlib/config.py')
-    sys.exit()
-    
-from mnb_misc import *
 
+from mnb_misc import *
+from config import *
 
 def chain_path(mpath):
     import re
@@ -54,8 +49,13 @@ def get_chain_pubkey(client, bip32):
         chargingBar.finish()
         return chain_pubkey
 
-    except AssertionError as e:
-        err_msg = str(e.args)
+    except AssertionError:
+        _, _, tb = sys.exc_info()
+        traceback.print_tb(tb) # Fixed format
+        tb_info = traceback.extract_tb(tb)
+        filename, line, func, text = tb_info[-1]
+
+        err_msg = 'An error occurred on line {} in statement {}'.format(line, text)
         print_err_exit(
             get_caller_name(),
             get_function_name(),

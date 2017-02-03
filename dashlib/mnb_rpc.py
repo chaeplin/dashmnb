@@ -2,15 +2,9 @@ import sys
 import os
 sys.path.append(os.path.join(os.path.dirname(__file__), '.'))
 
-try:
-    from config import *
-except:
-    print('please config dashlib/config.py')
-    sys.exit()
-    
+from config import *
 from dash_tx import *
 from mnb_misc import *
-
 
 def get_rawtxid(alias, txid, txidn, access):
     try:

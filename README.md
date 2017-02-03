@@ -74,6 +74,8 @@ Clone the dashmnb repo and install Python dependencies.
 
 ## Configuration
 
+- Move dashlib/config.sample.py to dashlib/config.py and edit parameters
+
 - Use python bin/hw-wallet-for-mn.py to gen a list of address
 
         $ cd dashmnb
@@ -92,8 +94,6 @@ Clone the dashmnb repo and install Python dependencies.
 - Run once with -rescan, to make index
 
         $ dashd -rescan
-
-- Move dashlib/config.sample.py to dashlib/config.py and edit parameters
 
 - Move mnconf/masternode.conf.sample to mnconf/masternode.conf and edit
 

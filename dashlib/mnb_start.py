@@ -3,8 +3,8 @@ import os
 sys.path.append(os.path.join(os.path.dirname(__file__), '.'))
 
 import re
-from dashlib import *
-
+from mnb_makemnb import *
+from mnb_misc import *
 
 def start_masternode(
         mns_to_start,

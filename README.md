@@ -79,6 +79,12 @@ Clone the dashmnb repo and install Python dependencies.
     $ cd dashmnb
     $ git pull
 
+## Udev rule set up for linux
+
+To use keepkey or trezor as normal user, do following
+
+    $ sudo cp others/linux/51-* /etc/udev/rules.d/
+
 
 ## Configuration
 

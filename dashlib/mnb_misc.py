@@ -4,12 +4,27 @@ sys.path.append(os.path.join(os.path.dirname(__file__), '.'))
 
 import time
 
-
 def clear_screen():
     os.system('clear')
 
+def check_version():
+    from mnb_explorer import get_version_txt
+
+    cur_version = get_dashmnbversion()
+    git_version = get_version_txt()
+
+    if ((cur_version.get('major') != git_version.get('major')) or \
+         (cur_version.get('minor') != git_version.get('minor')) or \
+         (cur_version.get('fix') != git_version.get('fix'))):
+
+        return True
+
+    else:
+       return False
+
 
 def logo_show():
+    
     from pyfiglet import Figlet
     from config import MAINNET
     from config import MOVE_1K_COLLATERAL
@@ -19,6 +34,8 @@ def logo_show():
     print(f.renderText('Dash Masternode with HW Wallet'))
     #print('\n\t\t\tdonation : xxxxxxxxxx')
     print('\t\t\tby : chaeplin\n')
+    if check_version():
+        print('\t*** New version is available, ple update ! do git pull\n')
     print('Network : ' + ('MAINNET' if MAINNET else 'TESTNET'))
     if MOVE_1K_COLLATERAL:
         print()
@@ -69,19 +86,27 @@ def get_caller_name():
     return sys._getframe(2).f_code.co_name
 
 
+def get_dashmnbversion():
+    import simplejson as json
+    version_file = os.path.join( os.path.dirname( os.path.abspath(__file__)), 'version.txt')
+    with open(version_file) as data_file:
+        data = json.load(data_file)
+    return data
+
 def print_err_exit(
         caller_name,
         function_name,
         err_msg,
         errargs=None):
-    #    import signal
 
-    msg = '\n\n\tversion  : 0.2a\n'
-    msg += '\tcaller   : ' + caller_name + '\n'
-    msg += '\tfunction : ' + function_name + '\n'
+    VERSION = get_dashmnbversion()
+
+    msg = '\n\n\tversion  : %s.%s.%s\n' % (VERSION.get('minor'), VERSION.get('major'), VERSION.get('fix'))
+    msg += '\tcaller   : %s\n' % caller_name
+    msg += '\tfunction : %s\n' % function_name 
     if errargs:
-        msg += '\terr      : ' + str(errargs) + '\n'
-    msg += '\t===> ' + err_msg + '\n'
+        msg += '\terr      : %s' % str(errargs)
+    msg += '\t===> %s\n' % err_msg
 
 #    if tunnel:
 #        os.kill(tunnel, signal.SIGTERM)

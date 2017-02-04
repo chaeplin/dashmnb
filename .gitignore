@@ -1,16 +1,10 @@
-
 *.pyc
-
-masternode.conf
-
-config.py
-
-no_sync
-
 *.swp
-
+*.dat
+no_sync
+config.py
+masternode.conf
 masternode.mainnet.conf
-
 masternode.testnet.conf
 
-*.dat
+dashlib/1.py

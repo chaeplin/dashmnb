@@ -71,7 +71,13 @@ Clone the dashmnb repo and install Python dependencies.
     $ git clone https://github.com/chaeplin/dashmnb && cd dashmnb
     $ virtualenv -p python3 venv3
     $ . venv3/bin/activate
+    $ pip install --upgrade setuptools
     $ pip install -r requirements.txt
+
+## 3. Update
+
+    $ cd dashmnb
+    $ git pull
 
 
 ## Configuration

@@ -10,7 +10,6 @@ except:
     print('please config dashlib/config.py')
     sys.exit()
 
-from version import VERSION
 from dash_b58 import *
 from dash_block import *
 from dash_ecdsa import *

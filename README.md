@@ -88,12 +88,12 @@ To use keepkey or trezor as normal user, do following
 
 ## Configuration
 
-- Move dashlib/config.sample.mainnet[testnet].py to dashlib/config.py and edit parameters
+### 1. Move dashlib/config.sample.mainnet[testnet].py to dashlib/config.py and edit parameters
     - for testnet dashlib/config.sample.mainnet.py to dashlib/config.py
     - for mainet dashlib/config.mainet.testnet.py to dashlib/config.py
 
 
-- Use python bin/hw-wallet-for-mn.py to get a list of address
+### 2.  Use python bin/hw-wallet-for-mn.py to get a list of address
 
         $ cd dashmnb
         $ . venv3/bin/activate
@@ -150,6 +150,11 @@ Dash address: 44'/5'/0'/0/3        XshN8cA8zsHFxxYee8SnQ8qx1iHXg6TP3s
 
 ```
 
+###### for testnet
+
+- Use output of python bin/hw-wallet-for-mn.py 
+
+
 ###### for mainnet
 
 - Use trezor web wallet or keepkey rc clinet to compare address and send 1K Dash to an address of Account #2
@@ -170,30 +175,25 @@ https://blog.trezor.io/multi-currency-support-bitcoin-dash-and-zcash-in-trezor-w
 ![1](./others/pics/keepkey04.png)
 
 
-###### for testnet
-
-- Use output of python bin/hw-wallet-for-mn.py 
-
-
-- Set up remote masternode, add following to dashd.conf. check dash.conf.sample
+### 3. Set up remote masternode, add following to dashd.conf. check dash.conf.sample
 
         addressindex=1
         spentindex=1
         timestampindex=1
         txindex=1
 
-- Run once with -rescan, to make index
+### 4.  Run once with -rescan, to make index
 
         $ dashd -rescan
 
-- add ssh key to remote mastrrnode
+### 5.  add ssh key to remote mastrrnode
 
 https://www.digitalocean.com/community/tutorials/how-to-set-up-ssh-keys--2
 
 
-- Move mnconf/masternode.conf.sample to mnconf/masternode.conf and edit
+### 6.  Move mnconf/masternode.conf.sample to mnconf/masternode.conf and edit
 
-- Run dashmnb.py
+### 7.  Run dashmnb.py
 
         $ cd dashmnb
         $ . venv3/bin/activate

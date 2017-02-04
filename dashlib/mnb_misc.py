@@ -69,19 +69,27 @@ def get_caller_name():
     return sys._getframe(2).f_code.co_name
 
 
+def get_dashmnbversion():
+    import simplejson as json
+    version_file = os.path.join( os.path.dirname( os.path.abspath(__file__)), 'version.txt')
+    with open(version_file) as data_file:
+        data = json.load(data_file)
+    return data
+
 def print_err_exit(
         caller_name,
         function_name,
         err_msg,
         errargs=None):
-    #    import signal
 
-    msg = '\n\n\tversion  : 0.2a\n'
-    msg += '\tcaller   : ' + caller_name + '\n'
-    msg += '\tfunction : ' + function_name + '\n'
+    VERSION = get_dashmnbversion()
+
+    msg = '\n\n\tversion  : %s.%s.%s\n' % (VERSION.get('minor'), VERSION.get('major'), VERSION.get('fix'))
+    msg += '\tcaller   : %s\n' % caller_name
+    msg += '\tfunction : %s\n' % function_name 
     if errargs:
-        msg += '\terr      : ' + str(errargs) + '\n'
-    msg += '\t===> ' + err_msg + '\n'
+        msg += '\terr      : %s' % str(errargs)
+    msg += '\t===> %s\n' % err_msg
 
 #    if tunnel:
 #        os.kill(tunnel, signal.SIGTERM)

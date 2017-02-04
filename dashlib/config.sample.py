@@ -2,7 +2,7 @@
 
 # start of config
 # network
-# MAINNET = True  # mainnet
+#MAINNET = True  # mainnet
 MAINNET = False  # testnet
 
 # https://github.com/bitcoin/bips/blob/master/bip-0044.mediawiki
@@ -10,13 +10,14 @@ MAINNET = False  # testnet
 # Dash  : 44'/5'/account'/0/0
 # tDash : 44'/165'/account'/0/0
 # bip32 path
-# 10 is selected randomly
-account_no = 10
+# 1 is selected to use trezor's web wallet and Keepkey's client
+account_no = 1
 
 #
 if MAINNET:
     # HW WALLET TYPE
-    TYPE_HW_WALLET = 'Trezor'          # Keepkey [ keepkey ], Trezor [ trezor ]
+    # Keepkey [ keepkey ], Trezor [ trezor ]
+    TYPE_HW_WALLET = 'Trezor'          
 
     # rpc
     rpcuser = 'xxxx'

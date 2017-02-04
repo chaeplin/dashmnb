@@ -178,6 +178,11 @@ https://blog.trezor.io/multi-currency-support-bitcoin-dash-and-zcash-in-trezor-w
 
         $ dashd -rescan
 
+- add ssh key to remote mastrrnode
+
+https://www.digitalocean.com/community/tutorials/how-to-set-up-ssh-keys--2
+
+
 - Move mnconf/masternode.conf.sample to mnconf/masternode.conf and edit
 
 - Run dashmnb.py

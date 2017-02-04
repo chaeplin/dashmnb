@@ -4,12 +4,27 @@ sys.path.append(os.path.join(os.path.dirname(__file__), '.'))
 
 import time
 
-
 def clear_screen():
     os.system('clear')
 
+def check_version():
+    from mnb_explorer import get_version_txt
+
+    cur_version = get_dashmnbversion()
+    git_version = get_version_txt()
+
+    if ((cur_version.get('major') != git_version.get('major')) or \
+         (cur_version.get('minor') != git_version.get('minor')) or \
+         (cur_version.get('fix') != git_version.get('fix'))):
+
+        return True
+
+    else:
+       return False
+
 
 def logo_show():
+    
     from pyfiglet import Figlet
     from config import MAINNET
     from config import MOVE_1K_COLLATERAL
@@ -19,6 +34,8 @@ def logo_show():
     print(f.renderText('Dash Masternode with HW Wallet'))
     #print('\n\t\t\tdonation : xxxxxxxxxx')
     print('\t\t\tby : chaeplin\n')
+    if check_version():
+        print('\t*** New version is available, ple update ! do git pull\n')
     print('Network : ' + ('MAINNET' if MAINNET else 'TESTNET'))
     if MOVE_1K_COLLATERAL:
         print()

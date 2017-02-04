@@ -150,11 +150,11 @@ Dash address: 44'/5'/0'/0/3        XshN8cA8zsHFxxYee8SnQ8qx1iHXg6TP3s
 
 ```
 
-- Use trezor web wallet or keepkey rc clinet to compare address and send 1K Dash to an address of Account #1
+- Use trezor web wallet or keepkey rc clinet to compare address and send 1K Dash to an address of Account #2
 
-- Use Account #0 for daily use
+- Use Account #1 for daily use
 
-- To add Account #1, should send small amount to an address of Account #0 
+- To add Account #2, should send small amount to an address of Account #1
 
 https://www.keepkey.com/2017/02/02/dash-now-public-beta/
 

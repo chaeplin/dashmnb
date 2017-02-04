@@ -82,7 +82,10 @@ Clone the dashmnb repo and install Python dependencies.
 
 ## Configuration
 
-- Move dashlib/config.sample.py to dashlib/config.py and edit parameters
+- Move dashlib/config.sample.mainnet[testnet].py to dashlib/config.py and edit parameters
+    - for testnet dashlib/config.sample.mainnet.py to dashlib/config.py
+    - for mainet dashlib/config.mainet.testnet.py to dashlib/config.py
+
 
 - Use python bin/hw-wallet-for-mn.py to gen a list of address
 

@@ -49,6 +49,8 @@ Make sure Python version 3.x or above is installed:
 Update system packages and ensure virtualenv is installed:
 
     $ sudo apt-get update
+    $ sudo apt-get install libudev-dev libusb-1.0-0-dev libfox-1.6-dev
+    $ sudo apt-get install autotools-dev autoconf automake libtool
     $ sudo apt-get -y install python3-pip
     $ sudo pip3 install virtualenv
 

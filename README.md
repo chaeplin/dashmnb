@@ -150,6 +150,8 @@ Dash address: 44'/5'/0'/0/3        XshN8cA8zsHFxxYee8SnQ8qx1iHXg6TP3s
 
 ```
 
+###### for mainnet
+
 - Use trezor web wallet or keepkey rc clinet to compare address and send 1K Dash to an address of Account #2
 
 - Use Account #1 for daily use
@@ -167,7 +169,13 @@ https://blog.trezor.io/multi-currency-support-bitcoin-dash-and-zcash-in-trezor-w
 ![1](./others/pics/keepkey03.png)
 ![1](./others/pics/keepkey04.png)
 
-- Set up remote masternode, add following to dashd.conf.
+
+###### for testnet
+
+- Use output of python bin/hw-wallet-for-mn.py 
+
+
+- Set up remote masternode, add following to dashd.conf. check dash.conf.sample
 
         addressindex=1
         spentindex=1

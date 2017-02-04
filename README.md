@@ -51,7 +51,7 @@ Update system packages and ensure virtualenv is installed:
     $ sudo apt-get update
     $ sudo apt-get install libudev-dev libusb-1.0-0-dev libfox-1.6-dev
     $ sudo apt-get install autotools-dev autoconf automake libtool
-    $ sudo apt-get -y install python3-pip
+    $ sudo apt-get -y install python3-pip git
     $ sudo pip3 install virtualenv
 
 
@@ -60,7 +60,7 @@ Update system packages and ensure virtualenv is installed:
 Install brew and python3
 
     $ /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"    
-    $ brew install python3
+    $ brew install python3 git
     $ pip3 install virtualenv
 
 

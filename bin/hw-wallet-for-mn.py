@@ -96,4 +96,7 @@ def main():
     client.close()
 
 if __name__ == '__main__':
+    if (sys.version_info < (3, 5, 1)):
+        sys.exit('need python 3.5.1')
+            
     main()

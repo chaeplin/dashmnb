@@ -204,8 +204,8 @@ if __name__ == "__main__":
             os.kill(tunnel_pid, signal.SIGTERM)
 
     printdbg('main starting')
-    if (sys.version_info < (3, 0)):
-        sys.exit('need python3')
+    if (sys.version_info < (3, 5, 1)):
+        sys.exit('need python 3.5.1')
 
     try:
 

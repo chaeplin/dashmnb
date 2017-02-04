@@ -42,7 +42,7 @@ Run Dash Masternode with Hardware Wallet
 
 ### 1. Install Prerequisites (Ubuntu/Debian)
 
-Make sure Python version 3.x or above is installed:
+Make sure Python version 3.5.1 or above is installed:
 
     python --version
 

@@ -160,12 +160,12 @@ https://www.keepkey.com/2017/02/02/dash-now-public-beta/
 
 https://blog.trezor.io/multi-currency-support-bitcoin-dash-and-zcash-in-trezor-wallet-7377d812112a#.36ft1p2c1
 
-[1](./others/pics/trezor01.png)
-[1](./others/pics/trezor02.png)
-[1](./others/pics/keepkey01.png)
-[1](./others/pics/keepkey02.png)
-[1](./others/pics/keepkey03.png)
-[1](./others/pics/keepkey04.png)
+![1](./others/pics/trezor01.png)
+![1](./others/pics/trezor02.png)
+![1](./others/pics/keepkey01.png)
+![1](./others/pics/keepkey02.png)
+![1](./others/pics/keepkey03.png)
+![1](./others/pics/keepkey04.png)
 
 - Set up remote masternode, add following to dashd.conf.
 

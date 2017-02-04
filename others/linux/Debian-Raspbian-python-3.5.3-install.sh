@@ -15,4 +15,5 @@ cd Python-$RELEASE
 make
 sudo make install
 sudo rm -rf ~/python3/Python-$RELEASE
+sudo pip3 install virtualenv
 cd ~

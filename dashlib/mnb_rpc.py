@@ -207,7 +207,7 @@ def getaddressbalancewithoutexcept(addsress, access):
         return r.get('balance')
 
     except:
-        return '-'
+        return 0
 
 
 def getaddressutxos(addsress, access):

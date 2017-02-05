@@ -46,6 +46,9 @@ Make sure Python version 3.5.1 or above is installed:
 
     python --version
 
+Check python install script others/linux/Debian-Raspbian-python-3.5.3-install.sh
+
+
 Update system packages and ensure virtualenv is installed:
 
     $ sudo apt-get update
@@ -57,7 +60,7 @@ Update system packages and ensure virtualenv is installed:
 
 ### 1. Install Prerequisites (Mac oS)
 
-Install brew and python3
+Install brew and python3.5 or python3.6 
 
     $ /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"    
     $ brew install python3 git

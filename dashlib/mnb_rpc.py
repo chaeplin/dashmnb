@@ -67,6 +67,8 @@ def checksynced(access, pversion=False):
 
     try:
         status = access.mnsync('status')
+        if MOVE_1K_COLLATERAL:
+            return True
 
         if protocolversion > 70201:
             if pversion:

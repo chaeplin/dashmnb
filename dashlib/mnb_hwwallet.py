@@ -45,6 +45,8 @@ def get_chain_pubkey(client, bip32):
                 client.expand_path(child_path)).node.public_key.hex()
 
             chain_pubkey[address] = {"spath": i, "addrpubkey": publicnode}
+        
+        chargingBar.next()
 
         chargingBar.finish()
         return chain_pubkey

@@ -84,7 +84,7 @@ def main(args):
                 mpath)
 
     # wallet rescan
-    if args.balance or args.maketx or args.xfer:
+    if args.balance : #or args.maketx or args.xfer:
         for m in mn_config:
             #m["unspent"], m["txs"], m["collateral_dashd_balance"] = get_unspent_txs(m, access)
             m["txs"], m["collateral_dashd_balance"] = get_unspent_txs(

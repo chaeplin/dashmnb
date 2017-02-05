@@ -108,7 +108,7 @@ def get_unspent_txs(mnconfig, blockcount, access):
     txs = []
     for x in unspent_mine:
         if (x.get('address') == collateral_address) and (
-                (blockcount - 100) > x.get('height')):
+                (blockcount - 120) > x.get('height')):
             tx = {
                 "amount": round(Decimal(float(x.get('satoshis') / 1e8)), 8),
                 "txid": x.get('txid'),

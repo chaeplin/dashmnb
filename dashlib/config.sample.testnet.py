@@ -24,7 +24,27 @@ rpcport = 19998
 
 # ssh tunnel
 USE_SSH_TUNNEL = True  # True or False
-SSH_IDENTITYFILE = '~/.ssh/xxxx.pem'
+
+# if you connect remote server with IDENTITYFILE
+# like ssh -i ~/.ssh/xxxx.pem myid@x.x.x.x
+# 2 option
+# 1)
+# USE_IDENTITYFILE = False
+# SSH_IDENTITYFILE = ''
+# then use ssh-add -K ~/.ssh/xxxx.pem 
+# ssh-add : adds private key identities to the authentication agent
+#
+# 2)
+# USE_IDENTITYFILE = True
+# SSH_IDENTITYFILE = '~/.ssh/xxxx.pem'
+
+USE_IDENTITYFILE = False # True or False
+SSH_IDENTITYFILE = ''
+
+#USE_IDENTITYFILE = True
+#SSH_IDENTITYFILE = '~/.ssh/xxxx.pem' or '~/.ssh/id_rsa'
+
+
 SSH_USER = 'xxxx'
 SSH_SERVER = '10.10.10.10'
 SSH_LOCAL_PORT = '39998'

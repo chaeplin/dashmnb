@@ -30,11 +30,17 @@ class SshTunnel(threading.Thread):
         # main non-daemon thread finishes
 
     def run(self):
-        p = subprocess.Popen([
-            'ssh', '-i', self.identityfile,
-                   '-N',
-                   '-L', str(self.localport) + ':localhost:' + str(self.remoteport),
-                   self.remoteuser + '@' + self.remotehost])
+        if not USE_IDENTITYFILE:
+            p = subprocess.Popen([
+                'ssh', '-N',
+                       '-L', str(self.localport) + ':localhost:' + str(self.remoteport),
+                       self.remoteuser + '@' + self.remotehost])
+        else:
+            p = subprocess.Popen([
+                'ssh', '-i', self.identityfile,
+                       '-N',
+                       '-L', str(self.localport) + ':localhost:' + str(self.remoteport),
+                       self.remoteuser + '@' + self.remotehost])            
 
         if p:
             self.pid = p.pid

@@ -8,3 +8,7 @@ masternode.mainnet.conf
 masternode.testnet.conf
 
 dashlib/1.py
+
+dashlib/config.testnet.py
+
+dashlib/config.main.py

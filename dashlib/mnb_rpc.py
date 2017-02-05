@@ -191,12 +191,23 @@ def getaddressbalance(addsress, access):
         return r.get('balance')
 
     except Exception as e:
-        err_msg = 'Dash-QT or dashd running ?'
+        err_msg = 'if dashd/QT is running, check\nhttps://github.com/chaeplin/dashmnb#3-set-up-remote-nodeor-masternode-add-following-to-dashdconf-check-dashconfsample'
         print_err_exit(
             get_caller_name(),
             get_function_name(),
             err_msg,
             e.args)
+
+def getaddressbalancewithoutexcept(addsress, access):
+    try:
+        params = {
+            "addresses": [addsress]
+        }
+        r = access.getaddressbalance(params)
+        return r.get('balance')
+
+    except:
+        return '-'
 
 
 def getaddressutxos(addsress, access):

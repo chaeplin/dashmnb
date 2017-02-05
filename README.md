@@ -26,10 +26,10 @@ Run Dash Masternode with Hardware Wallet
     - to get unspent tx of collateral
     - to relay mnb and txs
 
-###### Q : why do -rescan
-    - -rescan means restaring dashd or Dash-QT with -rescan option
-    - after initial checking of masternode config, dashmnb will ask you to do rescan
-    - add following to dash.con and run dashd with dashd -rescan
+###### Q : why do -reindex
+    - -reindex means restaring dashd or Dash-QT with -reindex option
+    - after initial checking of masternode config, dashmnb will ask you to do reindex
+    - add following to dash.con and run dashd with dashd -reindex
     
 ```
     addressindex=1
@@ -178,16 +178,16 @@ https://blog.trezor.io/multi-currency-support-bitcoin-dash-and-zcash-in-trezor-w
 ![1](./others/pics/keepkey04.png)
 
 
-### 3. Set up remote masternode, add following to dashd.conf. check dash.conf.sample
+### 3. Set up remote node(or masternode), add following to dashd.conf. check dash.conf.sample
 
         addressindex=1
         spentindex=1
         timestampindex=1
         txindex=1
 
-### 4.  Run once with -rescan, to make index
+### 4.  Run once with -reindex, to make index
 
-        $ dashd -rescan
+        $ dashd -reindex
 
 ### 5.  add ssh key to remote mastrrnode
 

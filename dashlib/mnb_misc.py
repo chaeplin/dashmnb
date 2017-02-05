@@ -67,8 +67,8 @@ def print_mnstatus(mn_config, mns, mna):
     print('alias\tip (m: ip/port match)\tcollateral address\t\t   status')
 
     for m in mn_config:
-        mna_ip = mna.get(m.get('collateral_txidtxidn', '-------'))
-        mns_status = mns.get(m.get('collateral_txidtxidn', '-------'))
+        mna_ip = mna.get(m.get('collateral_txidtxidn', '-------'), '-')
+        mns_status = mns.get(m.get('collateral_txidtxidn', '-------'), '-')
         if m.get('ipport') != mna_ip:
             ipmatch = '-'
         else:

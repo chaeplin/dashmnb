@@ -93,9 +93,9 @@ To use keepkey or trezor as normal user, do following
 
 ## Configuration
 
-### 1. Move dashlib/config.sample.mainnet[testnet].py to dashlib/config.py and edit parameters
-    - for testnet dashlib/config.sample.mainnet.py to dashlib/config.py
-    - for mainet dashlib/config.mainet.testnet.py to dashlib/config.py
+### 1. copy dashlib/config.sample.mainnet[testnet].py to dashlib/config.py and edit parameters
+    - for testnet : dashlib/config.sample.testnet.py to dashlib/config.py
+    - for mainet  : dashlib/config.sample.mainnet.py to dashlib/config.py
 
 
 ### 2.  Use python bin/hw-wallet-for-mn.py to get a list of address

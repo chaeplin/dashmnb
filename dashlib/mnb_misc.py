@@ -101,7 +101,7 @@ def print_err_exit(
 
     VERSION = get_dashmnbversion()
 
-    msg = '\n\n\tversion  : %s.%s.%s\n' % (VERSION.get('minor'), VERSION.get('major'), VERSION.get('fix'))
+    msg = '\n\n\tversion  : %s.%s.%s\n' % (VERSION.get('major'), VERSION.get('minor'), VERSION.get('fix'))
     msg += '\tcaller   : %s\n' % caller_name
     msg += '\tfunction : %s\n' % function_name 
     if errargs:

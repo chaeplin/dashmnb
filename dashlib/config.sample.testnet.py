@@ -57,7 +57,7 @@ masternode_conf_file = 'masternode.conf'
 default_receiving_address = ''
 
 #
-max_gab = 20     # number of keys used on mn config
+max_gab = 5     # number of keys used on mn config
 
 max_amounts = 50     # max amounts of each unspent tx
 max_unspent = 20

@@ -33,7 +33,7 @@ def print_balance(mn_config):
                 cnt,
                 sumofunspent) +
             '\t' +
-            m.get('receiving_address'))
+            str(m.get('receiving_address', '----')))
 
     print(
         '\n* count / balance : including collateral and unmature mn payment\n* can be inaccurate after transfer(xfer), need 1 confirmation')

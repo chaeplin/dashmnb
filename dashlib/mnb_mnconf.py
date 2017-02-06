@@ -202,7 +202,10 @@ def parse_masternode_conf(
         if len(s) == 6:
             raddr = s[5]
         elif len(s) == 5:
-            raddr = default_receiving_address
+            if len(default_receiving_address) != 0: 
+                raddr = default_receiving_address
+            else:
+                raddr = None
 
         lineno = lno
 
@@ -286,12 +289,13 @@ def parse_masternode_conf(
                 get_function_name(),
                 err_msg)
 
-        if not validateaddress(raddr, access):
-            err_msg = 'receiving_address error : ' + alias
-            print_err_exit(
-                get_caller_name(),
-                get_function_name(),
-                err_msg)
+        if raddr != None:
+            if not validateaddress(raddr, access):
+                err_msg = 'receiving_address error : ' + alias
+                print_err_exit(
+                    get_caller_name(),
+                    get_function_name(),
+                    err_msg)
 
         printdbg('\tvalidateaddress for')
 

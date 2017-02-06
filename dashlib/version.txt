@@ -1,1 +1,1 @@
-{"major": 0, "minor": 2, "fix": "rc1"}
+{"major": 0, "minor": 3, "fix": "rc1"}

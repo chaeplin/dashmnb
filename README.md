@@ -1,7 +1,9 @@
 Run Dash Masternode with Hardware Wallet
 =========================================
 
-#### TESTNET ONLY ####
+#### MAINET READY ####
+    - start mn working
+    - transaction disabled and will be enabled after more testing.
 
 ###### Q : why firmware update ?
     - to support Dash testnet, both trezor and keepkey has only Mainnet.

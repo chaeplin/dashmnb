@@ -34,7 +34,7 @@ from mnb_xfer import *
 try:
 	assert isinstance(MAINNET, bool) == True
 	assert isinstance(account_no, int) == True
-	assert (account_no > 0) == True
+	assert (account_no >= 0) == True
 
 except AssertionError:
     _, _, tb = sys.exc_info()

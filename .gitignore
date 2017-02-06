@@ -14,3 +14,5 @@ dashlib/config.testnet.py
 dashlib/config.main.py
 
 dashlib/config.test.py
+
+mnconf/masternode.zero.conf

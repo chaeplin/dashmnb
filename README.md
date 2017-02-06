@@ -46,7 +46,8 @@ Run Dash Masternode with Hardware Wallet
 
 Make sure Python version 3.5.1 or above is installed:
 
-    python --version
+    python3 --version
+
 
 Check python install script others/linux/Debian-Raspbian-python-3.5.3-install.sh
 

@@ -41,9 +41,15 @@ def check_mtime_of_config(
 
 def check_collateral_in_chain_pubkey(addrs, chain_pubkey, alias=None):
     # check collateral_address and chain_pubkey again
+
+    printdbg('check_collateral_in_chain_pubkey : caller : %s' % get_caller_name())
+    printdbg('check_collateral_in_chain_pubkey : type(addrs) : %s' % type(addrs))
+    printdbg('check_collateral_in_chain_pubkey : chain_pubkey.keys() : %s' % chain_pubkey.keys())
+
     if isinstance(addrs, list):
         for x in addrs:
             collateral_address = x.get('collateral_address')
+            printdbg('check_collateral_in_chain_pubkey : collateral_address : %s' % collateral_address)
             if collateral_address in chain_pubkey.keys():
                 pass
             else:
@@ -55,6 +61,7 @@ def check_collateral_in_chain_pubkey(addrs, chain_pubkey, alias=None):
                     err_msg)
     else:
         collateral_address = addrs
+        printdbg('check_collateral_in_chain_pubkey : collateral_address : %s' % collateral_address)
         if collateral_address in chain_pubkey.keys():
             return True
         else:
@@ -79,6 +86,12 @@ def checking_mn_config(access, signing, chain_pubkey):
     cache_config_check_abs_path = os.path.join(os.path.dirname(os.path.abspath(
         __file__)), '../cache/' + ('MAINNET' if MAINNET else 'TESTNET') + '-configcache.dat')
 
+
+    printdbg('checking_mn_config : masternode.conf : %s' % masternode_conf_file_abs_path)
+    printdbg('checking_mn_config : config.py : %s' % config_py_file_abs_path)
+    printdbg('checking_mn_config : config cache : %s' % cache_config_check_abs_path)
+
+
     if not os.path.exists(masternode_conf_file_abs_path):
         err_msg = 'no %s file' % masternode_conf_file
         print_err_exit(
@@ -90,6 +103,8 @@ def checking_mn_config(access, signing, chain_pubkey):
         config_py_file_abs_path,
         masternode_conf_file_abs_path,
         cache_config_check_abs_path)
+
+    printdbg('checking_mn_config : bbParseConfigAgain : %s' % bParseConfigAgain)
 
     if bParseConfigAgain:
         print(
@@ -222,15 +237,18 @@ def parse_masternode_conf(
         txidtxidn = get_txidtxidn(txid, txidn)
         mn_v_txidtxidn.append(txidtxidn)
 
-        printdbg('\trawtxid for')
+        printdbg('\tchecking rawtxid..')
         mnaddr = get_rawtxid(alias, txid, txidn, access)
+        printdbg('\tchecking rawtxid collateral_address : %s' % mnaddr)
         if mnaddr is None:
             errorinconf.append(
                 'line: %d : %s : no matching txid with 1K collateral in blockchain' %
                 (lno, alias))
             continue
 
+        printdbg('\tchecking getaddressbalance..')
         collateral_cur_balance = float(getaddressbalance(mnaddr, access) / 1e8)
+        printdbg('\tchecking getaddressbalance : %s' % collateral_cur_balance)
         if collateral_cur_balance < 1000:
             errorinconf.append(
                 'line: %d : %s : collateral_address has less than 1K balance : %s' %
@@ -238,10 +256,7 @@ def parse_masternode_conf(
             if not MOVE_1K_COLLATERAL:
                 continue
 
-        printdbg('\tprocess_chain for')
-
-        #print(check_collateral_in_chain_pubkey(mnaddr, chain_pubkey, alias))
-        # if mnaddr in chain_pubkey:
+        printdbg('\tprocess_chain ....')
         if check_collateral_in_chain_pubkey(mnaddr, chain_pubkey, alias):
             collateral_spath = chain_pubkey.get(mnaddr).get('spath', None)
             collateral_pubkey = chain_pubkey.get(
@@ -259,7 +274,7 @@ def parse_masternode_conf(
                 (lno, alias))
             continue
 
-        printdbg('\tget masternode_pubkey for')
+        printdbg('\tget masternode_pubkey ....')
         try:
             masternode_pubkey = get_public_key(
                 wif_to_privkey(mnprivkey_wif).get('privkey')).get('pubkeyhex')
@@ -272,7 +287,7 @@ def parse_masternode_conf(
 
         masternode_address = pubkey_to_address(masternode_pubkey)
 
-        printdbg('\tvalidateaddress for')
+        printdbg('\tvalidateaddress ....')
 
         if not validateaddress(mnaddr, access):
             err_msg = 'collateral_address error : ' + alias
@@ -297,8 +312,6 @@ def parse_masternode_conf(
                     get_function_name(),
                     err_msg)
 
-        printdbg('\tvalidateaddress for')
-
         mn_config.append({
             "alias": alias,
             "lineno": str(lineno),
@@ -315,7 +328,7 @@ def parse_masternode_conf(
             "receiving_address": raddr
         })
 
-        printdbg('\tdone for')
+        printdbg('\tdone')
 
     ###########################################
     if len(mn_config) != i:

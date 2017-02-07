@@ -1,7 +1,7 @@
 Run Dash Masternode with Hardware Wallet
 =========================================
 
-#### MAINET READY ####
+#### MAINNET READY ####
     - start mn working
     - transaction disabled and will be enabled after more testing.
 
@@ -113,7 +113,7 @@ To use keepkey or trezor as normal user, do following
 
 ### 1. copy dashlib/config.sample.mainnet[testnet].py to dashlib/config.py and edit parameters
     - for testnet : dashlib/config.sample.testnet.py to dashlib/config.py
-    - for mainet  : dashlib/config.sample.mainnet.py to dashlib/config.py
+    - for mainnet  : dashlib/config.sample.mainnet.py to dashlib/config.py
     
     - testing config.py : no output if config.py is ok
 

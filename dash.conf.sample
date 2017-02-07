@@ -2,7 +2,7 @@ rpcuser=dashrpc#change
 rpcpassword=veryvey-long-complicatedpassword=#change
 rpcallowip=127.0.0.1
 rpcbind=127.0.0.1
-# mainet
+# mainnet
 #rpcport=9998
 # testnet
 #rpcport=19998

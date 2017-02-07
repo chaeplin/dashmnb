@@ -53,7 +53,7 @@ SSH_LOCAL_PORT = '29998'
 masternode_conf_file = 'masternode.conf'
 
 # default address to send coins in hw wallet if reveiving_address in masternode.conf is blank
-# this is not chaing payment address of mn
+# this is not changing payment address of mn
 default_receiving_address = ''
 
 #

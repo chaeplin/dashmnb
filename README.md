@@ -31,14 +31,21 @@ Run Dash Masternode with Hardware Wallet
 ###### Q : why do -reindex
     - -reindex means restaring dashd or Dash-QT with -reindex option
     - after initial checking of masternode config, dashmnb will ask you to do reindex
-    - add following to dash.con and run dashd with dashd -reindex
-    
+
+
+###### Q : Which one to do first
+    - Set up remote node(or masternode), add following to dashd.conf. check dash.conf.sample
+
 ```
     addressindex=1
     spentindex=1
     timestampindex=1
     txindex=1
 ```
+
+    Run once with dashd/QT with -reindex, to make index
+
+
 
 ## Installation
 
@@ -107,6 +114,12 @@ To use keepkey or trezor as normal user, do following
 ### 1. copy dashlib/config.sample.mainnet[testnet].py to dashlib/config.py and edit parameters
     - for testnet : dashlib/config.sample.testnet.py to dashlib/config.py
     - for mainet  : dashlib/config.sample.mainnet.py to dashlib/config.py
+    
+    - testing config.py : no output if config.py is ok
+
+        cd dashmnb
+        . venv3/bin/activate
+        python dashlib/config.py
 
 
 ### 2.  Use python bin/hw-wallet-for-mn.py to get a list of address

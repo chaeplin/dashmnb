@@ -54,42 +54,52 @@ Check python install script others/linux/Debian-Raspbian-python-3.5.3-install.sh
 
 Update system packages and ensure virtualenv is installed:
 
-    $ sudo apt-get update
-    $ sudo apt-get install libudev-dev libusb-1.0-0-dev libfox-1.6-dev
-    $ sudo apt-get install autotools-dev autoconf automake libtool
-    $ sudo apt-get -y install python3-pip git
-    $ sudo pip3 install virtualenv
+    sudo apt-get update
+    sudo apt-get install libudev-dev libusb-1.0-0-dev libfox-1.6-dev
+    sudo apt-get install autotools-dev autoconf automake libtool
+    sudo apt-get -y install python3-pip git
+    sudo pip3 install virtualenv
 
 
 ### 1. Install Prerequisites (Mac oS)
 
 Install brew and python3.5 or python3.6 
 
-    $ /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"    
-    $ brew install python3 git
-    $ pip3 install virtualenv
+    /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"    
+    brew install python3 git
+    pip3 install virtualenv
 
 
 ### 2. Install dashmnb
 
 Clone the dashmnb repo and install Python dependencies.
 
-    $ git clone https://github.com/chaeplin/dashmnb && cd dashmnb
-    $ virtualenv -p python3 venv3
-    $ . venv3/bin/activate
-    $ pip install --upgrade setuptools
-    $ pip install -r requirements.txt
+    git clone https://github.com/chaeplin/dashmnb && cd dashmnb
+    virtualenv -p python3 venv3
+    . venv3/bin/activate
+    pip install --upgrade setuptools
+    pip install -r requirements.txt
 
 ## 3. Update
 
-    $ cd dashmnb
-    $ git pull
+    cd dashmnb
+    git pull
+
+
+## 4. debug
+
+    add DASHMNB_DEBUG=1 
+
+    cd dashmnb
+    . venv3/bin/activate
+    DASHMNB_DEBUG=1 python bin/dashmnb.py
+
 
 ## Udev rule set up for linux
 
 To use keepkey or trezor as normal user, do following
 
-    $ sudo cp others/linux/51-* /etc/udev/rules.d/
+    sudo cp others/linux/51-* /etc/udev/rules.d/
 
 
 ## Configuration
@@ -101,12 +111,12 @@ To use keepkey or trezor as normal user, do following
 
 ### 2.  Use python bin/hw-wallet-for-mn.py to get a list of address
 
-        $ cd dashmnb
-        $ . venv3/bin/activate
-        $ python bin/hw-wallet-for-mn.py
+        cd dashmnb
+        . venv3/bin/activate
+        python bin/hw-wallet-for-mn.py
 
 ```
-(venv3) > $ python bin/hw-wallet-for-mn.py 
+(venv3) > python bin/hw-wallet-for-mn.py 
     ____             __  
    / __ \____ ______/ /_ 
   / / / / __ `/ ___/ __ \
@@ -190,7 +200,7 @@ https://blog.trezor.io/multi-currency-support-bitcoin-dash-and-zcash-in-trezor-w
 
 ### 4.  Run once with -reindex, to make index
 
-        $ dashd -reindex
+        dashd -reindex
 
 ### 5.  add ssh key to remote mastrrnode
 
@@ -201,9 +211,9 @@ https://www.digitalocean.com/community/tutorials/how-to-set-up-ssh-keys--2
 
 ### 7.  Run dashmnb.py
 
-        $ cd dashmnb
-        $ . venv3/bin/activate
-        $ python bin/dashmnb.py
+        cd dashmnb
+        . venv3/bin/activate
+        python bin/dashmnb.py
 
 
 

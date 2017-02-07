@@ -15,6 +15,7 @@ def chain_path(mpath):
         account = pathmatch.group(3)
         change = pathmatch.group(4)
 
+        printdbg('chain_path : re.search : %s : %s : %s :%s' % (int(purpose), int(coin_type), int(account), int(change)))
         return int(purpose), int(coin_type), int(account), int(change)
 
     else:
@@ -26,7 +27,9 @@ def chain_path(mpath):
 
 
 def get_chain_pubkey(client, bip32):
-    from progress.bar import ChargingBar
+    if not os.environ.get('DASHMNB_DEBUG', None):
+
+        from progress.bar import ChargingBar
 
     try:
         mpath = get_mpath()
@@ -34,10 +37,12 @@ def get_chain_pubkey(client, bip32):
         chain_pubkey = {}
 
         print('---> get address from hw wallet : %s' % max_gab)
-        chargingBar = ChargingBar('---> processing', max=max_gab)
+        if not os.environ.get('DASHMNB_DEBUG', None):
+            chargingBar = ChargingBar('---> processing', max=max_gab)
 
         for i in range(max_gab):
-            chargingBar.next()
+            if not os.environ.get('DASHMNB_DEBUG', None):
+                chargingBar.next()
             child_path = '%s%s' % (mpath + '/', str(i))
             address = client.get_address(
                 coin_name, client.expand_path(child_path))
@@ -45,11 +50,16 @@ def get_chain_pubkey(client, bip32):
                 client.expand_path(child_path)).node.public_key.hex()
 
             chain_pubkey[address] = {"spath": i, "addrpubkey": publicnode}
+            printdbg('get_chain_pubkey : %s %s %s' % (child_path, address, publicnode[-10:]))
         
-        chargingBar.next()
+        if not os.environ.get('DASHMNB_DEBUG', None):
+            chargingBar.next()
+            chargingBar.finish()
 
-        chargingBar.finish()
+        printdbg('get_chain_pubkey : chain_pubkey.keys() : %s' % chain_pubkey.keys())
+
         return chain_pubkey
+
 
     except AssertionError:
         _, _, tb = sys.exc_info()
@@ -82,6 +92,10 @@ def get_mpath(default_account=False):
 
     #  Dash  : 44'/5'/account'/0/0
     #  tDash : 44'/165'/account'/0/0
+
+
+    printdbg('get_mpath : default_account : %s' % bool(default_account))
+    printdbg('get_mpath : network mainnet : %s' % MAINNET)
 
     if default_account:
         return "44'/5'/0'/0" if MAINNET else "44'/165'/0'/0"
@@ -169,6 +183,7 @@ def check_hw_wallet():
                     get_function_name(),
                     err_msg)
 
+
     if client is not None:
 
         try:
@@ -222,5 +237,11 @@ def check_hw_wallet():
             get_caller_name(),
             get_function_name(),
             "KeyboardInterrupt")
+
+
+    printdbg('check_hw_wallet : signing : %s' % signing)
+    printdbg('check_hw_wallet : xpub[:7] : %s' % xpub[:7])
+    printdbg('check_hw_wallet : xpub[-7:] : %s' % xpub[-7:])
+    printdbg('check_hw_wallet : mpath : %s' % mpath)
 
     return client, signing, bip32, mpath, xpub

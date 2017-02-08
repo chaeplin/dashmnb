@@ -109,7 +109,7 @@ def main(args):
 #    if args.maketx or args.xfer:
 #
 #        if need_wallet_rescan:
-#            err_msg = '\n\t1) to spend mn payments in HW Wallet, restart Dash-QT or dashd with -rescan\n\t2) if did -rescan and still see this messge, check if 1K was spent'
+#            err_msg = '\n\t1) to spend mn payout in HW Wallet, restart Dash-QT or dashd with -rescan\n\t2) if did -rescan and still see this messge, check if 1K was spent'
 #            print_err_exit(
 #                get_caller_name(),
 #                get_function_name(),

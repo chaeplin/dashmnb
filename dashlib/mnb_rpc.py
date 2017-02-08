@@ -62,19 +62,17 @@ def rpcgetinfo(access):
             e.args)
 
 
-def checksynced(access, pversion=False):
-    protocolversion = rpcgetinfo(access)
+def checksynced(protocolversion, access):
+    if rpcusessl and rpcbindip == "test.stats.dash.org":
+        return True
 
     try:
         status = access.mnsync('status')
-        if MOVE_1K_COLLATERAL:
-            return True
+#        if MOVE_1K_COLLATERAL:
+#            return True  
 
         if protocolversion > 70201:
-            if pversion:
-                return protocolversion
-            else:
-                return status.get('IsSynced')
+            return status.get('IsSynced')
 
         else:
             err_msg = 'Dash 12.0 not supported'
@@ -95,9 +93,9 @@ def checksynced(access, pversion=False):
 def check_dashd_syncing(access):
     from progress.spinner import Spinner
     spinner = Spinner('\n---> checking dashd syncing status ')
-    protocolversion = checksynced(access, True)
+    protocolversion = rpcgetinfo(access)
 
-    while(not checksynced(access, False)):
+    while(not checksynced(protocolversion, access)):
         try:
             spinner.next()
             time.sleep(1)

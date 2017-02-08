@@ -21,22 +21,31 @@ Run Dash Masternode with Hardware Wallet
     - send coins(mn payment) in hw wallet
     - send collateral + coins(mn payment) in hw wallet
     - ssh tunnel to use remote dashd
+    - can use remote rpc service
 
-###### Q : why Dash-QT or dashd needed ?
+###### Q : why Dash-QT or dashd needed ? [if you want to run your own dashd/QT]
     - instead of block explorer 
     - to check address, collateral, masternode status
     - to get unspent tx of collateral
     - to relay mnb and txs
 
-###### Q : why do -reindex
+###### Q : why do -reindex ? [if you want to run your own dashd/QT]
     - -reindex means restaring dashd or Dash-QT with -reindex option
     - after initial checking of masternode config, dashmnb will ask you to do reindex
 
 
-###### Q : Which one to do first
+###### Q : Which one to do first [if you want to run your own dashd/QT]
     - Set up remote node(or masternode), add following to dashd.conf. check dash.conf.sample
 
 ```
+    rpcuser=dashrpc#change
+    rpcpassword=veryvey-long-complicatedpassword=#change
+    rpcallowip=127.0.0.1
+    rpcbind=127.0.0.1
+    rpcport=9998
+    server=1
+    daemon=1
+    logips=1
     addressindex=1
     spentindex=1
     timestampindex=1
@@ -111,9 +120,9 @@ To use keepkey or trezor as normal user, do following
 
 ## Configuration
 
-### 1. copy dashlib/config.sample.mainnet[testnet].py to dashlib/config.py and edit parameters
-    - for testnet : dashlib/config.sample.testnet.py to dashlib/config.py
-    - for mainnet  : dashlib/config.sample.mainnet.py to dashlib/config.py
+### 1. copy dashlib/config.xxxx.py to dashlib/config.py and edit parameters
+    
+    - use config.sample.mainnet.remotesvc.py to use remote rpc service by chaeplin
     
     - testing config.py : no output if config.py is ok
 
@@ -204,18 +213,26 @@ https://blog.trezor.io/multi-currency-support-bitcoin-dash-and-zcash-in-trezor-w
 ![1](./others/pics/keepkey04.png)
 
 
-### 3. Set up remote node(or masternode), add following to dashd.conf. check dash.conf.sample
+### 3. Set up remote node(or masternode), add following to dashd.conf. check dash.conf.sample [if you want to run your own dashd/QT]
 
-        addressindex=1
-        spentindex=1
-        timestampindex=1
-        txindex=1
+    rpcuser=dashrpc#change
+    rpcpassword=veryvey-long-complicatedpassword=#change
+    rpcallowip=127.0.0.1
+    rpcbind=127.0.0.1
+    rpcport=9998
+    server=1
+    daemon=1
+    logips=1
+    addressindex=1
+    spentindex=1
+    timestampindex=1
+    txindex=1
 
-### 4.  Run once with -reindex, to make index
+### 4.  Run once with -reindex, to make index [if you want to run your own dashd/QT]
 
         dashd -reindex
 
-### 5.  add ssh key to remote mastrrnode
+### 5.  add ssh key to remote mastrrnode [if you want to run your own dashd/QT]
 
 https://www.digitalocean.com/community/tutorials/how-to-set-up-ssh-keys--2
 
@@ -227,7 +244,6 @@ https://www.digitalocean.com/community/tutorials/how-to-set-up-ssh-keys--2
         cd dashmnb
         . venv3/bin/activate
         python bin/dashmnb.py
-
 
 
 ###### Thanks to

@@ -11,7 +11,8 @@ from mnb_rpc import *
 def check_mtime_of_config(
         config_py_file_abs_path,
         masternode_conf_file_abs_path,
-        cache_config_check_abs_path):
+        cache_config_check_abs_path,
+        showall):
 
     # check file mtime to do config parse again
     mtime_of_masternode_conf = int(
@@ -34,6 +35,9 @@ def check_mtime_of_config(
 
     if time.time() > (mtime_of_cache_config_check +
                       (config_cache_refresh_interval_hour * 60 * 60)):
+        return True
+
+    if showall:
         return True
 
     return False
@@ -73,7 +77,7 @@ def check_collateral_in_chain_pubkey(addrs, chain_pubkey, alias=None):
                 err_msg)
 
 
-def checking_mn_config(access, signing, chain_pubkey):
+def checking_mn_config(access, signing, chain_pubkey, showall):
 
     # abs path of config.py, masternode.conf and cachetime of configcache.dat
     masternode_conf_file_abs_path = os.path.join(
@@ -102,7 +106,8 @@ def checking_mn_config(access, signing, chain_pubkey):
     bParseConfigAgain = check_mtime_of_config(
         config_py_file_abs_path,
         masternode_conf_file_abs_path,
-        cache_config_check_abs_path)
+        cache_config_check_abs_path,
+        showall)
 
     printdbg('checking_mn_config : bbParseConfigAgain : %s' % bParseConfigAgain)
 
@@ -120,7 +125,8 @@ def checking_mn_config(access, signing, chain_pubkey):
                 lines,
                 access,
                 chain_pubkey,
-                cache_config_check_abs_path)
+                cache_config_check_abs_path,
+                showall)
 
         else:
             err_msg = 'no %s file' % masternode_conf_file
@@ -186,7 +192,8 @@ def parse_masternode_conf(
         lines,
         access,
         chain_pubkey,
-        cache_config_check_abs_path):
+        cache_config_check_abs_path,
+        showall):
 
     i = 0
     lno = 0
@@ -253,7 +260,8 @@ def parse_masternode_conf(
             errorinconf.append(
                 'line: %d : %s : collateral_address has less than 1K balance : %s' %
                 (lno, alias, collateral_cur_balance))
-            if not MOVE_1K_COLLATERAL:
+            
+            if not MOVE_1K_COLLATERAL and not showall:
                 continue
 
         printdbg('\tprocess_chain ....')

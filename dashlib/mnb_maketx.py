@@ -26,6 +26,12 @@ def print_balance(mn_config):
         if cnt == 0:
             need_wallet_rescan = True
 
+        if rpcusessl and rpcbindip == "test.stats.dash.org":
+            need_wallet_rescan = False
+
+        if MOVE_1K_COLLATERAL:
+            need_wallet_rescan = False
+
         print(
             alias +
             '\t' +
@@ -38,11 +44,8 @@ def print_balance(mn_config):
     print(
         '\n* count / balance : including collateral and unmature mn payout\n* can be inaccurate after a transaction(transfer/xfer), need 1 confirmation')
 
-    if MOVE_1K_COLLATERAL:
-        return False
 
-    else:
-        return need_wallet_rescan
+    return need_wallet_rescan
 
 
 def check_mtime_of_tx(unspent_cache_abs_path):
@@ -148,7 +151,8 @@ def make_inputs_for_hw_wallet(
     tx_api.rpcpassword = rpcpassword
     tx_api.rpcbindip = rpcbindip
     tx_api.rpcport = (rpcport if USE_SSH_TUNNEL is False else SSH_LOCAL_PORT)
-
+    tx_api.rpcusessl = rpcusessl
+    
     client.set_tx_api(TXAPIDashrpc())
 
     inputs = []

@@ -16,39 +16,6 @@ account_no = 1
 # Keepkey [ keepkey ], Trezor [ trezor ]
 TYPE_HW_WALLET = 'Trezor'          
 
-# rpc
-rpcusessl = False
-rpcuser = 'xxxx'
-rpcpassword = 'xxxxx'
-rpcbindip = '127.0.0.1'
-rpcport = 9998
-
-# ssh tunnel
-USE_SSH_TUNNEL = False    # True or False
-
-# if you connect remote server with IDENTITYFILE
-# like ssh -i ~/.ssh/xxxx.pem myid@x.x.x.x
-# 2 option
-# 1)
-# USE_IDENTITYFILE = False
-# SSH_IDENTITYFILE = ''
-# then use ssh-add -K ~/.ssh/xxxx.pem 
-# ssh-add : adds private key identities to the authentication agent
-#
-# 2)
-# USE_IDENTITYFILE = True
-# SSH_IDENTITYFILE = '~/.ssh/xxxx.pem'
-
-USE_IDENTITYFILE = False # True or False
-SSH_IDENTITYFILE = ''
-
-#USE_IDENTITYFILE = True
-#SSH_IDENTITYFILE = '~/.ssh/xxxx.pem' or '~/.ssh/id_rsa'
-
-SSH_USER = 'xxxx'
-SSH_SERVER = '10.10.10.10'
-SSH_LOCAL_PORT = '29998'
-
 # masternode_config
 masternode_conf_file = 'masternode.conf'
 
@@ -91,6 +58,13 @@ MOVE_1K_COLLATERAL = False
 
 # don't change
 # dash mainnet
+USE_SSH_TUNNEL = False
+rpcusessl   = True
+rpcuser     = 'dashmnb'
+rpcpassword = 'iamok'
+rpcbindip   = 'test.stats.dash.org'
+rpcport     = 8080
+
 # network
 MAINNET = True  # mainnet
 wif_prefix = 204  # cc

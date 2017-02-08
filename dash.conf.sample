@@ -7,7 +7,6 @@ rpcbind=127.0.0.1
 # testnet
 #rpcport=19998
 #
-listen=1
 server=1
 daemon=1
 logips=1

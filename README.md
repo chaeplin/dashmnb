@@ -55,6 +55,15 @@ Run Dash Masternode with Hardware Wallet
     Run once with dashd/QT with -reindex, to make index
 
 
+###### Q : how 'remote rpc service' works ?
+    - using nginx as proxy
+    - lua script by https://github.com/adetante/ethereum-nginx-proxy
+    - need to change version checking
+    - use ssl by default
+    - add http basic auth to nginx
+    - change Authorization header using proxy_set_header
+    - rpc user name and password on config.py is only for web auth
+
 
 ## Installation
 

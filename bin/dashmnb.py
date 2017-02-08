@@ -74,7 +74,7 @@ def main(args):
                     mns_to_start.append(m)
             else:
                 if ((mns.get(txidtxidn, None) not in list_of_mn_status_ok) and
-                    (mns.get(txidtxidn, None) not in list_of_mn_status_to_ignore))
+                    (mns.get(txidtxidn, None) not in list_of_mn_status_to_ignore)):
                 #if ((mns.get(txidtxidn, None) != 'ENABLED'
                 #     and mns.get(txidtxidn, None) != 'PRE_ENABLED')):
                     mns_to_start.append(m)

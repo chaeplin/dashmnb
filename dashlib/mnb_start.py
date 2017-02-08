@@ -19,6 +19,8 @@ def start_masternode(
     else:
         print('\n[making mnbs and quit]')
 
+    print_hw_wallet_check()
+    
     masternodebroadcast = []
 
     for m in mns_to_start:

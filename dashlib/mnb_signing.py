@@ -65,7 +65,7 @@ def hwwallet_signmessage(
         client,
         mpath):
 
-    print_hw_wallet_check()
+    #print_hw_wallet_check()
 
     purpose, coin_type, account, change = chain_path(mpath)
 

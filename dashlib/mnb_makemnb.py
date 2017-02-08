@@ -112,7 +112,7 @@ def make_mnb(
         + last_ping_block_hash + work_sig_time \
         + num_to_varint(len(sig2) / 2).hex() + sig2
 
-    print('---> mnb hex for %s : %s\n' % (mnconfig.get('alias'), work))
+    #print('---> mnb hex for %s : %s\n' % (mnconfig.get('alias'), work))
     return work
 
 # end

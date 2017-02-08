@@ -63,14 +63,20 @@ def main(args):
                 err_msg)
 
         mns_to_start = []
+
+        list_of_mn_status_ok = ["ENABLED", "PRE_ENABLED", "WATCHDOG_EXPIRED"]
+        list_of_mn_status_to_ignore = ["OUTPOINT_SPENT"]
+
         for m in mn_config:
             txidtxidn = m.get('collateral_txidtxidn')
             if len(args.masternode_to_start) > 0:
                 if m.get('alias') in args.masternode_to_start:
                     mns_to_start.append(m)
             else:
-                if ((mns.get(txidtxidn, None) != 'ENABLED'
-                     and mns.get(txidtxidn, None) != 'PRE_ENABLED')):
+                if ((mns.get(txidtxidn, None) not in list_of_mn_status_ok) and
+                    (mns.get(txidtxidn, None) not in list_of_mn_status_to_ignore))
+                #if ((mns.get(txidtxidn, None) != 'ENABLED'
+                #     and mns.get(txidtxidn, None) != 'PRE_ENABLED')):
                     mns_to_start.append(m)
 
         if len(mns_to_start) > 0 and signing:

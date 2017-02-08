@@ -17,6 +17,7 @@ account_no = 1
 TYPE_HW_WALLET = 'Keepkey'
 
 # rpc
+rpcusessl = False
 rpcuser = 'xxxx'
 rpcpassword = 'xxxxx'
 rpcbindip = '127.0.0.1'

@@ -17,8 +17,17 @@ def main():
     logo_show()
 
     # access
-    serverURL = 'http://' + rpcuser + ':' + rpcpassword + '@' + rpcbindip + \
-        ':' + str(rpcport if USE_SSH_TUNNEL is False else SSH_LOCAL_PORT)
+    if rpcusessl
+        import ssl
+        ssl._create_default_https_context = ssl._create_unverified_context
+
+        serverURL = 'https://' + rpcuser + ':' + rpcpassword + '@' + rpcbindip + \
+            ':' + str(rpcport if USE_SSH_TUNNEL is False else SSH_LOCAL_PORT)
+
+    else:
+        serverURL = 'http://' + rpcuser + ':' + rpcpassword + '@' + rpcbindip + \
+            ':' + str(rpcport if USE_SSH_TUNNEL is False else SSH_LOCAL_PORT)
+
     access = AuthServiceProxy(serverURL)
 
     if len(str(account_no)) == 0:

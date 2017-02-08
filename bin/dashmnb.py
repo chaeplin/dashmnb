@@ -26,10 +26,20 @@ def main(args):
     logo_show()
 
     # access
-    serverURL = 'http://' + rpcuser + ':' + rpcpassword + '@' + rpcbindip + \
-        ':' + str(rpcport if USE_SSH_TUNNEL is False else SSH_LOCAL_PORT)
-    access = AuthServiceProxy(serverURL)
+    # access
+    if rpcusessl:
+        import ssl
+        ssl._create_default_https_context = ssl._create_unverified_context
 
+        serverURL = 'https://' + rpcuser + ':' + rpcpassword + '@' + rpcbindip + \
+            ':' + str(rpcport if USE_SSH_TUNNEL is False else SSH_LOCAL_PORT)
+
+    else:
+        serverURL = 'http://' + rpcuser + ':' + rpcpassword + '@' + rpcbindip + \
+            ':' + str(rpcport if USE_SSH_TUNNEL is False else SSH_LOCAL_PORT)
+
+    access = AuthServiceProxy(serverURL)
+    
     if len(str(account_no)) == 0:
         err_msg = 'please configure bip32 path : account_no'
         print_err_exit(
@@ -50,13 +60,13 @@ def main(args):
     chain_pubkey = get_chain_pubkey(client, bip32)
 
     mn_config, signing, mns, mna = checking_mn_config(
-        access, signing, chain_pubkey)
+        access, signing, chain_pubkey, args.showall)
 
     print_mnstatus(mn_config, mns, mna)
 
     if args.anounce and MOVE_1K_COLLATERAL == False:
         if not signing:
-            err_msg = 'need HW wallet to anounce'
+            err_msg = 'check masternode config'
             print_err_exit(
                 get_caller_name(),
                 get_function_name(),
@@ -183,6 +193,11 @@ def parse_args():
                         dest='balance',
                         action='store_true',
                         help='show masternodes balance')
+
+    parser.add_argument('-l', '--showall',
+                        dest='showall',
+                        action='store_true',
+                        help='show all configured masternodes')
 
 #    parser.add_argument('-m', '--maketx',
 #                        dest='maketx',

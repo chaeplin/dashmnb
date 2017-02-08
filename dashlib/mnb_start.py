@@ -19,6 +19,8 @@ def start_masternode(
     else:
         print('\n[making mnbs and quit]')
 
+    print_hw_wallet_check()
+    
     masternodebroadcast = []
 
     for m in mns_to_start:
@@ -52,14 +54,17 @@ def start_masternode(
     print('\t---> failed  : ' + decoded['failed'])
     print()
 
-    print(json.dumps(verify, sort_keys=True, indent=4, separators=(',', ': ')))
-
     if decoded['success'] != decoded['total']:
+
+        print(json.dumps(verify, sort_keys=True, indent=4, separators=(',', ': ')))
+
         err_msg = 'error occurred while verifying mnb hex'
         print_err_exit(
             get_caller_name(),
             get_function_name(),
             err_msg)
+
+
 
     if announce:
 
@@ -87,13 +92,8 @@ def start_masternode(
         print('\t---> failed  : ' + relayed['failed'])
         print()
 
-        print(
-            json.dumps(
-                relay,
-                sort_keys=False,
-                indent=4,
-                separators=(
-                    ',',
-                    ': ')))
+        if relayed['success'] != relayed['total']:
+            print(json.dumps(relay, sort_keys=True, indent=4, separators=(',', ': ')))
+
 
 # end

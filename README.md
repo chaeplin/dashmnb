@@ -108,7 +108,11 @@ Clone the dashmnb repo and install Python dependencies.
 ## 3. Update
 
     cd dashmnb
+    . venv3/bin/activate
     git pull
+
+    pip install --upgrade git+https://github.com/chaeplin/python-trezor
+    pip install --upgrade git+https://github.com/chaeplin/python-keepkey
 
 
 ## 4. debug

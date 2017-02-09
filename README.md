@@ -65,6 +65,10 @@ Run Dash Masternode with Hardware Wallet
     - rpc user name and password on config.py is only for web auth
 
 
+###### Blocks
+![1](./others/pics/dashmnb.png)
+
+
 ## Installation
 
 ### 1. Install Prerequisites (Ubuntu/Debian)
@@ -190,15 +194,6 @@ Dash address: 44'/5'/1'/0/0        XiDWe5fkVcrXBQApmCFQUxpue5iuWcbmcK
 Dash address: 44'/5'/1'/0/1        XrQcbEjhncd62v58K122hzTdgdW5Z6TBmm
 Dash address: 44'/5'/1'/0/2        XnSibMiJGcoQzCcku4fhR4wWNNfFBrye9h
 Dash address: 44'/5'/1'/0/3        XwUXXWL5kUzJNPDAX2wjxnQYkGjJL5AGwg
-......
-
-**** ====> use following address for trezor/keepkey wallet(default path)
-Dash address: 44'/5'/0'/0/0        XrqJae7jireuCgJSYL31RFiZVV4Yt4g5kX
-Dash address: 44'/5'/0'/0/1        XvztPzfywBFpVEzvS9ULkdWmQAZYqUzTeE
-Dash address: 44'/5'/0'/0/2        XtTTUntBxZtca2wdEbfidyDfV9SVu6TpR4
-Dash address: 44'/5'/0'/0/3        XshN8cA8zsHFxxYee8SnQ8qx1iHXg6TP3s
-.......
-
 ```
 
 ###### for testnet

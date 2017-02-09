@@ -181,9 +181,16 @@ def checking_mn_config(access, signing, chain_pubkey, showall):
         signing = True
 
     # check_wallet_lock(access)
-
+    print()
+    print('---> get masternodelist : status')
+    printdbg('checking_mn_config : check_masternodelist')
     mns = check_masternodelist(access)
+
+    print('---> get masternodelist : addr')
+    printdbg('checking_mn_config : check_masternodeaddr')
     mna = check_masternodeaddr(access)
+    printdbg('checking_mn_config : done')    
+
 
     return mn_config_all.get('mn_config'), signing, mns, mna
 

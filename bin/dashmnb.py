@@ -47,15 +47,42 @@ def main(args):
             get_function_name(),
             err_msg)
 
-    protocolversion = check_dashd_syncing(access)
-    blockcount = get_getblockcount(access)
-    blockhash = get_block_hash(blockcount, access)
+    try:
+        print('--> get dash explorer block count')
+        explorer_blockcount = get_explorer_blockcount()
 
-    print('-> protocolv : %s' % str(protocolversion))
-    print('-> blockcnt  : %s' % blockcount)
-    print('-> blockhash : %s\n' % blockhash)
+        print('--> get dashd/remotesvc status')
+        protocolversion = check_dashd_syncing(access)
+        blockcount = get_getblockcount(access)
+        blockhash = get_block_hash(blockcount, access)
 
+        print('-> protocolv : %s' % str(protocolversion))
+        print('-> blockcnt  : %s' % blockcount)
+        print('-> blockhash : %s\n' % blockhash)
 
+        assert int(explorer_blockcount) == int(blockcount), "blockcount mismatch exp : %s <--> dashd : %s" % (
+                explorer_blockcount, blockcount)
+
+        print()
+
+    except AssertionError as e:
+        err_msg = str(e.args)
+        print_err_exit(
+            get_caller_name(),
+            get_function_name(),
+            err_msg)
+
+    except Exception as e:
+        err_msg = str(e.args)
+        print_err_exit(
+            get_caller_name(),
+            get_function_name(),
+            err_msg)
+
+    have_unconfirmed_tx = False
+    if get_xferblockcount_cache(True) >= blockcount:
+        have_unconfirmed_tx = True
+        
     client, signing, bip32, mpath, xpub = check_hw_wallet()
     chain_pubkey = get_chain_pubkey(client, bip32)
 
@@ -100,13 +127,12 @@ def main(args):
                 mpath)
 
     # wallet rescan
-    if args.balance : #or args.maketx or args.xfer:
+    if args.balance or args.maketx or args.xfer:
         for m in mn_config:
             #m["unspent"], m["txs"], m["collateral_dashd_balance"] = get_unspent_txs(m, access)
-            m["txs"], m["collateral_dashd_balance"] = get_unspent_txs(
-                m, blockcount, access)
+            m["txs"], m["collateral_dashd_balance"] = get_unspent_txs(m, blockcount, access)
 
-        need_wallet_rescan = print_balance(mn_config)
+        need_wallet_rescan = print_balance(mn_config, have_unconfirmed_tx)
 
         if need_wallet_rescan:
             err_msg = '\n\trestarting Dash-QT or dashd with -rescan needed'
@@ -115,51 +141,50 @@ def main(args):
                 get_function_name(),
                 err_msg)
 
-#    if not signing:
-#        err_msg = 'need HW wallet to spend'
-#        print_err_exit(
-#            get_caller_name(),
-#            get_function_name(),
-#            err_msg)
-#
-#    if args.maketx or args.xfer:
-#
-#        if need_wallet_rescan:
-#            err_msg = '\n\t1) to spend mn payout in HW Wallet, restart Dash-QT or dashd with -rescan\n\t2) if did -rescan and still see this messge, check if 1K was spent'
-#            print_err_exit(
-#                get_caller_name(),
-#                get_function_name(),
-#                err_msg)
-#
-#        if signing:
-#            print('[making txs]')
-#            for m in mn_config:
-#                if len(
-#                    m.get('collateral_dashd_balance')) > 0 and len(
-#                    m.get(
-#                        'txs',
-#                        None)) > 0:
-#                    if len(args.masternode_to_start) > 0:
-#                        if m.get('alias') in args.masternode_to_start:
-#                            print(
-#                                '---> signing txs for mn %s: ' %
-#                                m.get('alias'))
-#                            m["signedrawtx"] = make_txs_for_hwwallet(
-#                                m, client, mpath)
-#
-#                    else:
-#                        print('---> signing txs for mn %s: ' % m.get('alias'))
-#                        m["signedrawtx"] = make_txs_for_hwwallet(
-#                            m, client, mpath)
-#
-#    if args.xfer and signing:
-#        xfertxid = broadcast_signedrawtx(mn_config, access)
-#
-#        print()
-#        if xfertxid is not None:
-#            for x in xfertxid:
-#                print('\t' + x)
-#
+    if not signing:
+        err_msg = 'need HW wallet to spend'
+        print_err_exit(
+            get_caller_name(),
+            get_function_name(),
+            err_msg)
+
+    if have_unconfirmed_tx:
+        err_msg = 'have unconfirmed tx, wait at least 1 confirmation'
+        print_err_exit(
+            get_caller_name(),
+            get_function_name(),
+            err_msg)        
+
+    if args.maketx or args.xfer:
+
+        if need_wallet_rescan:
+            err_msg = '\n\t1) to spend mn payout in HW Wallet, restart Dash-QT or dashd with -rescan\n\t2) if did -rescan and still see this messge, check if 1K was spent'
+            print_err_exit(
+                get_caller_name(),
+                get_function_name(),
+                err_msg)
+
+        if signing:
+            print('[making txs]')
+            for m in mn_config:
+                if len(m.get('collateral_dashd_balance')) > 0 and len(m.get('txs', None)) > 0 and m.get('receiving_address', None) is not None:
+                    if len(args.masternode_to_start) > 0:
+                        if m.get('alias') in args.masternode_to_start:
+                            print('---> signing txs for mn %s: ' % m.get('alias'))
+                            m["signedrawtx"] = make_txs_for_hwwallet(m, client, mpath)
+
+                    else:
+                        print('---> signing txs for mn %s: ' % m.get('alias'))
+                        m["signedrawtx"] = make_txs_for_hwwallet(m, client, mpath)
+
+    if args.xfer and signing:
+        xfertxid = broadcast_signedrawtx(mn_config, blockcount, access)
+
+        print()
+        if xfertxid is not None:
+            for x in xfertxid:
+                print('\t' + x)
+
     print_err_exit(
         get_caller_name(),
         get_function_name(),
@@ -199,15 +224,15 @@ def parse_args():
                         action='store_true',
                         help='show all configured masternodes')
 
-#    parser.add_argument('-m', '--maketx',
-#                        dest='maketx',
-#                        action='store_true',
-#                        help='make signed raw tx')
-#
-#    parser.add_argument('-x', '--xfer',
-#                        dest='xfer',
-#                        action='store_true',
-#                        help='broadcast signed raw tx')
+    parser.add_argument('-m', '--maketx',
+                        dest='maketx',
+                        action='store_true',
+                        help='make signed raw tx')
+
+    parser.add_argument('-x', '--xfer',
+                        dest='xfer',
+                        action='store_true',
+                        help='broadcast signed raw tx')
 
     if len(sys.argv) < 2:
         parser.print_help()

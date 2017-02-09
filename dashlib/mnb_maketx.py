@@ -10,18 +10,20 @@ from mnb_rpc import *
 from mnb_mnconf import *
 from mnb_hwwallet import *
 
-def print_balance(mn_config):
+def print_balance(mn_config, have_unconfirmed_tx):
 
     need_wallet_rescan = False
 
     print('[masternodes balance]')
-    print('alias\tcnt\tbalance\t\taddress to send')
+    print('alias\tcnt\tspn\tbalance\t\taddress to send')
 
     for m in mn_config:
         alias = m.get('alias')
         unspent = m.get('collateral_dashd_balance')
         sumofunspent = sum(unspent)
         cnt = len(unspent)
+
+        spn = len(m.get('txs'))
 
         if cnt == 0:
             need_wallet_rescan = True
@@ -35,15 +37,17 @@ def print_balance(mn_config):
         print(
             alias +
             '\t' +
-            '{:2d}\t{:13.8f}'.format(
+            '{:2d}\t{:2d}\t{:13.8f}'.format(
                 cnt,
+                spn,
                 sumofunspent) +
             '\t' +
             str(m.get('receiving_address', '----')))
 
-    print(
-        '\n* count / balance : including collateral and unmature mn payout\n* can be inaccurate after a transaction(transfer/xfer), need 1 confirmation')
-
+    print('* cnt - count    : number of payouts(un + mature) + 1(collateral)')
+    print('* spn - spenable : number of spendable payouts(mature)')
+    if have_unconfirmed_tx:
+        print('* can be inaccurate after a transaction(transfer/xfer), need 1 confirmation')
 
     return need_wallet_rescan
 

@@ -62,11 +62,11 @@ def make_request_version_txt(url):
             get_function_name(),
             err_msg)    
 
-def get_explorer_balance(address):
+def get_explorer_blockcount():
     if MAINNET:
-        url = 'https://explorer.dash.org/chain/Dash/q/addressbalance/' + address
+        url = 'https://explorer.dash.org/chain/Dash/q/getblockcount'
     else:
-        url = 'https://test.explorer.dash.org/chain/tDash/q/addressbalance/' + address
+        url = 'https://test.explorer.dash.org/chain/tDash/q/getblockcount'
 
     response = make_request(url)
 

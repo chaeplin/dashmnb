@@ -17,11 +17,9 @@ def check_version():
          (cur_version.get('minor') != git_version.get('minor')) or \
          (cur_version.get('fix') != git_version.get('fix'))):
 
-        return True
-
-    else:
-       return False
-
+        print('\t*** New version is available, ple update ! do git pull\n')
+        if git_version.get('msgs', None):
+            print('\t*** %s' % git_version.get('msgs', None))
 
 def logo_show():
     
@@ -34,8 +32,7 @@ def logo_show():
     print(f.renderText('Dash Masternode with HW Wallet'))
     #print('\n\t\t\tdonation : xxxxxxxxxx')
     print('\t\t\tby : chaeplin\n')
-    if check_version():
-        print('\t*** New version is available, ple update ! do git pull\n')
+    check_version()
     print('Network : ' + ('MAINNET' if MAINNET else 'TESTNET'))
     if MOVE_1K_COLLATERAL:
         print()
@@ -48,6 +45,24 @@ def logo_show():
 
     # clear_screen()
 
+
+def get_xferblockcount_cache(getblock=False):
+    from config import MAINNET
+    import simplejson as json
+    
+    xferblockcount_cache_abs_path = os.path.join(
+        os.path.dirname(os.path.abspath(__file__)), '../cache/' + ('MAINNET' if MAINNET else 'TESTNET') + '-xferblockcount.dat')
+
+    if getblock:
+        xferblockcount = 0
+        if os.path.exists(xferblockcount_cache_abs_path):
+            with open(xferblockcount_cache_abs_path) as data_file:
+                xferblockcount = json.load(data_file)
+
+        return  xferblockcount
+    else:
+    
+        return xferblockcount_cache_abs_path
 
 def get_txidtxidn(txid, txidn):
     if txid is None or txidn is None:

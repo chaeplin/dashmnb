@@ -75,13 +75,15 @@ Run Dash Masternode with Hardware Wallet
 
 
 ###### config.py example
-    - using emote rpc service by chaeplin
+    - using `remote rpc service by chaeplin`
 
         cd dashmnb
         . venv3/bin/activate
         cp config.sample.mainnet.remotesvc.py dashlib/config.py
+        cp mnconf/masternode.conf.sample mnconf/masternode.conf
 
-    - edit config.py
+    - edit mnconf/masternode.conf
+    - edit dashlib/config.py
 
 ```
 # https://github.com/bitcoin/bips/blob/master/bip-0044.mediawiki
@@ -96,7 +98,7 @@ account_no = 1
 # Keepkey [ keepkey ], Trezor [ trezor ]
 TYPE_HW_WALLET = 'Trezor'          
 
-# masternode_config
+# masternode_config file in mnconf/
 masternode_conf_file = 'masternode.conf'
 
 # default address to send payout coins in hw wallet if reveiving_address in masternode.conf is blank.

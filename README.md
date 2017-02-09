@@ -27,6 +27,11 @@ Run Dash Masternode with Hardware Wallet
     - ssh tunnel to use remote dashd
     - can use remote rpc service
 
+###### Q : spend payout
+    - don't use trezor web wallet to move payout in Masternode account
+    - it will break your masternode. trezor web wallet has no coincontrol
+    - use dashmnb.py -x or  dashmnb.py -x mnalias1 mnalias2. 
+
 ###### Q : why Dash-QT or dashd needed ? [if you want to run your own dashd/QT]
     - if you use `remote dashd/rpc service` don't need
     - instead of block explorer 
@@ -250,13 +255,16 @@ Dash address: 44'/5'/1'/0/3        XwUXXWL5kUzJNPDAX2wjxnQYkGjJL5AGwg
 - Use output of python bin/hw-wallet-for-mn.py 
 
 
+
 ###### for mainnet
 
 - Use trezor web wallet or keepkey rc clinet to compare address and send 1K Dash to an address of Account #2
 
-- Use Account #1 for daily use
+- Use Account #1 for daily use (or Account #2 for daily, if you want)
 
 - To add Account #2, should send small amount to an address of Account #1
+
+- Don't use trezor web wallet to move payout in Masternode account, it will break your masternode. trezor web wallet has no coincontrol. use dashmnb.py -x mnalias. 
 
 https://www.keepkey.com/2017/02/02/dash-now-public-beta/
 

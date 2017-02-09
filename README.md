@@ -3,7 +3,11 @@ Run Dash Masternode with Hardware Wallet
 
 #### MAINNET READY ####
     - start mn working
-    - transaction disabled and will be enabled after more testing.
+    - sending payout working
+
+###### Blocks
+![1](./others/pics/dashmnb.png)
+
 
 ###### Q : why firmware update ?
     - to support Dash testnet, both trezor and keepkey has only Mainnet.
@@ -18,23 +22,26 @@ Run Dash Masternode with Hardware Wallet
     - config check (alias, address, ip, key, pkey, hw wallet path)
     - start masternode missing, selected
     - show masternode status
-    - send coins(mn payment) in hw wallet
+    - send payout in hw wallet
     - send collateral + coins(mn payment) in hw wallet
     - ssh tunnel to use remote dashd
     - can use remote rpc service
 
 ###### Q : why Dash-QT or dashd needed ? [if you want to run your own dashd/QT]
+    - if you use `remote dashd/rpc service` don't need
     - instead of block explorer 
     - to check address, collateral, masternode status
     - to get unspent tx of collateral
     - to relay mnb and txs
 
 ###### Q : why do -reindex ? [if you want to run your own dashd/QT]
+    - if you use `remote dashd/rpc service` don't need
     - -reindex means restaring dashd or Dash-QT with -reindex option
     - after initial checking of masternode config, dashmnb will ask you to do reindex
 
 
 ###### Q : Which one to do first [if you want to run your own dashd/QT]
+    - if you use `remote dashd/rpc service` don't need
     - Set up remote node(or masternode), add following to dashd.conf. check dash.conf.sample
 
 ```
@@ -55,7 +62,7 @@ Run Dash Masternode with Hardware Wallet
     Run once with dashd/QT with -reindex, to make index
 
 
-###### Q : how 'remote rpc service' works ?
+###### Q : how 'remote dashd/rpc service' works ?
     - using nginx as proxy
     - lua script by https://github.com/adetante/ethereum-nginx-proxy
     - need to change version checking
@@ -63,10 +70,50 @@ Run Dash Masternode with Hardware Wallet
     - add http basic auth to nginx
     - change Authorization header using proxy_set_header
     - rpc user name and password on config.py is only for web auth
+    - use remote rpc service
+    - use dashlib/config.sample.mainnet.remotesvc.py
 
 
-###### Blocks
-![1](./others/pics/dashmnb.png)
+###### config.py example
+    - using emote rpc service by chaeplin
+
+        cd dashmnb
+        . venv3/bin/activate
+        cp config.sample.mainnet.remotesvc.py dashlib/config.py
+
+    - edit config.py
+
+```
+# https://github.com/bitcoin/bips/blob/master/bip-0044.mediawiki
+# purpose' / coin_type' / account' / change / address_index
+# Dash  : 44'/5'/account'/0/0
+# tDash : 44'/165'/account'/0/0
+# bip32 path
+# 1 is selected to use trezor's web wallet and Keepkey's client
+account_no = 1
+
+# HW WALLET TYPE
+# Keepkey [ keepkey ], Trezor [ trezor ]
+TYPE_HW_WALLET = 'Trezor'          
+
+# masternode_config
+masternode_conf_file = 'masternode.conf'
+
+# default address to send payout coins in hw wallet if reveiving_address in masternode.conf is blank.
+# this is not changing payment address of mn
+# command -m and -x will use
+default_receiving_address = ''
+
+#
+# how many mns do you have, to check address on hw wallet
+# if bip32 path last used address for mn is like 44'/5'/1'/0/10 : address_index is 10
+# use max_gab = 11 (address_index + 1)
+max_gab = 5     
+```
+
+
+
+
 
 
 ## Installation
@@ -139,7 +186,7 @@ To use keepkey or trezor as normal user, do following
 
 ### 1. copy dashlib/config.xxxx.py to dashlib/config.py and edit parameters
     
-    - use config.sample.mainnet.remotesvc.py to use remote rpc service by chaeplin
+    - use dashlib/config.sample.mainnet.remotesvc.py to use remote rpc service by chaeplin
     
     - testing config.py : no output if config.py is ok
 

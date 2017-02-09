@@ -23,9 +23,13 @@ Run Dash Masternode with Hardware Wallet
     - start masternode missing, selected
     - show masternode status
     - send payout in hw wallet
-    - send collateral + coins(mn payment) in hw wallet
+    - send collateral + coins(mn payouts) in hw wallet
     - ssh tunnel to use remote dashd
     - can use remote rpc service
+
+###### Q : can I use mixed bip32 path
+    - dashmnb support only one bip32 path
+    - can't use mixed(ex: 44'/5'/x'/0/0 + 44'/5'/y'/0/0) path together
 
 ###### Q : spend payout
     - don't use trezor web wallet to move payout in Masternode account
@@ -43,7 +47,6 @@ Run Dash Masternode with Hardware Wallet
     - if you use `remote dashd/rpc service` don't need
     - -reindex means restaring dashd or Dash-QT with -reindex option
     - after initial checking of masternode config, dashmnb will ask you to do reindex
-
 
 ###### Q : Which one to do first [if you want to run your own dashd/QT]
     - if you use `remote dashd/rpc service` don't need

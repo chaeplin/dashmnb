@@ -17,7 +17,7 @@ def main():
     logo_show()
 
     # access
-    if rpcusessl
+    if 'rpcusessl' in globals() and rpcusessl:
         import ssl
         ssl._create_default_https_context = ssl._create_unverified_context
 

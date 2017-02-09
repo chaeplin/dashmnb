@@ -28,7 +28,7 @@ def print_balance(mn_config, have_unconfirmed_tx):
         if cnt == 0:
             need_wallet_rescan = True
 
-        if rpcusessl and rpcbindip == "test.stats.dash.org":
+        if 'rpcusessl' in globals() and rpcusessl and rpcbindip == "test.stats.dash.org":
             need_wallet_rescan = False
 
         if MOVE_1K_COLLATERAL:
@@ -155,7 +155,8 @@ def make_inputs_for_hw_wallet(
     tx_api.rpcpassword = rpcpassword
     tx_api.rpcbindip = rpcbindip
     tx_api.rpcport = (rpcport if USE_SSH_TUNNEL is False else SSH_LOCAL_PORT)
-    tx_api.rpcusessl = rpcusessl
+    if 'rpcusessl' in globals() and rpcusessl:
+        tx_api.rpcusessl = rpcusessl
     
     client.set_tx_api(TXAPIDashrpc())
 

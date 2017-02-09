@@ -63,7 +63,7 @@ def rpcgetinfo(access):
 
 
 def checksynced(protocolversion, access):
-    if rpcusessl and rpcbindip == "test.stats.dash.org":
+    if 'rpcusessl' in globals() and  rpcusessl and rpcbindip == "test.stats.dash.org":
         return True
 
     try:

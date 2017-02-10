@@ -41,7 +41,7 @@ Confirm your Passphrase:
 
 ```
 (venv3) ~/dashmnb $ python bin/dashmnb.py 
-usage: dashmnb.py [-h] [-c] [-s] [-a] [-b] [-m] [-x]
+usage: dashmnb.py [-h] [-c] [-s] [-a] [-b] [-l] [-m] [-x]
                   [masternode_alias_to_start/spend [masternode_alias_to_start/spend ...]]
 
 positional arguments:
@@ -53,11 +53,12 @@ optional arguments:
   -s, --status          show masternode status
   -a, --anounce         anounce missing masternodes
   -b, --balance         show masternodes balance
+  -l, --showall         show all configured masternodes
   -m, --maketx          make signed raw tx
   -x, --xfer            broadcast signed raw tx
 
 
-  version  : 0.2a
+  version  : 0.3.rc5
   caller   : <module>
   function : parse_args
   ===> print help

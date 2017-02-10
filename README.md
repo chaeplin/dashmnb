@@ -9,6 +9,33 @@ Run Dash Masternode with Hardware Wallet
 ![1](./others/pics/dashmnb.png)
 
 
+```
+(venv3) ~/dashmnb $ python bin/dashmnb.py
+usage: dashmnb.py [-h] [-c] [-s] [-a] [-b] [-l] [-m] [-x]
+                  [masternode_alias_to_start/spend [masternode_alias_to_start/spend ...]]
+
+positional arguments:
+  masternode_alias_to_start/spend
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -c, --check           check masternode config
+  -s, --status          show masternode status
+  -a, --anounce         anounce missing masternodes
+  -b, --balance         show masternodes balance
+  -l, --showall         show all configured masternodes
+  -m, --maketx          make signed raw tx
+  -x, --xfer            broadcast signed raw tx
+
+
+    version  : 0.3.rc5
+    caller   : <module>
+    function : parse_args
+    ===> print help
+
+```
+
+
 ###### Q : why firmware update ?
     - to support Dash testnet, both trezor and keepkey has only Mainnet.
     - with Mainnet, no need to update firmware. Use official firmware.

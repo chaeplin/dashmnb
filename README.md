@@ -108,7 +108,7 @@ Update system packages and ensure virtualenv is installed:
     sudo apt-get -y install python3-pip git
     sudo pip3 install virtualenv
 
-#### if python is 3.4.x
+#### if python3 is 3.4.x
 go to [Installation](#installation) and install python-3.5.3 
 
 ### 1.b Install Prerequisites (Mac oS)
@@ -132,7 +132,7 @@ Clone the dashmnb repo and install Python dependencies.
     pip install -r requirements.txt
 
 
-#### if python is 3.4.x
+#### if python3 is 3.4.x
 Clone the dashmnb repo and install Python 3.5.3 and Python dependencies.
 
 
@@ -176,7 +176,7 @@ To use keepkey or trezor as normal user, do following
 
 ### 1. copy dashlib/config.xxxx.py to dashlib/config.py and edit parameters
     
-    - use dashlib/config.sample.mainnet.remotesvc.py to use remote rpc service by chaeplin
+    - copy dashlib/config.sample.mainnet.remotesvc.py to use remote rpc service by chaeplin
     - copy dashlib/config.sample.mainnet.remotesvc.py to run own dashd/Dash-QT
     
     - testing config.py : no output if config.py is ok
@@ -235,6 +235,7 @@ Dash address: 44'/5'/1'/0/3        XwUXXWL5kUzJNPDAX2wjxnQYkGjJL5AGwg
 ```
 
 - Use trezor web wallet or keepkey rc clinet to compare address and send 1K Dash to an address
+- If you funds on trezor already, use trezor web wallet or keepkey rc clinet to find bip32 path
 
 
 ### 3.  copy mnconf/masternode.conf.sample to mnconf/masternode.conf and edit

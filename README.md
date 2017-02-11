@@ -199,6 +199,13 @@ When you see the following err while running dashmnb first time, need system reb
         python dashlib/config.py
 
 
+    - things to change in config.py
+
+        account_no
+        TYPE_HW_WALLET
+        max_gab
+
+
 ### 2.  Use python bin/hw-wallet-for-mn.py to get a list of address
 
         cd dashmnb

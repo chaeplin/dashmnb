@@ -148,8 +148,20 @@ Clone the dashmnb repo and install Python 3.5.3 and Python dependencies.
 
 To use keepkey or trezor as normal user, do following
 
+
     sudo cp others/linux/51-* /etc/udev/rules.d/
 
+When you see the following err while running dashmnb first time, need system reboot to apply udev rule
+```
+    Network : MAINNET
+    ===> trezor HW Wallet found
+
+
+    version  : 0.3.rc5
+    caller   : main
+    function : check_hw_wallet
+    ===> ('open failed',)`
+```
 
 ## Update
 

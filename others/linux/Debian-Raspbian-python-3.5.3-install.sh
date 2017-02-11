@@ -13,7 +13,10 @@ tar xvf Python-$RELEASE.tar.xz
 cd Python-$RELEASE
 ./configure
 make
-sudo make install
-sudo rm -rf ~/python3/Python-$RELEASE
-sudo pip3 install virtualenv
-cd ~
+
+# this will install python3.5.3
+sudo make altinstall
+#sudo make install
+#sudo rm -rf ~/python3/Python-$RELEASE
+#sudo pip3 install virtualenv
+#cd ~

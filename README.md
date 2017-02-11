@@ -1,40 +1,25 @@
-Run Dash Masternode with Hardware Wallet
+run dash masternode with hardware wallet
 =========================================
 
-#### MAINNET READY ####
+# Contents
+- [Blocks](#blocks)
+- [Q&A](#qa)
+- [Help](#help)
+- [Installation](#installation)
+- [Update](#update)
+- [Debug](#debug)
+- [Configuration](#configuration)
+- [Runowndashd](#to-run-own-dashd--dash-qt)
+- [Thankyou](#thankyou)
+
+# MAINNET READY
     - start mn working
     - sending payout working
-
-###### Blocks
+    
+## Blocks
 ![1](./others/pics/dashmnb.png)
 
-
-```
-(venv3) ~/dashmnb $ python bin/dashmnb.py
-usage: dashmnb.py [-h] [-c] [-s] [-a] [-b] [-l] [-m] [-x]
-                  [masternode_alias_to_start/spend [masternode_alias_to_start/spend ...]]
-
-positional arguments:
-  masternode_alias_to_start/spend
-
-optional arguments:
-  -h, --help            show this help message and exit
-  -c, --check           check masternode config
-  -s, --status          show masternode status
-  -a, --anounce         anounce missing masternodes
-  -b, --balance         show masternodes balance
-  -l, --showall         show all configured masternodes
-  -m, --maketx          make signed raw tx
-  -x, --xfer            broadcast signed raw tx
-
-
-    version  : 0.3.rc5
-    caller   : <module>
-    function : parse_args
-    ===> print help
-
-```
-
+## Q&A
 
 ###### Q : why firmware update ?
     - to support Dash testnet, both trezor and keepkey has only Mainnet.
@@ -63,40 +48,6 @@ optional arguments:
     - it will break your masternode. trezor web wallet has no coincontrol
     - use dashmnb.py -x or  dashmnb.py -x mnalias1 mnalias2. 
 
-###### Q : why Dash-QT or dashd needed ? [if you want to run your own dashd/QT]
-    - if you use `remote dashd/rpc service` don't need
-    - instead of block explorer 
-    - to check address, collateral, masternode status
-    - to get unspent tx of collateral
-    - to relay mnb and txs
-
-###### Q : why do -reindex ? [if you want to run your own dashd/QT]
-    - if you use `remote dashd/rpc service` don't need
-    - -reindex means restaring dashd or Dash-QT with -reindex option
-    - after initial checking of masternode config, dashmnb will ask you to do reindex
-
-###### Q : Which one to do first [if you want to run your own dashd/QT]
-    - if you use `remote dashd/rpc service` don't need
-    - Set up remote node(or masternode), add following to dashd.conf. check dash.conf.sample
-
-```
-    rpcuser=dashrpc#change
-    rpcpassword=veryvey-long-complicatedpassword=#change
-    rpcallowip=127.0.0.1
-    rpcbind=127.0.0.1
-    rpcport=9998
-    server=1
-    daemon=1
-    logips=1
-    addressindex=1
-    spentindex=1
-    timestampindex=1
-    txindex=1
-```
-
-    Run once with dashd/QT with -reindex, to make index
-
-
 ###### Q : how 'remote dashd/rpc service' works ?
     - using nginx as proxy
     - lua script by https://github.com/adetante/ethereum-nginx-proxy
@@ -109,62 +60,46 @@ optional arguments:
     - use dashlib/config.sample.mainnet.remotesvc.py
 
 
-###### config.py example
-    - using `remote rpc service by chaeplin`
 
-        cd dashmnb
-        . venv3/bin/activate
-        cp config.sample.mainnet.remotesvc.py dashlib/config.py
-        cp mnconf/masternode.conf.sample mnconf/masternode.conf
+## Help
+```
+(venv3) ~/dashmnb $ python bin/dashmnb.py
+usage: dashmnb.py [-h] [-c] [-s] [-a] [-b] [-l] [-m] [-x]
+                  [masternode_alias_to_start/spend [masternode_alias_to_start/spend ...]]
 
-    - edit mnconf/masternode.conf
-    - edit dashlib/config.py
+positional arguments:
+  masternode_alias_to_start/spend
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -c, --check           check masternode config
+  -s, --status          show masternode status
+  -a, --anounce         anounce missing masternodes
+  -b, --balance         show masternodes balance
+  -l, --showall         show all configured masternodes
+  -m, --maketx          make signed raw tx
+  -x, --xfer            broadcast signed raw tx
+
+
+    version  : 0.3.rc5
+    caller   : <module>
+    function : parse_args
+    ===> print help
 
 ```
-# https://github.com/bitcoin/bips/blob/master/bip-0044.mediawiki
-# purpose' / coin_type' / account' / change / address_index
-# Dash  : 44'/5'/account'/0/0
-# tDash : 44'/165'/account'/0/0
-# bip32 path
-# 1 is selected to use trezor's web wallet and Keepkey's client
-account_no = 1
-
-# HW WALLET TYPE
-# Keepkey [ keepkey ], Trezor [ trezor ]
-TYPE_HW_WALLET = 'Trezor'          
-
-# masternode_config file in mnconf/
-masternode_conf_file = 'masternode.conf'
-
-# default address to send payout coins in hw wallet if reveiving_address in masternode.conf is blank.
-# this is not changing payment address of mn
-# command -m and -x will use
-default_receiving_address = ''
-
-#
-# how many mns do you have, to check address on hw wallet
-# if bip32 path last used address for mn is like 44'/5'/1'/0/10 : address_index is 10
-# use max_gab = 11 (address_index + 1)
-max_gab = 5     
-```
-
-
-
-
 
 
 ## Installation
 
-### 1. Install Prerequisites (Ubuntu/Debian)
+### 1.a Install Prerequisites (Ubuntu)
 
 Make sure Python version 3.5.1 or above is installed:
 
     python3 --version
+    or
+    python3 -V
 
-
-Check python install script others/linux/Debian-Raspbian-python-3.5.3-install.sh
-
-
+#### if python3 is is above 3.5.1
 Update system packages and ensure virtualenv is installed:
 
     sudo apt-get update
@@ -173,8 +108,10 @@ Update system packages and ensure virtualenv is installed:
     sudo apt-get -y install python3-pip git
     sudo pip3 install virtualenv
 
+#### if python is 3.4.x
+go to [Installation](#installation) and install python-3.5.3 
 
-### 1. Install Prerequisites (Mac oS)
+### 1.b Install Prerequisites (Mac oS)
 
 Install brew and python3.5 or python3.6 
 
@@ -185,6 +122,7 @@ Install brew and python3.5 or python3.6
 
 ### 2. Install dashmnb
 
+#### if python3 is is above 3.5.1
 Clone the dashmnb repo and install Python dependencies.
 
     git clone https://github.com/chaeplin/dashmnb && cd dashmnb
@@ -193,7 +131,27 @@ Clone the dashmnb repo and install Python dependencies.
     pip install --upgrade setuptools
     pip install -r requirements.txt
 
-## 3. Update
+
+#### if python is 3.4.x
+Clone the dashmnb repo and install Python 3.5.3 and Python dependencies.
+
+
+    git clone https://github.com/chaeplin/dashmnb && cd dashmnb
+    sh ./others/linux/python-3.5.3-install.sh
+    virtualenv -p python3.5 venv3
+    . venv3/bin/activate
+    pip install --upgrade setuptools
+    pip install -r requirements.txt
+
+
+### 3. Udev rule set up for linux (Ubuntu)
+
+To use keepkey or trezor as normal user, do following
+
+    sudo cp others/linux/51-* /etc/udev/rules.d/
+
+
+## Update
 
     cd dashmnb
     . venv3/bin/activate
@@ -203,7 +161,7 @@ Clone the dashmnb repo and install Python dependencies.
     pip install --upgrade git+https://github.com/chaeplin/python-keepkey
 
 
-## 4. debug
+## debug
 
     add DASHMNB_DEBUG=1 
 
@@ -212,11 +170,6 @@ Clone the dashmnb repo and install Python dependencies.
     DASHMNB_DEBUG=1 python bin/dashmnb.py
 
 
-## Udev rule set up for linux
-
-To use keepkey or trezor as normal user, do following
-
-    sudo cp others/linux/51-* /etc/udev/rules.d/
 
 
 ## Configuration
@@ -224,6 +177,7 @@ To use keepkey or trezor as normal user, do following
 ### 1. copy dashlib/config.xxxx.py to dashlib/config.py and edit parameters
     
     - use dashlib/config.sample.mainnet.remotesvc.py to use remote rpc service by chaeplin
+    - copy dashlib/config.sample.mainnet.remotesvc.py to run own dashd/Dash-QT
     
     - testing config.py : no output if config.py is ok
 
@@ -280,36 +234,45 @@ Dash address: 44'/5'/1'/0/2        XnSibMiJGcoQzCcku4fhR4wWNNfFBrye9h
 Dash address: 44'/5'/1'/0/3        XwUXXWL5kUzJNPDAX2wjxnQYkGjJL5AGwg
 ```
 
-###### for testnet
-
-- Use output of python bin/hw-wallet-for-mn.py 
+- Use trezor web wallet or keepkey rc clinet to compare address and send 1K Dash to an address
 
 
+### 3.  copy mnconf/masternode.conf.sample to mnconf/masternode.conf and edit
 
-###### for mainnet
-
-- Use trezor web wallet or keepkey rc clinet to compare address and send 1K Dash to an address of Account #2
-
-- Use Account #1 for daily use (or Account #2 for daily, if you want)
-
-- To add Account #2, should send small amount to an address of Account #1
-
-- Don't use trezor web wallet to move payout in Masternode account, it will break your masternode. trezor web wallet has no coincontrol. use dashmnb.py -x mnalias. 
-
-https://www.keepkey.com/2017/02/02/dash-now-public-beta/
-
-https://blog.trezor.io/multi-currency-support-bitcoin-dash-and-zcash-in-trezor-wallet-7377d812112a#.36ft1p2c1
-
-![1](./others/pics/trezor01.png)
-![1](./others/pics/trezor02.png)
-![1](./others/pics/keepkey01.png)
-![1](./others/pics/keepkey02.png)
-![1](./others/pics/keepkey03.png)
-![1](./others/pics/keepkey04.png)
+    cp mnconf/masternode.conf.sample mnconf/masternode.conf
 
 
-### 3. Set up remote node(or masternode), add following to dashd.conf. check dash.conf.sample [if you want to run your own dashd/QT]
+### 4.  Run dashmnb.py
 
+        cd dashmnb
+        . venv3/bin/activate
+        python bin/dashmnb.py
+
+
+
+## to run own dashd / Dash-QT
+
+
+###### Q : why Dash-QT or dashd needed ? [if you want to run your own dashd/QT]
+    - if you use `remote dashd/rpc service` don't need
+    - instead of block explorer 
+    - fast, reliable
+    - for privacy
+    - to check address, collateral, masternode status
+    - to get unspent tx of collateral
+    - to relay mnb and txs
+
+
+###### Q : why do -reindex ? [if you want to run your own dashd/QT]
+    - if you use `remote dashd/rpc service` don't need
+    - -reindex means restaring dashd or Dash-QT with -reindex option
+    - after initial checking of masternode config, dashmnb will ask you to do reindex
+
+###### Q : Which one to do first [if you want to run your own dashd/QT]
+    - if you use `remote dashd/rpc service` don't need
+    - Set up local/remote node, add following to dashd.conf. check dash.conf.sample
+
+```
     rpcuser=dashrpc#change
     rpcpassword=veryvey-long-complicatedpassword=#change
     rpcallowip=127.0.0.1
@@ -322,26 +285,17 @@ https://blog.trezor.io/multi-currency-support-bitcoin-dash-and-zcash-in-trezor-w
     spentindex=1
     timestampindex=1
     txindex=1
+```
 
-### 4.  Run once with -reindex, to make index [if you want to run your own dashd/QT]
+    Run once with dashd/QT with -reindex, to make index
 
-        dashd -reindex
-
-### 5.  add ssh key to remote mastrrnode [if you want to run your own dashd/QT]
+###### add ssh key to remote node [if you want to run your own dashd/QT]
 
 https://www.digitalocean.com/community/tutorials/how-to-set-up-ssh-keys--2
 
 
-### 6.  Move mnconf/masternode.conf.sample to mnconf/masternode.conf and edit
 
-### 7.  Run dashmnb.py
-
-        cd dashmnb
-        . venv3/bin/activate
-        python bin/dashmnb.py
-
-
-###### Thanks to
+## Thankyou
 - codes form https://github.com/dashpay/electrum-dash
-- ref : https://github.com/dashpay/dash/blob/v0.12.1.x/dash-docs/protocol-documentation.md by 
+- ref : https://github.com/dashpay/dash/blob/v0.12.1.x/dash-docs/protocol-documentation.md
 

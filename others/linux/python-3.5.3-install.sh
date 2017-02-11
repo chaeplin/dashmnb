@@ -4,7 +4,9 @@ RELEASE=3.5.3
  
 # install dependencies
 sudo apt-get install git libbz2-dev liblzma-dev libsqlite3-dev libncurses5-dev libgdbm-dev zlib1g-dev libreadline-dev libssl-dev tk-dev
- 
+sudo apt-get install libudev-dev libusb-1.0-0-dev libfox-1.6-dev
+sudo apt-get install autotools-dev autoconf automake libtool
+
 # download and build Python
 mkdir ~/python3
 cd ~/python3

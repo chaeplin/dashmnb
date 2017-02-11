@@ -16,3 +16,5 @@ dashlib/config.main.py
 dashlib/config.test.py
 
 mnconf/masternode.zero.conf
+
+bin/tool-for-config.py

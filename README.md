@@ -205,6 +205,29 @@ When you see the following err while running dashmnb first time, need system reb
         TYPE_HW_WALLET
         max_gab
 
+```
+following 4 questions are keys to make a dashlib/config.py
+
+1) hw wallet type : Trezor or Keepkey
+   config name : TYPE_HW_WALLET
+   default wallet type is Trezor
+
+2) account number : account #x or bip32 path
+   config name : account_no
+   check using trezor's web wallet or RC clinet of Keepkey
+   if you use 'Account #x' for mn fund(s) on trezor's web wallet(shown in left side) this number is x -1
+   if bip32 path is m/44'/5'/x'/0/y, this number is x
+
+3) an address : will be used to send payouts in hw wallet
+   config name : default_receiving_address
+   use an address in another account name or an address for daily use
+   can leave as blank
+
+4) number of address used in 'Account #x' : how many masternodes
+   config name : max_gab
+   number of masternodes : how many masternodes(1K fund) do you have in hw wallet
+   use number of address + 1
+```   
 
 ### 2.  Use python bin/hw-wallet-for-mn.py to get a list of address
 

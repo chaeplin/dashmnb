@@ -3,7 +3,7 @@
 RELEASE=3.5.3
  
 # install dependencies
-sudo apt-get install libbz2-dev liblzma-dev libsqlite3-dev libncurses5-dev libgdbm-dev zlib1g-dev libreadline-dev libssl-dev tk-dev
+sudo apt-get install git libbz2-dev liblzma-dev libsqlite3-dev libncurses5-dev libgdbm-dev zlib1g-dev libreadline-dev libssl-dev tk-dev
  
 # download and build Python
 mkdir ~/python3
@@ -14,9 +14,11 @@ cd Python-$RELEASE
 ./configure
 make
 
-# this will install python3.5.3
+# this will install
+# /usr/local/bin/python3.5
+# /usr/local/bin/pip3.5
 sudo make altinstall
-#sudo make install
-#sudo rm -rf ~/python3/Python-$RELEASE
-#sudo pip3 install virtualenv
-#cd ~
+sudo pip3.5 install virtualenv
+
+# do below when install dashmnb
+# virtualenv -p python3.5 venv3

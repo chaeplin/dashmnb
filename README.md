@@ -10,7 +10,7 @@ run dash masternode with hardware wallet
 - [Debug](#debug)
 - [Configuration](#configuration)
 - [Runowndashd](#to-run-own-dashd--dash-qt)
-- [Support](#supprot)
+- [Support](#support)
 - [Thankyou](#thankyou)
 
 # MAINNET READY

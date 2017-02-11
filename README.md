@@ -10,6 +10,7 @@ run dash masternode with hardware wallet
 - [Debug](#debug)
 - [Configuration](#configuration)
 - [Runowndashd](#to-run-own-dashd--dash-qt)
+- [Support](#supprot)
 - [Thankyou](#thankyou)
 
 # MAINNET READY
@@ -306,6 +307,15 @@ Dash address: 44'/5'/1'/0/3        XwUXXWL5kUzJNPDAX2wjxnQYkGjJL5AGwg
 
 https://www.digitalocean.com/community/tutorials/how-to-set-up-ssh-keys--2
 
+
+## Support
+- I can guide you installtion and configuration of dashmnb
+- ping chaeplin at dashnation slack : http://www.dashnation.com/chat/
+- OS : Linux(Ubuntu), Max OSX
+- Prerequisites :
+        
+        bip32 path of fund(Account name shown on trezoer web - left side)
+        masternode.conf(hosting provider sent you or you made)
 
 
 ## Thankyou

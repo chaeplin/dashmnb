@@ -183,8 +183,6 @@ When you see the following err while running dashmnb first time, need system reb
     DASHMNB_DEBUG=1 python bin/dashmnb.py
 
 
-
-
 ## Configuration
 
 ### 1. copy dashlib/config.xxxx.py to dashlib/config.py and edit parameters
@@ -230,6 +228,7 @@ following 4 questions are keys to make a dashlib/config.py
    number of masternodes : how many masternodes(1K fund) do you have in hw wallet(if address is sequential)
    number of last address_index that holds fund : /'y' in receive tab
    number of masternodes + 1 or number of last address_index + 1
+
 ```   
 
 ### 2.  Use python bin/hw-wallet-for-mn.py to get a list of address

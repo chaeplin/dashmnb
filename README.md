@@ -183,8 +183,6 @@ When you see the following err while running dashmnb first time, need system reb
     DASHMNB_DEBUG=1 python bin/dashmnb.py
 
 
-
-
 ## Configuration
 
 ### 1. copy dashlib/config.xxxx.py to dashlib/config.py and edit parameters
@@ -215,7 +213,7 @@ following 4 questions are keys to make a dashlib/config.py
 2) account number : account #x or bip32 path
    config name : account_no
    check using trezor's web wallet or RC clinet of Keepkey
-   if you use 'Account #x' for mn fund(s) on trezor's web wallet(shown in left side) this number is x -1
+   if you use 'Account #x' for mn fund(s) on trezor's web wallet(shown in left side) this number is x - 1
    if bip32 path is m/44'/5'/x'/0/y, this number is x
 
 3) an address : will be used to send payouts in hw wallet
@@ -223,10 +221,14 @@ following 4 questions are keys to make a dashlib/config.py
    use an address in another account name or an address for daily use
    can leave as blank
 
-4) number of address used in 'Account #x' : how many masternodes
+4) number of address used in 'Account #x' : last address_index
    config name : max_gab
-   number of masternodes : how many masternodes(1K fund) do you have in hw wallet
-   use number of address + 1
+   this config set max number of address that dashmnb gets from Trezor or Keepkey
+   dashmnb uses these addresses to compare collateral address(es) in masternode.conf is correct
+   number of masternodes : how many masternodes(1K fund) do you have in hw wallet(if address is sequential)
+   number of last address_index that holds fund : /'y' in receive tab
+   number of masternodes + 1 or number of last address_index + 1
+
 ```   
 
 ### 2.  Use python bin/hw-wallet-for-mn.py to get a list of address

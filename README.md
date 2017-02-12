@@ -44,6 +44,9 @@ run dash masternode with hardware wallet
     - dashmnb support only one bip32 path
     - can't use mixed(ex: 44'/5'/x'/0/0 + 44'/5'/y'/0/0) path together
 
+###### Q : example for web wallet of Trezor ?
+    - check [trezor example](https://github.com/chaeplin/dashmnb/tree/master/others/pics/trezor)
+
 ###### Q : spend payout
     - don't use trezor web wallet to move payout in Masternode account
     - it will break your masternode. trezor web wallet has no coincontrol

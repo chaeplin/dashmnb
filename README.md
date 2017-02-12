@@ -346,10 +346,10 @@ https://www.digitalocean.com/community/tutorials/how-to-set-up-ssh-keys--2
 ## Support
 - I can guide you installtion and configuration of dashmnb
 - ping chaeplin at dashnation slack : http://www.dashnation.com/chat/
-- OS : Linux(Ubuntu), Max OSX
+- OS : Linux(Ubuntu), Mac OSX
 - Prerequisites :
         
-        bip32 path of fund(Account name shown on trezoer web - left side)
+        check [trezor example](https://github.com/chaeplin/dashmnb/tree/master/others/pics/trezor)
         masternode.conf(hosting provider sent you or you made)
 
 

@@ -343,14 +343,13 @@ Dash address: 44'/5'/1'/0/3        XwUXXWL5kUzJNPDAX2wjxnQYkGjJL5AGwg
 https://www.digitalocean.com/community/tutorials/how-to-set-up-ssh-keys--2
 
 
+
 ## Support
 - I can guide you installtion and configuration of dashmnb
 - ping chaeplin at dashnation slack : http://www.dashnation.com/chat/
 - OS : Linux(Ubuntu), Mac OSX
-- Prerequisites :
-        
-        check [trezor example](https://github.com/chaeplin/dashmnb/tree/master/others/pics/trezor)
-        masternode.conf(hosting provider sent you or you made)
+- check [trezor example](https://github.com/chaeplin/dashmnb/tree/master/others/pics/trezor) to get required information
+- masternode.conf(hosting provider sent you or you made)
 
 
 ## Thankyou

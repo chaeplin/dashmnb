@@ -113,7 +113,7 @@ Update system packages and ensure virtualenv is installed:
     sudo pip3 install virtualenv
 
 #### if python3 is 3.4.x
-go to [Installation](#installation) and install python-3.5.3 
+go to [Install dashmnb](##2-install-dashmnb) and install python-3.5.3 
 
 ### 1.b Install Prerequisites (Mac oS)
 

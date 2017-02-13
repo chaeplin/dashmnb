@@ -191,7 +191,7 @@ When you see the following err while running dashmnb first time, need system reb
 ### 1. copy dashlib/config.xxxx.py to dashlib/config.py and edit parameters
     
     - copy dashlib/config.sample.mainnet.remotesvc.py to use remote rpc service by chaeplin
-    - copy dashlib/config.sample.mainnet.remotesvc.py to run own dashd/Dash-QT
+    - copy dashlib/config.sample.mainnet.py to run own dashd/Dash-QT
     
     - testing config.py : no output if config.py is ok
 

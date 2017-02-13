@@ -51,7 +51,11 @@ def main(args):
         print('--> get dash explorer block count')
         explorer_blockcount = get_explorer_blockcount()
 
-        print('--> get dashd/remotesvc status')
+        if rpcbindip == "test.stats.dash.org":
+            print('--> get remotesvc status')
+        else:
+            print('--> get dashd status')
+
         protocolversion = check_dashd_syncing(access)
         blockcount = get_getblockcount(access)
         blockhash = get_block_hash(blockcount, access)

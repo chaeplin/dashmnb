@@ -40,8 +40,9 @@ run dash masternode with hardware wallet
     - ssh tunnel to use remote dashd
     - can use remote rpc service
 
-###### Q : can I use mixed bip32 path
-    - dashmnb support only one bip32 path
+### Q : can I use multiple Account #'x' with dashmnb ?
+    - dashmnb support only single Account #'x'(single path)
+    - can't use mixed account name(Account #1 + Account #2) together
     - can't use mixed(ex: 44'/5'/x'/0/0 + 44'/5'/y'/0/0) path together
 
 ###### Q : example for web wallet of Trezor ?

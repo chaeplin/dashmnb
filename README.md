@@ -1,5 +1,5 @@
-run dash masternode with hardware wallet
-=========================================
+run dash masternode with hardware wallet / dashmnb simplify local masternode part
+==================================================================================
 
 # Contents
 - [Blocks](#blocks)
@@ -32,6 +32,7 @@ run dash masternode with hardware wallet
     - dashmnb will not run without hw wallet
 
 ###### Q : what can dashmnb do
+    - dashmnb simplify local masternode part
     - config check (alias, address, ip, key, pkey, hw wallet path)
     - start masternode missing, selected
     - show masternode status

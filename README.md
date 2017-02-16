@@ -1,6 +1,8 @@
 run dash masternode with hardware wallet / dashmnb simplify local masternode part
 ==================================================================================
 
+# need python version above 3.5.1 
+
 # Contents
 - [Blocks](#blocks)
 - [Q&A](#qa)

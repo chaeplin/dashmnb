@@ -101,6 +101,8 @@ optional arguments:
 
 ### 1.a Install Prerequisites (Ubuntu)
 
+#### [Ubuntu 16.04 --> use this link](https://github.com/chaeplin/dashmnb/tree/master/others/pics/ubuntu-16.04)
+
 Make sure Python version 3.5.1 or above is installed:
 
     python3 --version

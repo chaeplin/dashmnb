@@ -198,7 +198,8 @@ Clone the dashmnb repo and install Python dependencies.
 #### if python3 is 3.4.x
 Clone the dashmnb repo and install Python 3.5.3 and Python dependencies.
 
-
+    sudo apt-get update
+    sudo apt-get -y git
     git clone https://github.com/chaeplin/dashmnb && cd dashmnb
     sh ./others/linux/python-3.5.3-install.sh
     virtualenv -p python3.5 venv3

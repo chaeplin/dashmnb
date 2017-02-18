@@ -60,13 +60,50 @@ check [trezor example](https://github.com/chaeplin/dashmnb/tree/master/others/pi
     - using nginx as proxy
     - lua script by https://github.com/adetante/ethereum-nginx-proxy
     - need to change version checking
-    - use ssl by default
+    - using ssl by default
     - add http basic auth to nginx
     - change Authorization header using proxy_set_header
     - rpc user name and password on config.py is only for web auth
     - use remote rpc service
     - use dashlib/config.sample.mainnet.remotesvc.py
 
+###### Q : dashmnb ask PIN(or PASSPHRASE) of Trezor/Keepkey, why ?
+![1](./tech/trezor-api.png)
+    - https://doc.satoshilabs.com/trezor-tech/api.html
+    - dashmnb use python-trezor / python-keepkey as API to communicate Trezor/Keepkey
+    - https://github.com/chaeplin/python-trezor
+    - https://github.com/chaeplin/python-keepkey
+    - The API ask you PIN(or PASSPHRASE) when first connected or a transaction requested
+
+###### Q : Is there any privacy concern when using `remote dashd/rpc service by you` 
+    - dashmnb use rpc command to get a blockchain info.
+    - rpc command are following, and no logging occur on rpc command
+``` 
+    decoderawtransaction --> to get a transaction is correct
+    getaddressbalance    --> to get balance of a mn
+    getaddressutxos      --> to get unspent tx(s) of a mn
+    getblockcount        --> to get current block height
+    getblockhash         --> to get current blockhash and (current block height -12) blockhash
+    getrawtransaction    --> to get collateral address on masternode.conf
+    listunspent          --> replaced by getaddressutxos
+    masternodebroadcast  --> to decode / relay mnb(s)
+    masternodelist       --> to get masternode list and address
+    getinfo              --> to get current block height
+    sendrawtransaction   --> to relay a transaction made
+    validateaddress      --> to check collateral_address, receiving_address, masternode_address are ok
+```
+
+    - dashmnb connects remote service using ssl  
+    - However `remote dashd/rpc service` use nginx(web server) as frontend
+    - https://github.com/chaeplin/dash-ticker/tree/master/web/nginx has frontend configuration
+    - As nginx(web server) leave a log containning ip address of user like following
+```    
+10.10.10.1 - dashmnb [18/Feb/2017:06:13:33 +0000] "POST / HTTP/1.1" 200 227 "-" "AuthServiceProxy/0.1" "-" [-] [-] []
+10.10.10.1 - dashmnb [18/Feb/2017:06:13:39 +0000] "POST / HTTP/1.1" 200 227 "-" "AuthServiceProxy/0.1" "-" [-] [-] []
+10.10.10.1 - dashmnb [18/Feb/2017:06:13:44 +0000] "POST / HTTP/1.1" 200 92 "-" "AuthServiceProxy/0.1" "-" [-] [-] []
+10.10.10.1 - dashmnb [18/Feb/2017:06:13:54 +0000] "POST / HTTP/1.1" 200 359050 "-" "AuthServiceProxy/0.1" "-" [-] [-] []
+```
+    - The ip address is `privacy concern`
 
 
 ## Help

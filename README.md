@@ -1,6 +1,13 @@
 run dash masternode with hardware wallet / dashmnb simplify local masternode part
 ==================================================================================
 
+# read faq of trezor, and understand how trezor/keepkey works
+- backup up your 12/24 words seed
+
+- [https://doc.satoshilabs.com/trezor-faq/overview.html](https://doc.satoshilabs.com/trezor-faq/overview.html)
+
+
+
 # need python version above 3.5.1 
 
 # Contents

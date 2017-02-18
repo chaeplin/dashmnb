@@ -69,10 +69,17 @@ check [trezor example](https://github.com/chaeplin/dashmnb/tree/master/others/pi
 
 ###### Q : dashmnb ask PIN(or PASSPHRASE) of Trezor/Keepkey, why ?
 ![1](./tech/trezor-api.png)
-    - https://doc.satoshilabs.com/trezor-tech/api.html
+
+read [https://doc.satoshilabs.com/trezor-faq/](https://doc.satoshilabs.com/trezor-faq/)
+
+[https://doc.satoshilabs.com/trezor-tech/api.html](https://doc.satoshilabs.com/trezor-tech/api.html)
+
     - dashmnb use python-trezor / python-keepkey as API to communicate Trezor/Keepkey
-    - https://github.com/chaeplin/python-trezor
-    - https://github.com/chaeplin/python-keepkey
+
+[https://github.com/chaeplin/python-trezor](https://github.com/chaeplin/python-trezor)
+    
+[https://github.com/chaeplin/python-keepkey](https://github.com/chaeplin/python-keepkey)
+    
     - The API ask you PIN(or PASSPHRASE) when first connected or a transaction requested
 
 ###### Q : Is there any privacy concern when using `remote dashd/rpc service by you` 
@@ -95,7 +102,9 @@ check [trezor example](https://github.com/chaeplin/dashmnb/tree/master/others/pi
 
     - dashmnb connects remote service using ssl  
     - However `remote dashd/rpc service` use nginx(web server) as frontend
-    - https://github.com/chaeplin/dash-ticker/tree/master/web/nginx has frontend configuration
+
+[https://github.com/chaeplin/dash-ticker/tree/master/web/nginx](https://github.com/chaeplin/dash-ticker/tree/master/web/nginx) has frontend configuration
+
     - As nginx(web server) leave a log containning ip address of user like following
 ```    
 10.10.10.1 - dashmnb [18/Feb/2017:06:13:33 +0000] "POST / HTTP/1.1" 200 227 "-" "AuthServiceProxy/0.1" "-" [-] [-] []

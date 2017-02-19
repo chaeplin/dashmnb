@@ -49,7 +49,8 @@ https://github.com/chaeplin/dashmnb/tree/master/others/pics/trezor has example
 
 duoble click masternode.conf, gedit will open it
 
-edit redd box and save it
+edit mnconf(or paste text of masternode.conf whichh mn hosting providee sent you) and save it
+
 
 ![1](./09.png)
 ![1](./10.png)

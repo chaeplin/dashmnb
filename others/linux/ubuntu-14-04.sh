@@ -32,6 +32,7 @@ pip install --upgrade setuptools
 pip install -r requirements.txt
 
 
+echo "will copy others/linux/51-* to /etc/udev/rules.d/"
 sudo cp others/linux/51-* /etc/udev/rules.d/
 
 cp dashlib/config.sample.mainnet.remotesvc.py  dashlib/config.py

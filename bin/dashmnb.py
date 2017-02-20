@@ -95,6 +95,52 @@ def main(args):
 
     print_mnstatus(mn_config, mns, mna)
 
+
+    # vote
+    if args.voteyes or args.voteno:
+        if args.voteyes and args.voteno:
+            err_msg = "can't use yes and no together to vote, slect one"
+            print_err_exit(
+                get_caller_name(),
+                get_function_name(),
+                err_msg)
+
+
+        proposal_hash = args.masternode_to_start
+        if len(proposal_hash)== 0:
+            err_msg = 'hash of a proposal needed'
+            print_err_exit(
+                get_caller_name(),
+                get_function_name(),
+                err_msg)
+
+        elif len(proposal_hash) > 1:
+            err_msg = 'can vote only one proposal at a time'
+            print_err_exit(
+                get_caller_name(),
+                get_function_name(),
+                err_msg)
+
+        proposallist = rpc_getproposals(access).keys()
+
+        if proposal_hash[0] in proposallist:
+
+            if args.voteyes:
+                vote = 'yes'
+            if args.voteno:
+                vote = 'no'
+
+            print('[making vote(s)]')
+            start_votes(mn_config, proposal_hash[0], vote, access)
+
+
+        else:
+            err_msg = 'no matching proposal to vote, check proposal hash'
+            print_err_exit(
+                get_caller_name(),
+                get_function_name(),
+                err_msg)
+
     if args.anounce and MOVE_1K_COLLATERAL == False:
         if not signing:
             err_msg = 'check masternode config'
@@ -200,7 +246,7 @@ def parse_args():
     parser = argparse.ArgumentParser()
 
     parser.add_argument(dest='masternode_to_start',
-                        metavar='masternode_alias_to_start/spend',
+                        metavar='mnalias[s] or a proposal_hash',
                         nargs='*')
 
     parser.add_argument('-c', '--check',
@@ -222,6 +268,16 @@ def parse_args():
                         dest='balance',
                         action='store_true',
                         help='show masternodes balance')
+
+    parser.add_argument('-y', '--voteyes',
+                        dest='voteyes',
+                        action='store_true',
+                        help='vote Yes to a proposal using all mns')
+
+    parser.add_argument('-n', '--voteno',
+                        dest='voteno',
+                        action='store_true',
+                        help='vote No to a proposal using all mns')
 
     parser.add_argument('-l', '--showall',
                         dest='showall',

@@ -4,6 +4,7 @@ sys.path.append(os.path.join(os.path.dirname(__file__), '.'))
 
 from mnb_rpc import *
 from mnb_misc import *
+from mnb_rpc import *
 import simplejson as json
 
 def broadcast_signedrawtx(mn_config, blockcount, access):

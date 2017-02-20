@@ -19,7 +19,7 @@ def check_version():
 
         print('\t*** New version is available, ple update ! do git pull\n')
         if git_version.get('msgs', None):
-            print('\t*** %s' % git_version.get('msgs', None))
+            print('\t*** %s\n\n' % git_version.get('msgs', None))
 
 def logo_show():
     

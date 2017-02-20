@@ -23,12 +23,14 @@ from mnb_explorer import *
 from mnb_hwwallet import *
 from mnb_makemnb import *
 from mnb_maketx import *
+from mnb_makevote import *
 from mnb_misc import *
 from mnb_mnconf import *
 from mnb_rpc import *
 from mnb_signing import *
 from mnb_sshtunnel import *
 from mnb_start import *
+from mnb_vote import *
 from mnb_xfer import *
 
 try:

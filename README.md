@@ -19,12 +19,14 @@ run dash masternode with hardware wallet / dashmnb simplify local masternode par
 - [Debug](#debug)
 - [Configuration](#configuration)
 - [Runowndashd](#to-run-own-dashd--dash-qt)
+- [Vote](#vote)
 - [Support](#support)
 - [Thankyou](#thankyou)
 
 # MAINNET READY
-    - start mn working
-    - sending payout working
+    - starting mn(s) works
+    - sending payout(s) works
+    - voting works
     
 ## Blocks
 ![1](./others/pics/dashmnb.png)
@@ -358,6 +360,22 @@ Dash address: 44'/5'/1'/0/3        XwUXXWL5kUzJNPDAX2wjxnQYkGjJL5AGwg
         . venv3/bin/activate
         python bin/dashmnb.py
 
+
+## Vote
+
+    use -y proposal_hash for yes
+    use -n proposal_hash for no
+
+```
+(venv3) > python bin/hw-wallet-for-mn.py -y proposal_hash
+
+```
+
+
+```
+(venv3) > python bin/hw-wallet-for-mn.py -n proposal_hash
+
+```
 
 
 ## to run own dashd / Dash-QT

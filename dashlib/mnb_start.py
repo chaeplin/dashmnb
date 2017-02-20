@@ -5,6 +5,8 @@ sys.path.append(os.path.join(os.path.dirname(__file__), '.'))
 import re
 from mnb_makemnb import *
 from mnb_misc import *
+from mnb_rpc import *
+import simplejson as json
 
 def start_masternode(
         mns_to_start,

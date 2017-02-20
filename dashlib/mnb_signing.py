@@ -43,12 +43,26 @@ def signmessage(last_ping_serialize_for_sig, address, access):
             e.args)
 
 
-def signmessage_ecdsa(last_ping_serialize_for_sig, privkeywif):
+def signmessage_ecdsa(message, privkeywif):
     import base64
     try:
-        r = ecdsa_sign(last_ping_serialize_for_sig, privkeywif)
+        r = ecdsa_sign(message, privkeywif)
         return(base64.b64decode(r).hex())
 
+    except Exception as e:
+        err_msg = 'dash_ecdsa has problem'
+        print_err_exit(
+            get_caller_name(),
+            get_function_name(),
+            err_msg,
+            e.args)
+
+
+def signmessage_ecdsa_no_encoding(message, privkeywif):
+    try:
+        r = ecdsa_sign(message, privkeywif)
+        return r
+        
     except Exception as e:
         err_msg = 'dash_ecdsa has problem'
         print_err_exit(

@@ -127,11 +127,12 @@ read [https://doc.satoshilabs.com/trezor-faq/](https://doc.satoshilabs.com/trezo
 ## Help
 ```
 (venv3) ~/dashmnb $ python bin/dashmnb.py
-usage: dashmnb.py [-h] [-c] [-s] [-a] [-b] [-l] [-m] [-x]
-                  [masternode_alias_to_start/spend [masternode_alias_to_start/spend ...]]
+usage: dashmnb.py [-h] [-c] [-s] [-a] [-b] [-y] [-n] [-l] [-m] [-x]
+                  [mnalias[s] or a proposal_hash [mnalias[s] or a
+                  proposal_hash ...]]
 
 positional arguments:
-  masternode_alias_to_start/spend
+  mnalias[s] or a proposal_hash
 
 optional arguments:
   -h, --help            show this help message and exit
@@ -139,15 +140,17 @@ optional arguments:
   -s, --status          show masternode status
   -a, --anounce         anounce missing masternodes
   -b, --balance         show masternodes balance
+  -y, --voteyes         vote Yes to a proposal using all mns
+  -n, --voteno          vote No to a proposal using all mns
   -l, --showall         show all configured masternodes
   -m, --maketx          make signed raw tx
   -x, --xfer            broadcast signed raw tx
 
 
-    version  : 0.3.rc5
-    caller   : <module>
-    function : parse_args
-    ===> print help
+  version  : 0.3.rc6
+  caller   : <module>
+  function : parse_args
+  ===> print help
 
 ```
 

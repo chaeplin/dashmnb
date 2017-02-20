@@ -92,7 +92,7 @@ def checksynced(protocolversion, access):
 
 def check_dashd_syncing(access):
     from progress.spinner import Spinner
-    spinner = Spinner('\n---> checking dashd syncing status ')
+    spinner = Spinner('\n--> checking syncing status ')
     protocolversion = rpcgetinfo(access)
 
     while(not checksynced(protocolversion, access)):
@@ -280,5 +280,38 @@ def rpc_masternode(what, hexto, access):
             err_msg,
             e.args)
 
+
+def rpc_getproposals(access):
+    try:
+        r = access.gobject('list', 'valid', 'proposals')
+        return r
+
+    except Exception as e:
+        err_msg = 'Dash-QT or dashd running ?'
+        print_err_exit(
+            get_caller_name(),
+            get_function_name(),
+            err_msg,
+            e.args)    
+
+def rpc_voteraw(voteconf, access):
+    try:
+        masternodetxhash  = voteconf['collateral_txid']
+        masternodetxindex = voteconf['collateral_txidn']
+        governancehash    = voteconf['proposal_hash']
+        vote              = voteconf['vote']
+        sigtime           = int(voteconf['sig_time'])
+        votesig           = voteconf['sig']
+
+        r = access.voteraw(masternodetxhash, masternodetxindex, governancehash, 'funding', vote, sigtime, votesig)
+        return r
+
+    except Exception as e:
+        err_msg = 'Dash-QT or dashd running ?'
+        print_err_exit(
+            get_caller_name(),
+            get_function_name(),
+            err_msg,
+            e.args)        
 
 # end

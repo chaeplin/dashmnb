@@ -401,7 +401,7 @@ Dash address: 44'/5'/1'/0/3        XwUXXWL5kUzJNPDAX2wjxnQYkGjJL5AGwg
 
 ###### Q : Which one to do first [if you want to run your own dashd/QT]
     - if you use `remote dashd/rpc service` don't need
-    - Set up local/remote node, add following to dashd.conf. check dash.conf.sample
+    - Set up local/remote node, add following to dash.conf. check dash.conf.sample
 
 ```
     rpcuser=dashrpc#change

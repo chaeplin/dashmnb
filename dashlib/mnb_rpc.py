@@ -189,7 +189,7 @@ def getaddressbalance(addsress, access):
         return r.get('balance')
 
     except Exception as e:
-        err_msg = 'if dashd/QT is running, check\nhttps://github.com/chaeplin/dashmnb#to-run-own-dashd--dash-qt'
+        err_msg = '\n\tif dashd/QT is running, check\n\thttps://github.com/chaeplin/dashmnb#to-run-own-dashd--dash-qt'
         print_err_exit(
             get_caller_name(),
             get_function_name(),

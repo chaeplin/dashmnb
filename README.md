@@ -394,6 +394,11 @@ Dash address: 44'/5'/1'/0/3        XwUXXWL5kUzJNPDAX2wjxnQYkGjJL5AGwg
     - to relay mnb and txs
 
 
+###### Q : got err `No information available for address`
+    - Run once with dashd/QT with -reindex
+    - wait till reindex is done
+
+
 ###### Q : why do -reindex ? [if you want to run your own dashd/QT]
     - if you use `remote dashd/rpc service` don't need
     - -reindex means restaring dashd or Dash-QT with -reindex option

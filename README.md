@@ -29,7 +29,7 @@ run dash masternode with hardware wallet / dashmnb simplify local masternode par
     - voting works
     
 ## Blocks
-![1](./others/pics/dashmnb.png)
+![1](./others/pics/dashmnb2.png)
 
 ## Q&A
 

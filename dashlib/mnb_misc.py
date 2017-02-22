@@ -90,7 +90,7 @@ def print_mnstatus(mn_config, mns, mna):
             ipmatch = 'm'
         print_mnlist(m, ipmatch, mns_status)
 
-    print()
+    print('\n* be sure to check masternode status again using online tools like dashninja')
 
 
 def get_function_name():

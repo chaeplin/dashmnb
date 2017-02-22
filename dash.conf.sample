@@ -10,6 +10,8 @@ rpcbind=127.0.0.1
 server=1
 daemon=1
 logips=1
+# uncomment this for masternode or full node
+#listen=1
 #
 logtimestamps=1
 addressindex=1
@@ -18,10 +20,11 @@ timestampindex=1
 txindex=1
 #
 maxconnections=256
-# testnet
+# un comment for testnet
 #testnet=1
 #
-externalip=ip_of_masternode#change
-masternode=1
-masternodeprivkey=mnprivkey#change
+# uncomment this for masternode
+#externalip=ip_of_masternode#change
+#masternode=1
+#masternodeprivkey=mnprivkey#change
 #

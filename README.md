@@ -1,4 +1,4 @@
-run dash masternode with hardware wallet / dashmnb simplify local masternode part
+run dash masternode with hardware wallet / dashmnb simplify local cold wallet part
 ==================================================================================
 
 # read faq of trezor, and understand how trezor/keepkey works
@@ -43,7 +43,7 @@ run dash masternode with hardware wallet / dashmnb simplify local masternode par
     - dashmnb will not run without hw wallet
 
 ###### Q : what can dashmnb do
-    - dashmnb simplify local masternode part
+    - dashmnb simplify local cold wallet part
     - config check (alias, address, ip, key, pkey, hw wallet path)
     - start masternode missing, selected
     - show masternode status

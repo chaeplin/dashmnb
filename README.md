@@ -6,8 +6,6 @@ run dash masternode with hardware wallet / dashmnb simplify local cold wallet pa
 
 - [https://doc.satoshilabs.com/trezor-faq/overview.html](https://doc.satoshilabs.com/trezor-faq/overview.html)
 
-
-
 # need python version above 3.5.1 
 
 # Contents
@@ -161,6 +159,7 @@ optional arguments:
 
 #### [Ubuntu 16.04 --> use this link](https://github.com/chaeplin/dashmnb/tree/master/others/pics/ubuntu-16.04)
 #### [Ubuntu 14.04 --> use this link](https://github.com/chaeplin/dashmnb/tree/master/others/pics/ubuntu-14.04)
+#### [WIndows 10 --> use this link](https://github.com/chaeplin/dashmnb/tree/master/others/pics/windows10)
 
 Make sure Python version 3.5.1 or above is installed:
 
@@ -443,3 +442,6 @@ https://www.digitalocean.com/community/tutorials/how-to-set-up-ssh-keys--2
 - codes form https://github.com/dashpay/electrum-dash
 - ref : https://github.com/dashpay/dash/blob/v0.12.1.x/dash-docs/protocol-documentation.md
 
+
+
+DASH: [XiDWe5fkVcrXBQApmCFQUxpue5iuWcbmcK](https://chainz.cryptoid.info/dash/address.dws?XiDWe5fkVcrXBQApmCFQUxpue5iuWcbmcK.htm)

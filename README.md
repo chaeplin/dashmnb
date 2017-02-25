@@ -155,11 +155,13 @@ optional arguments:
 
 ## Installation
 
-### 1.a Install Prerequisites (Ubuntu)
 
 #### [Ubuntu 16.04 --> use this link](https://github.com/chaeplin/dashmnb/tree/master/others/pics/ubuntu-16.04)
 #### [Ubuntu 14.04 --> use this link](https://github.com/chaeplin/dashmnb/tree/master/others/pics/ubuntu-14.04)
 #### [WIndows 10 --> use this link](https://github.com/chaeplin/dashmnb/tree/master/others/pics/windows10)
+
+
+### 1.a Install Prerequisites (Ubuntu)
 
 Make sure Python version 3.5.1 or above is installed:
 

@@ -3,7 +3,6 @@ progress==1.2
 pyfiglet==0.7.5
 requests==2.12.4
 simplejson==3.10.0
-x11-hash==1.4
 -e git+https://github.com/chaeplin/python-bitcoinrpc#egg=python-bitcoinrpc
 -e git+https://github.com/chaeplin/python-trezor#egg=trezor
 -e git+https://github.com/chaeplin/python-keepkey#egg=keepkey

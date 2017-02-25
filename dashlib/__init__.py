@@ -11,7 +11,7 @@ except:
     sys.exit()
 
 from dash_b58 import *
-from dash_block import *
+#from dash_block import *
 from dash_ecdsa import *
 from dash_hashs import *
 from dash_jacobian import *

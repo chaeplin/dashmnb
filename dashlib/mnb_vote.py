@@ -32,6 +32,6 @@ def start_votes(
     for voteconf in listforvotes:
         r = rpc_voteraw(voteconf, access)
         print('%s - %s' % (voteconf['alias'], r))
-        time.sleep(1)
+        #time.sleep(1)
 
 

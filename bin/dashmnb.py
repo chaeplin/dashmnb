@@ -87,7 +87,7 @@ def main(args):
             err_msg)
 
     have_unconfirmed_tx = False
-    if get_xferblockcount_cache(True) >= blockcount + 1:
+    if get_xferblockcount_cache(True) >= blockcount:
         have_unconfirmed_tx = True
         
     client, signing, bip32, mpath, xpub = check_hw_wallet()

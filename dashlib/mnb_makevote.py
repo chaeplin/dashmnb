@@ -3,6 +3,7 @@ import os
 sys.path.append(os.path.join(os.path.dirname(__file__), '.'))
 
 import time
+import random
 
 from dash_utils import *
 from mnb_misc import *
@@ -16,13 +17,15 @@ def make_vote(
 
     print('%s : %s : %s ' % (alias, vote, proposal_hash))
 
-    sig_time = int(time.time())
+    sig_time = int(time.time()) + random.randint(-1800, 1800)
     collateral_txidtxidn = mnconfig['collateral_txidtxidn']
 
     if vote == 'yes':
         voteno = '1'
     elif vote == 'no':
         voteno = '2'
+    elif vote == 'abstain':
+        voteno = '3'    
 
     serialize_for_sig = collateral_txidtxidn + '|' \
                     + proposal_hash + '|' \

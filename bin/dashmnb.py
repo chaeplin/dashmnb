@@ -100,9 +100,9 @@ def main(args):
 
 
     # vote
-    if args.voteyes or args.voteno:
+    if args.voteyes or args.voteno or args.voteabstain:
         if args.voteyes and args.voteno:
-            err_msg = "can't use yes and no together to vote, slect one"
+            err_msg = "can't use yes and no together to vote, select one"
             print_err_exit(
                 get_caller_name(),
                 get_function_name(),
@@ -132,6 +132,8 @@ def main(args):
                 vote = 'yes'
             if args.voteno:
                 vote = 'no'
+            if args.voteabstain:
+                vote = 'abstain'
 
             print('[making vote(s)]')
             start_votes(mn_config, proposal_hash[0], vote, access)
@@ -281,6 +283,11 @@ def parse_args():
                         dest='voteno',
                         action='store_true',
                         help='vote No to a proposal using all mns')
+
+    parser.add_argument('-f', '--voteabstain',
+                        dest='voteabstain',
+                        action='store_true',
+                        help='vote Abstain to a proposal using all mns')
 
     parser.add_argument('-l', '--showall',
                         dest='showall',

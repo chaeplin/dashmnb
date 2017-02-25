@@ -23,7 +23,7 @@ def print_balance(mn_config, have_unconfirmed_tx):
         sumofunspent = sum(unspent)
         cnt = len(unspent)
 
-        spn = len(m.get('txs'))
+        spn = len(m.get('txs')[0])
 
         if cnt == 0:
             need_wallet_rescan = True

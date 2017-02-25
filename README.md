@@ -155,11 +155,14 @@ optional arguments:
 
 ## Installation
 
-### 1.a Install Prerequisites (Ubuntu)
 
 #### [Ubuntu 16.04 --> use this link](https://github.com/chaeplin/dashmnb/tree/master/others/pics/ubuntu-16.04)
 #### [Ubuntu 14.04 --> use this link](https://github.com/chaeplin/dashmnb/tree/master/others/pics/ubuntu-14.04)
 #### [WIndows 10 --> use this link](https://github.com/chaeplin/dashmnb/tree/master/others/pics/windows10)
+
+
+### 1.a Install Prerequisites (Ubuntu)
+
 
 Make sure Python version 3.5.1 or above is installed:
 
@@ -384,7 +387,6 @@ Dash address: 44'/5'/1'/0/3        XwUXXWL5kUzJNPDAX2wjxnQYkGjJL5AGwg
 
 
 ###### Q : why Dash-QT or dashd needed ? [if you want to run your own dashd/QT]
-    - if you use `remote dashd/rpc service` don't need
     - instead of block explorer 
     - fast, reliable
     - for privacy
@@ -399,12 +401,10 @@ Dash address: 44'/5'/1'/0/3        XwUXXWL5kUzJNPDAX2wjxnQYkGjJL5AGwg
 
 
 ###### Q : why do -reindex ? [if you want to run your own dashd/QT]
-    - if you use `remote dashd/rpc service` don't need
     - -reindex means restaring dashd or Dash-QT with -reindex option
     - after initial checking of masternode config, dashmnb will ask you to do reindex
 
 ###### Q : Which one to do first [if you want to run your own dashd/QT]
-    - if you use `remote dashd/rpc service` don't need
     - Set up local/remote node, add following to dash.conf. check dash.conf.sample
 
 ```

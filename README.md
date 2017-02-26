@@ -424,6 +424,12 @@ Dash address: 44'/5'/1'/0/3        XwUXXWL5kUzJNPDAX2wjxnQYkGjJL5AGwg
 
     Run once with dashd/QT with -reindex, to make index
 
+    QT : use tools —> wallet repair —> last button : rebuild index.
+![1](./others/pics/qt-rebuild.png)
+
+
+
+
 ###### add ssh key to remote node [if you want to run your own dashd/QT]
 
 https://www.digitalocean.com/community/tutorials/how-to-set-up-ssh-keys--2

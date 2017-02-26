@@ -8,6 +8,7 @@ from dash_ecdsa import *
 from mnb_misc import *
 from mnb_hwwallet import *
 
+
 def serialize_input_str(tx, prevout_n, sequence, scriptSig):
     """Used by MasternodePing in its serialization for signing."""
     s = ['CTxIn(']
@@ -62,7 +63,7 @@ def signmessage_ecdsa_no_encoding(message, privkeywif):
     try:
         r = ecdsa_sign(message, privkeywif)
         return r
-        
+
     except Exception as e:
         err_msg = 'dash_ecdsa has problem'
         print_err_exit(
@@ -79,7 +80,7 @@ def hwwallet_signmessage(
         client,
         mpath):
 
-    #print_hw_wallet_check()
+    # print_hw_wallet_check()
 
     purpose, coin_type, account, change = chain_path(mpath)
 

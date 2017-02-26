@@ -6,6 +6,7 @@ sys.path.append(os.path.join(os.path.dirname(__file__), '.'))
 from mnb_misc import *
 from config import *
 
+
 def chain_path(mpath):
     import re
     pathmatch = re.search("^(.*)'/(.*)'/(.*)'/(.*)$", mpath)
@@ -15,7 +16,8 @@ def chain_path(mpath):
         account = pathmatch.group(3)
         change = pathmatch.group(4)
 
-        printdbg('chain_path : re.search : %s : %s : %s :%s' % (int(purpose), int(coin_type), int(account), int(change)))
+        printdbg('chain_path : re.search : %s : %s : %s :%s' %
+                 (int(purpose), int(coin_type), int(account), int(change)))
         return int(purpose), int(coin_type), int(account), int(change)
 
     else:
@@ -50,24 +52,27 @@ def get_chain_pubkey(client, bip32):
                 client.expand_path(child_path)).node.public_key.hex()
 
             chain_pubkey[address] = {"spath": i, "addrpubkey": publicnode}
-            printdbg('get_chain_pubkey : %s %s %s' % (child_path, address, publicnode[-10:]))
-        
+            printdbg('get_chain_pubkey : %s %s %s' %
+                     (child_path, address, publicnode[-10:]))
+
         if not os.environ.get('DASHMNB_DEBUG', None):
             chargingBar.next()
             chargingBar.finish()
 
-        printdbg('get_chain_pubkey : chain_pubkey.keys() : %s' % chain_pubkey.keys())
+        printdbg(
+            'get_chain_pubkey : chain_pubkey.keys() : %s' %
+            chain_pubkey.keys())
 
         return chain_pubkey
 
-
     except AssertionError:
         _, _, tb = sys.exc_info()
-        traceback.print_tb(tb) # Fixed format
+        traceback.print_tb(tb)  # Fixed format
         tb_info = traceback.extract_tb(tb)
         filename, line, func, text = tb_info[-1]
 
-        err_msg = 'An error occurred on line {} in statement {}'.format(line, text)
+        err_msg = 'An error occurred on line {} in statement {}'.format(
+            line, text)
         print_err_exit(
             get_caller_name(),
             get_function_name(),
@@ -92,7 +97,6 @@ def get_mpath(default_account=False):
 
     #  Dash  : 44'/5'/account'/0/0
     #  tDash : 44'/165'/account'/0/0
-
 
     printdbg('get_mpath : default_account : %s' % bool(default_account))
     printdbg('get_mpath : network mainnet : %s' % MAINNET)
@@ -183,7 +187,6 @@ def check_hw_wallet():
                     get_function_name(),
                     err_msg)
 
-
     if client is not None:
 
         try:
@@ -237,7 +240,6 @@ def check_hw_wallet():
             get_caller_name(),
             get_function_name(),
             "KeyboardInterrupt")
-
 
     printdbg('check_hw_wallet : signing : %s' % signing)
     printdbg('check_hw_wallet : xpub[:7] : %s' % xpub[:7])

@@ -4,8 +4,10 @@ sys.path.append(os.path.join(os.path.dirname(__file__), '.'))
 
 import time
 
+
 def clear_screen():
     os.system('clear')
+
 
 def check_version():
     from mnb_explorer import get_version_txt
@@ -13,16 +15,17 @@ def check_version():
     cur_version = get_dashmnbversion()
     git_version = get_version_txt()
 
-    if ((cur_version.get('major') != git_version.get('major')) or \
-         (cur_version.get('minor') != git_version.get('minor')) or \
-         (cur_version.get('fix') != git_version.get('fix'))):
+    if ((cur_version.get('major') != git_version.get('major')) or
+        (cur_version.get('minor') != git_version.get('minor')) or
+            (cur_version.get('fix') != git_version.get('fix'))):
 
         print('\t*** New version is available, ple update ! do git pull\n')
         if git_version.get('msgs', None):
             print('\t*** %s\n\n' % git_version.get('msgs', None))
 
+
 def logo_show():
-    
+
     from pyfiglet import Figlet
     from config import MAINNET
     from config import MOVE_1K_COLLATERAL
@@ -49,9 +52,9 @@ def logo_show():
 def get_xferblockcount_cache(getblock=False):
     from config import MAINNET
     import simplejson as json
-    
-    xferblockcount_cache_abs_path = os.path.join(
-        os.path.dirname(os.path.abspath(__file__)), '../cache/' + ('MAINNET' if MAINNET else 'TESTNET') + '-xferblockcount.dat')
+
+    xferblockcount_cache_abs_path = os.path.join(os.path.dirname(os.path.abspath(
+        __file__)), '../cache/' + ('MAINNET' if MAINNET else 'TESTNET') + '-xferblockcount.dat')
 
     if getblock:
         xferblockcount = 0
@@ -59,10 +62,11 @@ def get_xferblockcount_cache(getblock=False):
             with open(xferblockcount_cache_abs_path) as data_file:
                 xferblockcount = json.load(data_file)
 
-        return  xferblockcount
+        return xferblockcount
     else:
-    
+
         return xferblockcount_cache_abs_path
+
 
 def get_txidtxidn(txid, txidn):
     if txid is None or txidn is None:
@@ -103,10 +107,14 @@ def get_caller_name():
 
 def get_dashmnbversion():
     import simplejson as json
-    version_file = os.path.join( os.path.dirname( os.path.abspath(__file__)), 'version.txt')
+    version_file = os.path.join(
+        os.path.dirname(
+            os.path.abspath(__file__)),
+        'version.txt')
     with open(version_file) as data_file:
         data = json.load(data_file)
     return data
+
 
 def print_err_exit(
         caller_name,
@@ -116,9 +124,10 @@ def print_err_exit(
 
     VERSION = get_dashmnbversion()
 
-    msg = '\n\n\tversion  : %s.%s.%s\n' % (VERSION.get('major'), VERSION.get('minor'), VERSION.get('fix'))
+    msg = '\n\n\tversion  : %s.%s.%s\n' % (VERSION.get(
+        'major'), VERSION.get('minor'), VERSION.get('fix'))
     msg += '\tcaller   : %s\n' % caller_name
-    msg += '\tfunction : %s\n' % function_name 
+    msg += '\tfunction : %s\n' % function_name
     if errargs:
         msg += '\terr      : %s' % str(errargs)
     msg += '\t===> %s\n' % err_msg

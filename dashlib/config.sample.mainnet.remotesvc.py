@@ -14,7 +14,7 @@ account_no = 1
 
 # HW WALLET TYPE
 # Keepkey [ keepkey ], Trezor [ trezor ]
-TYPE_HW_WALLET = 'Trezor'          
+TYPE_HW_WALLET = 'Trezor'
 
 # masternode_config
 masternode_conf_file = 'masternode.conf'
@@ -28,12 +28,13 @@ default_receiving_address = ''
 # how many mns do you have, to check address on hw wallet
 # if bip32 path last used address for mn is like 44'/5'/1'/0/10 : address_index is 10
 # use max_gab = 11 (address_index + 1)
-max_gab = 5     
+max_gab = 5
 
 # settings to control send payout coins
 # when if MOVE_1K_COLLATERAL = True will not used to check
 
-# if a unspent tx(or payout or deposit on mn address) has amount more han this, will not touch
+# if a unspent tx(or payout or deposit on mn address) has amount more han
+# this, will not touch
 max_amounts = 50
 
 # number of inputs to include in a tx
@@ -59,11 +60,11 @@ MOVE_1K_COLLATERAL = False
 # don't change
 # dash mainnet
 USE_SSH_TUNNEL = False
-rpcusessl   = True
-rpcuser     = 'dashmnb'
+rpcusessl = True
+rpcuser = 'dashmnb'
 rpcpassword = 'iamok'
-rpcbindip   = 'test.stats.dash.org'
-rpcport     = 8080
+rpcbindip = 'test.stats.dash.org'
+rpcport = 8080
 
 # network
 MAINNET = True  # mainnet

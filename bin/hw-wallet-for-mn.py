@@ -8,6 +8,7 @@ sys.path.append(os.path.join(os.path.dirname(__file__), '..', 'dashlib'))
 from bip32utils import BIP32Key
 from dashlib import *
 
+
 def main():
     logo_show()
 
@@ -23,21 +24,20 @@ def main():
 
     try:
         #bip32_path = client.expand_path(keypath)
-        #xpub = bip32.serialize(
+        # xpub = bip32.serialize(
         #    client.get_public_node(bip32_path).node,
         #    (0x0488B21E if MAINNET else 0x043587CF))
 
         acc_node = BIP32Key.fromExtendedKey(xpub)
 
         print('**** ====> use following address for 1K collateral of masternode')
-        
+
         for i in range(max_gab):
             child_path = '%s%s' % (keypath + '/', str(i))
             address = client.get_address(
                 coin_name, client.expand_path(child_path))
             publicnode = client.get_public_node(
                 client.expand_path(child_path)).node.public_key.hex()
-
 
             # make sure xpub/tub
             bip32_addr_node = acc_node.ChildKey(i)
@@ -86,5 +86,5 @@ def main():
 if __name__ == '__main__':
     if (sys.version_info < (3, 5, 1)):
         sys.exit('need python 3.5.1')
-            
+
     main()

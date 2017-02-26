@@ -9,13 +9,13 @@ from mnb_misc import *
 from mnb_rpc import *
 import simplejson as json
 
+
 def start_votes(
         mn_config,
         proposal_hash,
         vote,
         access):
 
-    
     listforvotes = []
 
     for m in mn_config:
@@ -27,11 +27,8 @@ def start_votes(
 
         listforvotes.append(votedict)
 
-
     print('\n[relaying vote(s)]')
     for voteconf in listforvotes:
         r = rpc_voteraw(voteconf, access)
         print('%s - %s' % (voteconf['alias'], r))
-        #time.sleep(1)
-
-
+        # time.sleep(1)

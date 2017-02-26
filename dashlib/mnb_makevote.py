@@ -9,6 +9,7 @@ from dash_utils import *
 from mnb_misc import *
 from mnb_signing import *
 
+
 def make_vote(
         alias,
         proposal_hash,
@@ -25,13 +26,13 @@ def make_vote(
     elif vote == 'no':
         voteno = '2'
     elif vote == 'abstain':
-        voteno = '3'    
+        voteno = '3'
 
     serialize_for_sig = collateral_txidtxidn + '|' \
-                    + proposal_hash + '|' \
-                    + '1' + '|' \
-                    + voteno + '|' \
-                    + str(sig_time)
+        + proposal_hash + '|' \
+        + '1' + '|' \
+        + voteno + '|' \
+        + str(sig_time)
 
     sig = signmessage_ecdsa_no_encoding(
         serialize_for_sig,
@@ -49,5 +50,3 @@ def make_vote(
     }
 
     return work
-
-

@@ -2,7 +2,7 @@ import sys
 import os
 sys.path.append(os.path.join(os.path.dirname(__file__), '.'))
 
-    
+
 import subprocess
 import time
 import threading
@@ -40,7 +40,7 @@ class SshTunnel(threading.Thread):
                 'ssh', '-i', self.identityfile,
                        '-N',
                        '-L', str(self.localport) + ':localhost:' + str(self.remoteport),
-                       self.remoteuser + '@' + self.remotehost])            
+                       self.remoteuser + '@' + self.remotehost])
 
         if p:
             self.pid = p.pid

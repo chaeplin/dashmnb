@@ -6,6 +6,7 @@ from config import *
 from dash_tx import *
 from mnb_misc import *
 
+
 def get_rawtxid(alias, txid, txidn, access):
     try:
         data = access.getrawtransaction(txid)
@@ -63,13 +64,13 @@ def rpcgetinfo(access):
 
 
 def checksynced(protocolversion, access):
-    if 'rpcusessl' in globals() and  rpcusessl and rpcbindip == "test.stats.dash.org":
+    if 'rpcusessl' in globals() and rpcusessl and rpcbindip == "test.stats.dash.org":
         return True
 
     try:
         status = access.mnsync('status')
 #        if MOVE_1K_COLLATERAL:
-#            return True  
+#            return True
 
         if protocolversion > 70201:
             return status.get('IsSynced')
@@ -196,6 +197,7 @@ def getaddressbalance(addsress, access):
             err_msg,
             e.args)
 
+
 def getaddressbalancewithoutexcept(addsress, access):
     try:
         params = {
@@ -292,18 +294,26 @@ def rpc_getproposals(access):
             get_caller_name(),
             get_function_name(),
             err_msg,
-            e.args)    
+            e.args)
+
 
 def rpc_voteraw(voteconf, access):
     try:
-        masternodetxhash  = voteconf['collateral_txid']
+        masternodetxhash = voteconf['collateral_txid']
         masternodetxindex = voteconf['collateral_txidn']
-        governancehash    = voteconf['proposal_hash']
-        vote              = voteconf['vote']
-        sigtime           = int(voteconf['sig_time'])
-        votesig           = voteconf['sig']
+        governancehash = voteconf['proposal_hash']
+        vote = voteconf['vote']
+        sigtime = int(voteconf['sig_time'])
+        votesig = voteconf['sig']
 
-        r = access.voteraw(masternodetxhash, masternodetxindex, governancehash, 'funding', vote, sigtime, votesig)
+        r = access.voteraw(
+            masternodetxhash,
+            masternodetxindex,
+            governancehash,
+            'funding',
+            vote,
+            sigtime,
+            votesig)
         return r
 
     except Exception as e:
@@ -312,6 +322,6 @@ def rpc_voteraw(voteconf, access):
             get_caller_name(),
             get_function_name(),
             err_msg,
-            e.args)        
+            e.args)
 
 # end

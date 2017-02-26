@@ -39,7 +39,7 @@ def main(args):
             ':' + str(rpcport if USE_SSH_TUNNEL is False else SSH_LOCAL_PORT)
 
     access = AuthServiceProxy(serverURL)
-    
+
     if len(str(account_no)) == 0:
         err_msg = 'please configure bip32 path : account_no'
         print_err_exit(
@@ -67,8 +67,8 @@ def main(args):
         # check explorer block count
         explorer_blockcount = get_explorer_blockcount()
 
-        assert int(explorer_blockcount) == int(blockcount), "blockcount mismatch exp : %s <--> dashd : %s" % (
-                explorer_blockcount, blockcount)
+        assert int(explorer_blockcount) == int(
+            blockcount), "blockcount mismatch exp : %s <--> dashd : %s" % (explorer_blockcount, blockcount)
 
         print()
 
@@ -89,7 +89,7 @@ def main(args):
     have_unconfirmed_tx = False
     if get_xferblockcount_cache(True) >= blockcount + 1:
         have_unconfirmed_tx = True
-        
+
     client, signing, bip32, mpath, xpub = check_hw_wallet()
     chain_pubkey = get_chain_pubkey(client, bip32)
 
@@ -97,7 +97,6 @@ def main(args):
         access, signing, chain_pubkey, args.showall)
 
     print_mnstatus(mn_config, mns, mna)
-
 
     # vote
     if args.voteyes or args.voteno or args.voteabstain:
@@ -108,9 +107,8 @@ def main(args):
                 get_function_name(),
                 err_msg)
 
-
         proposal_hash = args.masternode_to_start
-        if len(proposal_hash)== 0:
+        if len(proposal_hash) == 0:
             err_msg = 'hash of a proposal needed'
             print_err_exit(
                 get_caller_name(),
@@ -138,7 +136,6 @@ def main(args):
             print('[making vote(s)]')
             start_votes(mn_config, proposal_hash[0], vote, access)
 
-
         else:
             err_msg = 'no matching proposal to vote, check proposal hash'
             print_err_exit(
@@ -165,10 +162,10 @@ def main(args):
                 if m.get('alias') in args.masternode_to_start:
                     mns_to_start.append(m)
             else:
-                if ((mns.get(txidtxidn, None) not in list_of_mn_status_ok) and
-                    (mns.get(txidtxidn, None) not in list_of_mn_status_to_ignore)):
-                #if ((mns.get(txidtxidn, None) != 'ENABLED'
-                #     and mns.get(txidtxidn, None) != 'PRE_ENABLED')):
+                if ((mns.get(txidtxidn, None) not in list_of_mn_status_ok) and (
+                        mns.get(txidtxidn, None) not in list_of_mn_status_to_ignore)):
+                    # if ((mns.get(txidtxidn, None) != 'ENABLED'
+                    #     and mns.get(txidtxidn, None) != 'PRE_ENABLED')):
                     mns_to_start.append(m)
 
         if len(mns_to_start) > 0 and signing:
@@ -185,7 +182,8 @@ def main(args):
     if args.balance or args.maketx or args.xfer:
         for m in mn_config:
             #m["unspent"], m["txs"], m["collateral_dashd_balance"] = get_unspent_txs(m, access)
-            m["txs"], m["collateral_dashd_balance"] = get_unspent_txs(m, blockcount, access)
+            m["txs"], m["collateral_dashd_balance"] = get_unspent_txs(
+                m, blockcount, access)
 
         need_wallet_rescan = print_balance(mn_config, have_unconfirmed_tx)
 
@@ -208,7 +206,7 @@ def main(args):
         print_err_exit(
             get_caller_name(),
             get_function_name(),
-            err_msg)        
+            err_msg)
 
     if args.maketx or args.xfer:
 
@@ -222,15 +220,25 @@ def main(args):
         if signing:
             print('[making txs]')
             for m in mn_config:
-                if len(m.get('collateral_dashd_balance')) > 0 and len(m.get('txs', None)) > 0 and m.get('receiving_address', None) is not None:
+                if len(
+                    m.get('collateral_dashd_balance')) > 0 and len(
+                    m.get(
+                        'txs',
+                        None)) > 0 and m.get(
+                    'receiving_address',
+                        None) is not None:
                     if len(args.masternode_to_start) > 0:
                         if m.get('alias') in args.masternode_to_start:
-                            print('---> signing txs for mn %s: ' % m.get('alias'))
-                            m["signedrawtx"] = make_txs_for_hwwallet(m, client, mpath)
+                            print(
+                                '---> signing txs for mn %s: ' %
+                                m.get('alias'))
+                            m["signedrawtx"] = make_txs_for_hwwallet(
+                                m, client, mpath)
 
                     else:
                         print('---> signing txs for mn %s: ' % m.get('alias'))
-                        m["signedrawtx"] = make_txs_for_hwwallet(m, client, mpath)
+                        m["signedrawtx"] = make_txs_for_hwwallet(
+                            m, client, mpath)
 
     if args.xfer and signing:
         xfertxid = broadcast_signedrawtx(mn_config, blockcount, access)

@@ -13,6 +13,7 @@ from bip32utils import BIP32Key
 from dashlib import *
 from bitcoinrpc.authproxy import AuthServiceProxy, JSONRPCException
 
+
 def main():
     logo_show()
 
@@ -42,19 +43,18 @@ def main():
     if client is None:
         sys.exit()
 
-
     keypath = mpath
 
     try:
         #bip32_path = client.expand_path(keypath)
-        #xpub = bip32.serialize(
+        # xpub = bip32.serialize(
         #    client.get_public_node(bip32_path).node,
         #    (0x0488B21E if MAINNET else 0x043587CF))
 
         acc_node = BIP32Key.fromExtendedKey(xpub)
 
         print('**** ====> use following address for 1K collateral of masternode')
-        
+
         for i in range(max_gab):
             child_path = '%s%s' % (keypath + '/', str(i))
             address = client.get_address(
@@ -67,7 +67,12 @@ def main():
             bip32_address = bip32_addr_node.Address()
             bip32_addrpkey = bip32_addr_node.PublicKey().hex()
 
-            addr_balance = round(Decimal(getaddressbalancewithoutexcept(address, access) / 1e8), 8)
+            addr_balance = round(
+                Decimal(
+                    getaddressbalancewithoutexcept(
+                        address,
+                        access) / 1e8),
+                8)
 
             print(
                 coin_name +
@@ -112,7 +117,7 @@ if __name__ == '__main__':
 
     if (sys.version_info < (3, 5, 1)):
         sys.exit('need python 3.5.1')
-            
+
     try:
 
         tunnel_pid = None

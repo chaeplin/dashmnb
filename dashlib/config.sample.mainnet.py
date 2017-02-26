@@ -14,7 +14,7 @@ account_no = 1
 
 # HW WALLET TYPE
 # Keepkey [ keepkey ], Trezor [ trezor ]
-TYPE_HW_WALLET = 'Trezor'          
+TYPE_HW_WALLET = 'Trezor'
 
 # rpc
 rpcusessl = False
@@ -32,14 +32,14 @@ USE_SSH_TUNNEL = False    # True or False
 # 1)
 # USE_IDENTITYFILE = False
 # SSH_IDENTITYFILE = ''
-# then use ssh-add -K ~/.ssh/xxxx.pem 
+# then use ssh-add -K ~/.ssh/xxxx.pem
 # ssh-add : adds private key identities to the authentication agent
 #
 # 2)
 # USE_IDENTITYFILE = True
 # SSH_IDENTITYFILE = '~/.ssh/xxxx.pem'
 
-USE_IDENTITYFILE = False # True or False
+USE_IDENTITYFILE = False  # True or False
 SSH_IDENTITYFILE = ''
 
 #USE_IDENTITYFILE = True
@@ -61,12 +61,13 @@ default_receiving_address = ''
 # how many mns do you have, to check address on hw wallet
 # if bip32 path last used address for mn is like 44'/5'/1'/0/10 : address_index is 10
 # use max_gab = 11 (address_index + 1)
-max_gab = 5     
+max_gab = 5
 
 # settings to control send payout coins
 # when if MOVE_1K_COLLATERAL = True will not used to check
 
-# if a unspent tx(or payout or deposit on mn address) has amount more han this, will not touch
+# if a unspent tx(or payout or deposit on mn address) has amount more han
+# this, will not touch
 max_amounts = 50
 
 # number of inputs to include in a tx

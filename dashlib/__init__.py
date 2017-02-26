@@ -34,13 +34,13 @@ from mnb_vote import *
 from mnb_xfer import *
 
 try:
-	assert isinstance(MAINNET, bool) == True
-	assert isinstance(account_no, int) == True
-	assert (account_no >= 0) == True
+    assert isinstance(MAINNET, bool)
+    assert isinstance(account_no, int)
+    assert (account_no >= 0)
 
 except AssertionError:
     _, _, tb = sys.exc_info()
-    traceback.print_tb(tb) # Fixed format
+    traceback.print_tb(tb)  # Fixed format
     tb_info = traceback.extract_tb(tb)
     filename, line, func, text = tb_info[-1]
 
@@ -49,5 +49,3 @@ except AssertionError:
         get_caller_name(),
         get_function_name(),
         err_msg)
-
-

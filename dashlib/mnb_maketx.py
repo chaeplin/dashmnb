@@ -10,6 +10,7 @@ from mnb_rpc import *
 from mnb_mnconf import *
 from mnb_hwwallet import *
 
+
 def print_balance(mn_config, have_unconfirmed_tx):
 
     need_wallet_rescan = False
@@ -26,7 +27,7 @@ def print_balance(mn_config, have_unconfirmed_tx):
         spn = 0
         for sp in m.get('txs'):
             spn = spn + len(sp)
-            
+
         if cnt == 0:
             need_wallet_rescan = True
 
@@ -159,7 +160,7 @@ def make_inputs_for_hw_wallet(
     tx_api.rpcport = (rpcport if USE_SSH_TUNNEL is False else SSH_LOCAL_PORT)
     if 'rpcusessl' in globals() and rpcusessl:
         tx_api.rpcusessl = rpcusessl
-    
+
     client.set_tx_api(TXAPIDashrpc())
 
     inputs = []

@@ -8,6 +8,7 @@ import json
 from config import *
 from mnb_rpc import *
 
+
 def check_mtime_of_config(
         config_py_file_abs_path,
         masternode_conf_file_abs_path,
@@ -46,14 +47,22 @@ def check_mtime_of_config(
 def check_collateral_in_chain_pubkey(addrs, chain_pubkey, alias=None):
     # check collateral_address and chain_pubkey again
 
-    printdbg('check_collateral_in_chain_pubkey : caller : %s' % get_caller_name())
-    printdbg('check_collateral_in_chain_pubkey : type(addrs) : %s' % type(addrs))
-    printdbg('check_collateral_in_chain_pubkey : chain_pubkey.keys() : %s' % chain_pubkey.keys())
+    printdbg(
+        'check_collateral_in_chain_pubkey : caller : %s' %
+        get_caller_name())
+    printdbg(
+        'check_collateral_in_chain_pubkey : type(addrs) : %s' %
+        type(addrs))
+    printdbg(
+        'check_collateral_in_chain_pubkey : chain_pubkey.keys() : %s' %
+        chain_pubkey.keys())
 
     if isinstance(addrs, list):
         for x in addrs:
             collateral_address = x.get('collateral_address')
-            printdbg('check_collateral_in_chain_pubkey : collateral_address : %s' % collateral_address)
+            printdbg(
+                'check_collateral_in_chain_pubkey : collateral_address : %s' %
+                collateral_address)
             if collateral_address in chain_pubkey.keys():
                 pass
             else:
@@ -65,7 +74,9 @@ def check_collateral_in_chain_pubkey(addrs, chain_pubkey, alias=None):
                     err_msg)
     else:
         collateral_address = addrs
-        printdbg('check_collateral_in_chain_pubkey : collateral_address : %s' % collateral_address)
+        printdbg(
+            'check_collateral_in_chain_pubkey : collateral_address : %s' %
+            collateral_address)
         if collateral_address in chain_pubkey.keys():
             return True
         else:
@@ -90,11 +101,13 @@ def checking_mn_config(access, signing, chain_pubkey, showall):
     cache_config_check_abs_path = os.path.join(os.path.dirname(os.path.abspath(
         __file__)), '../cache/' + ('MAINNET' if MAINNET else 'TESTNET') + '-configcache.dat')
 
-
-    printdbg('checking_mn_config : masternode.conf : %s' % masternode_conf_file_abs_path)
+    printdbg(
+        'checking_mn_config : masternode.conf : %s' %
+        masternode_conf_file_abs_path)
     printdbg('checking_mn_config : config.py : %s' % config_py_file_abs_path)
-    printdbg('checking_mn_config : config cache : %s' % cache_config_check_abs_path)
-
+    printdbg(
+        'checking_mn_config : config cache : %s' %
+        cache_config_check_abs_path)
 
     if not os.path.exists(masternode_conf_file_abs_path):
         err_msg = 'no %s file' % masternode_conf_file
@@ -109,7 +122,9 @@ def checking_mn_config(access, signing, chain_pubkey, showall):
         cache_config_check_abs_path,
         showall)
 
-    printdbg('checking_mn_config : bbParseConfigAgain : %s' % bParseConfigAgain)
+    printdbg(
+        'checking_mn_config : bbParseConfigAgain : %s' %
+        bParseConfigAgain)
 
     if bParseConfigAgain:
         print(
@@ -189,8 +204,7 @@ def checking_mn_config(access, signing, chain_pubkey, showall):
     print('---> get masternodelist : addr')
     printdbg('checking_mn_config : check_masternodeaddr')
     mna = check_masternodeaddr(access)
-    printdbg('checking_mn_config : done')    
-
+    printdbg('checking_mn_config : done')
 
     return mn_config_all.get('mn_config'), signing, mns, mna
 
@@ -231,7 +245,7 @@ def parse_masternode_conf(
         if len(s) == 6:
             raddr = s[5]
         elif len(s) == 5:
-            if len(default_receiving_address) != 0: 
+            if len(default_receiving_address) != 0:
                 raddr = default_receiving_address
             else:
                 raddr = None
@@ -267,7 +281,7 @@ def parse_masternode_conf(
             errorinconf.append(
                 'line: %d : %s : collateral_address has less than 1K balance : %s' %
                 (lno, alias, collateral_cur_balance))
-            
+
             if not MOVE_1K_COLLATERAL and not showall:
                 continue
 
@@ -319,7 +333,7 @@ def parse_masternode_conf(
                 get_function_name(),
                 err_msg)
 
-        if raddr != None:
+        if raddr is not None:
             if not validateaddress(raddr, access):
                 err_msg = 'receiving_address error : ' + alias
                 print_err_exit(

@@ -99,6 +99,9 @@ pip install -r requirements.txt
 ![1](i07.png)
 
 - copy config.sample.py to config.py and edit
+* to use "remote rpc svc by chaeplin" : config.sample.mainnet.remotesvc.py
+* to run "your own local/remote dashd" : config.sample.mainnet.py
+
 ![1](i08.png)
 ![1](i09.png)
 

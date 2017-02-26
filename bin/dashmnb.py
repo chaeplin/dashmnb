@@ -90,7 +90,7 @@ def main(args):
     if get_xferblockcount_cache(True) >= blockcount + 1:
         have_unconfirmed_tx = True
 
-    client, signing, bip32, mpath, xpub = check_hw_wallet()
+    client, signing, bip32, mpath, _ = check_hw_wallet()
     chain_pubkey = get_chain_pubkey(client, bip32)
 
     mn_config, signing, mns, mna = checking_mn_config(

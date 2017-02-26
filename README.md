@@ -55,6 +55,24 @@ run dash masternode with hardware wallet / dashmnb simplify local cold wallet pa
     - can't use mixed account name(Account #1 + Account #2) together
     - can't use mixed(ex: 44'/5'/x'/0/0 + 44'/5'/y'/0/0) path together
 
+
+### Q : how to speed up config checking speed ?
+    - use cache option on config.py
+```
+# if config.py and masternode.x.conf unchanged, recheck config every 7
+# day, and 6 hour
+#config_cache_refresh_interval_hour = 7 * 24
+
+# txs
+#txs_cache_refresh_interval_hour = 6
+
+# disable cache
+config_cache_refresh_interval_hour = 0
+txs_cache_refresh_interval_hour = 0
+````
+
+
+
 ###### Q : example for web wallet of Trezor ?
 check [trezor example](https://github.com/chaeplin/dashmnb/tree/master/others/pics/trezor)
 

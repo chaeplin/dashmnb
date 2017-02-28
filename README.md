@@ -123,6 +123,9 @@ read [https://doc.satoshilabs.com/trezor-faq/](https://doc.satoshilabs.com/trezo
     getinfo              --> to get current block height
     sendrawtransaction   --> to relay a transaction made
     validateaddress      --> to check collateral_address, receiving_address, masternode_address are ok
+    voteraw              --> to vote proposal
+    gobject              --> to get list of proposal
+    mnsync               --> to get sync status
 ```
 
     - dashmnb connects remote service using ssl  
@@ -411,6 +414,24 @@ Dash address: 44'/5'/1'/0/3        XwUXXWL5kUzJNPDAX2wjxnQYkGjJL5AGwg
     - to check address, collateral, masternode status
     - to get unspent tx of collateral
     - to relay mnb and txs
+    - rpc command are following
+``` 
+    decoderawtransaction --> to get a transaction is correct
+    getaddressbalance    --> to get balance of a mn
+    getaddressutxos      --> to get unspent tx(s) of a mn
+    getblockcount        --> to get current block height
+    getblockhash         --> to get current blockhash and (current block height -12) blockhash
+    getrawtransaction    --> to get collateral address on masternode.conf
+    listunspent          --> replaced by getaddressutxos
+    masternodebroadcast  --> to decode / relay mnb(s)
+    masternodelist       --> to get masternode list and address
+    getinfo              --> to get current block height
+    sendrawtransaction   --> to relay a transaction made
+    validateaddress      --> to check collateral_address, receiving_address, masternode_address are ok
+    voteraw              --> to vote proposal
+    gobject              --> to get list of proposal
+    mnsync               --> to get sync status
+```        
 
 
 ###### Q : got err `No information available for address`

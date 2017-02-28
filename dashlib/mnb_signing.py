@@ -28,21 +28,21 @@ def serialize_input_str(tx, prevout_n, sequence, scriptSig):
     return ''.join(s)
 
 
-def signmessage(last_ping_serialize_for_sig, address, access):
-
-    import base64
-    try:
-        r = access.signmessage(address, last_ping_serialize_for_sig)
-        return(base64.b64decode(r).hex())
-
-    except Exception as e:
-        err_msg = 'Please enter the wallet passphrase with walletpassphrase first'
-        print_err_exit(
-            get_caller_name(),
-            get_function_name(),
-            err_msg,
-            e.args)
-
+#def signmessage(last_ping_serialize_for_sig, address, access):
+#
+#    import base64
+#    try:
+#        r = access.signmessage(address, last_ping_serialize_for_sig)
+#        return(base64.b64decode(r).hex())
+#
+#    except Exception as e:
+#        err_msg = 'Please enter the wallet passphrase with walletpassphrase first'
+#        print_err_exit(
+#            get_caller_name(),
+#            get_function_name(),
+#            err_msg,
+#            e.args)
+#
 
 def signmessage_ecdsa(message, privkeywif):
     import base64

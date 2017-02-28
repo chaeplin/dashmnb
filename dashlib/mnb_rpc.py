@@ -227,19 +227,19 @@ def getaddressutxos(addsress, access):
             e.args)
 
 
-def get_listunspent(min, max, addsress, access):
-    try:
-        r = access.listunspent(min, max, [addsress])
-        return r
-
-    except Exception as e:
-        err_msg = 'Dash-QT or dashd running ?'
-        print_err_exit(
-            get_caller_name(),
-            get_function_name(),
-            err_msg,
-            e.args)
-
+#def get_listunspent(min, max, addsress, access):
+#    try:
+#        r = access.listunspent(min, max, [addsress])
+#        return r
+#
+#    except Exception as e:
+#        err_msg = 'Dash-QT or dashd running ?'
+#        print_err_exit(
+#            get_caller_name(),
+#            get_function_name(),
+#            err_msg,
+#            e.args)
+#
 
 def get_getblockcount(access):
     try:

@@ -179,6 +179,7 @@ optional arguments:
 
 #### [Ubuntu 16.04 --> use this link](https://github.com/chaeplin/dashmnb/tree/master/others/pics/ubuntu-16.04)
 #### [Ubuntu 14.04 --> use this link](https://github.com/chaeplin/dashmnb/tree/master/others/pics/ubuntu-14.04)
+#### [Debian 8.7.1 --> use this link](https://github.com/chaeplin/dashmnb/tree/master/others/pics/debian-8.7.1)
 #### [WIndows 10 --> use this link](https://github.com/chaeplin/dashmnb/tree/master/others/pics/windows10)
 
 

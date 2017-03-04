@@ -86,10 +86,6 @@ def main(args):
             get_function_name(),
             err_msg)
 
-    have_unconfirmed_tx = False
-    if get_xferblockcount_cache(True) >= blockcount + 1:
-        have_unconfirmed_tx = True
-
     client, signing, bip32, mpath, _ = check_hw_wallet()
     chain_pubkey = get_chain_pubkey(client, bip32)
 
@@ -179,6 +175,10 @@ def main(args):
                 mpath)
 
     # wallet rescan
+    have_unconfirmed_tx = check_mempool(mn_config, access)
+    if have_unconfirmed_tx:
+        txs_cache_refresh_interval_hour = 0
+
     if args.balance or args.maketx or args.xfer:
         for m in mn_config:
             #m["unspent"], m["txs"], m["collateral_dashd_balance"] = get_unspent_txs(m, access)
@@ -241,7 +241,7 @@ def main(args):
                             m, client, mpath)
 
     if args.xfer and signing:
-        xfertxid = broadcast_signedrawtx(mn_config, blockcount, access)
+        xfertxid = broadcast_signedrawtx(mn_config, access)
 
         print()
         if xfertxid is not None:

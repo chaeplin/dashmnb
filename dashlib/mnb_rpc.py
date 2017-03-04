@@ -181,10 +181,10 @@ def sendrawtransaction(signedrawtx, access):
             e.args)
 
 
-def getaddressbalance(addsress, access):
+def getaddressbalance(address, access):
     try:
         params = {
-            "addresses": [addsress]
+            "addresses": [address]
         }
         r = access.getaddressbalance(params)
         return r.get('balance')
@@ -198,10 +198,10 @@ def getaddressbalance(addsress, access):
             e.args)
 
 
-def getaddressbalancewithoutexcept(addsress, access):
+def getaddressbalancewithoutexcept(address, access):
     try:
         params = {
-            "addresses": [addsress]
+            "addresses": [address]
         }
         r = access.getaddressbalance(params)
         return r.get('balance')
@@ -210,10 +210,10 @@ def getaddressbalancewithoutexcept(addsress, access):
         return 0
 
 
-def getaddressutxos(addsress, access):
+def getaddressutxos(address, access):
     try:
         params = {
-            "addresses": [addsress]
+            "addresses": [address]
         }
         r = access.getaddressutxos(params)
         return r
@@ -226,10 +226,25 @@ def getaddressutxos(addsress, access):
             err_msg,
             e.args)
 
+def getaddressmempool(address, access):
+    try:
+        params = {
+            "addresses": [address]
+        }
+        r = access.getaddressmempool(params)
+        return r
 
-#def get_listunspent(min, max, addsress, access):
+    except Exception as e:
+        err_msg = 'Dash-QT or dashd running ?'
+        print_err_exit(
+            get_caller_name(),
+            get_function_name(),
+            err_msg,
+            e.args)    
+
+#def get_listunspent(min, max, address, access):
 #    try:
-#        r = access.listunspent(min, max, [addsress])
+#        r = access.listunspent(min, max, [address])
 #        return r
 #
 #    except Exception as e:

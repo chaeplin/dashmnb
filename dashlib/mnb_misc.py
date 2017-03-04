@@ -49,6 +49,17 @@ def logo_show():
     # clear_screen()
 
 
+def check_mempool(mn_config, access):
+    import simplejson as json
+    from mnb_rpc import getaddressmempool
+    for m in mn_config:
+        r = getaddressmempool(m.get('receiving_address'), access)
+        if len(r) > 0:
+            return True
+
+    return False
+    
+
 def get_xferblockcount_cache(getblock=False):
     from config import MAINNET
     import simplejson as json
@@ -94,7 +105,7 @@ def print_mnstatus(mn_config, mns, mna):
             ipmatch = 'm'
         print_mnlist(m, ipmatch, mns_status)
 
-    print('\n* be sure to check masternode status again using online tools like dashninja')
+    print('\n* be sure to check masternode status again using online tools like dashninja\n')
 
 
 def get_function_name():

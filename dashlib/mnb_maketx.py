@@ -47,7 +47,7 @@ def print_balance(mn_config, have_unconfirmed_tx):
             '\t' +
             str(m.get('receiving_address', '----')))
 
-    print('* cnt - count    : number of payouts(un + mature) + 1(collateral)')
+    print('\n* cnt - count    : number of payouts(un + mature) + 1(collateral)')
     print('* spn - spenable : number of spendable payouts(mature)')
     if have_unconfirmed_tx:
         print('* can be inaccurate after a transaction(transfer/xfer), need 1 confirmation')

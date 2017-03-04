@@ -22,3 +22,5 @@ bin/tool-for-config.py
 dashlib/config.main.remote.py
 
 dashlib/config.main.rpc.py
+
+devel_notes.txt

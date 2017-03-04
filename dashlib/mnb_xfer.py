@@ -4,11 +4,11 @@ sys.path.append(os.path.join(os.path.dirname(__file__), '.'))
 
 from mnb_rpc import *
 from mnb_misc import *
-from mnb_rpc import *
+ 
 import simplejson as json
 
 
-def broadcast_signedrawtx(mn_config, blockcount, access):
+def broadcast_signedrawtx(mn_config, access):
     xfertxid = []
     for x in mn_config:
         alias = x.get('alias')
@@ -39,26 +39,6 @@ def broadcast_signedrawtx(mn_config, blockcount, access):
                 s = sendrawtransaction(tx, access)
                 xfertxid.append(s)
                 print('\n====> txid : %s\n' % s)
-
-                collateral_txidtxidn = x.get('collateral_txidtxidn')
-
-                unspent_cache_abs_path = os.path.join(
-                    os.path.dirname(
-                        os.path.abspath(__file__)),
-                    '../cache/' +
-                    (
-                        'MAINNET' if MAINNET else 'TESTNET') +
-                    '-' +
-                    collateral_txidtxidn +
-                    '-unspent.dat')
-
-                open(unspent_cache_abs_path, 'w').close()
-
-                #
-                xferblockcount_cache_abs_path = get_xferblockcount_cache()
-
-                with open(xferblockcount_cache_abs_path, 'w') as out_blockcount_cache:
-                    json.dump(blockcount, out_blockcount_cache)
 
     if len(xfertxid) > 0:
         return xfertxid

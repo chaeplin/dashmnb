@@ -53,9 +53,11 @@ def check_mempool(mn_config, access):
     import simplejson as json
     from mnb_rpc import getaddressmempool
     for m in mn_config:
-        r = getaddressmempool(m.get('receiving_address'), access)
-        if len(r) > 0:
-            return True
+        checkaddress = m.get('receiving_address', None)
+        if checkaddress != None:
+            r = getaddressmempool(, access)
+            if len(r) > 0:
+                return True
 
     return False
     

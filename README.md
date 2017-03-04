@@ -8,6 +8,8 @@ run dash masternode with hardware wallet / dashmnb simplify local cold wallet pa
 
 # need python version above 3.5.1 
 
+# if you get err `error occurred while verifying mnb hex` when using `-a`, be sure to update firmware
+
 # Contents
 - [Blocks](#blocks)
 - [Q&A](#qa)

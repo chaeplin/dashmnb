@@ -55,7 +55,7 @@ def check_mempool(mn_config, access):
     for m in mn_config:
         checkaddress = m.get('receiving_address', None)
         if checkaddress != None:
-            r = getaddressmempool(, access)
+            r = getaddressmempool(checkaddress, access)
             if len(r) > 0:
                 return True
 

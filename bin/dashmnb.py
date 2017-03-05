@@ -174,10 +174,12 @@ def main(args):
                 args.anounce,
                 mpath)
 
+
     # wallet rescan
-    have_unconfirmed_tx = check_mempool(mn_config, access)
-    if have_unconfirmed_tx:
-        txs_cache_refresh_interval_hour = 0
+    if args.balance or args.maketx or args.xfer:
+        have_unconfirmed_tx = check_mempool(mn_config, access)
+        if have_unconfirmed_tx:
+            txs_cache_refresh_interval_hour = 0
 
     if args.balance or args.maketx or args.xfer:
         for m in mn_config:

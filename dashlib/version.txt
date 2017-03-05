@@ -1,1 +1,1 @@
-{"major": 0, "minor": 3, "fix": "rc7", "msgs": "voting enabled"}
+{"major": 0, "minor": 3, "fix": "rc8", "msgs": "query voting result"}

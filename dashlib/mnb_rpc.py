@@ -312,6 +312,20 @@ def rpc_getproposals(access):
             e.args)
 
 
+def rpc_getcurrentvotes(proposal_hash, access):
+    try:
+        r = access.gobject('getcurrentvotes', proposal_hash)
+        return r
+
+    except Exception as e:
+        err_msg = 'Dash-QT or dashd running ?'
+        print_err_exit(
+            get_caller_name(),
+            get_function_name(),
+            err_msg,
+            e.args)
+
+
 def rpc_voteraw(voteconf, access):
     try:
         masternodetxhash = voteconf['collateral_txid']

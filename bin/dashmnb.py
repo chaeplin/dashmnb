@@ -95,7 +95,7 @@ def main(args):
     print_mnstatus(mn_config, mns, mna)
 
     # vote
-    if args.voteyes or args.voteno or args.voteabstain:
+    if args.voteyes or args.voteno or args.voteabstain or args.votequery:
         if args.voteyes and args.voteno:
             err_msg = "can't use yes and no together to vote, select one"
             print_err_exit(
@@ -119,19 +119,25 @@ def main(args):
                 err_msg)
 
         proposallist = rpc_getproposals(access).keys()
-
         if proposal_hash[0] in proposallist:
+            if args.voteyes or args.voteno or args.voteabstain:
+        
+                if args.voteyes:
+                    vote = 'yes'
+                if args.voteno:
+                    vote = 'no'
+                if args.voteabstain:
+                    vote = 'abstain'
+    
+                print('[making vote(s)]')
+                start_votes(mn_config, proposal_hash[0], vote, access)
 
-            if args.voteyes:
-                vote = 'yes'
-            if args.voteno:
-                vote = 'no'
-            if args.voteabstain:
-                vote = 'abstain'
 
-            print('[making vote(s)]')
-            start_votes(mn_config, proposal_hash[0], vote, access)
+            elif args.votequery:
+                print('[vote(s) result]')
+                display_votes(mn_config, proposal_hash[0], access)
 
+    
         else:
             err_msg = 'no matching proposal to vote, check proposal hash'
             print_err_exit(
@@ -139,6 +145,7 @@ def main(args):
                 get_function_name(),
                 err_msg)
 
+    # signing chck
     if args.anounce and MOVE_1K_COLLATERAL == False:
         if not signing:
             err_msg = 'check masternode config'
@@ -176,6 +183,7 @@ def main(args):
 
 
     # wallet rescan
+    #have_unconfirmed_tx = False
     if args.balance or args.maketx or args.xfer:
         have_unconfirmed_tx = check_mempool(mn_config, access)
         if have_unconfirmed_tx:
@@ -203,12 +211,13 @@ def main(args):
             get_function_name(),
             err_msg)
 
-    if have_unconfirmed_tx:
-        err_msg = 'have unconfirmed tx, wait at least 1 confirmation'
-        print_err_exit(
-            get_caller_name(),
-            get_function_name(),
-            err_msg)
+    if args.balance or args.maketx or args.xfer:
+        if have_unconfirmed_tx:
+            err_msg = 'have unconfirmed tx, wait at least 1 confirmation'
+            print_err_exit(
+                get_caller_name(),
+                get_function_name(),
+                err_msg)
 
     if args.maketx or args.xfer:
 
@@ -298,6 +307,11 @@ def parse_args():
                         dest='voteabstain',
                         action='store_true',
                         help='vote Abstain to a proposal using all mns')
+
+    parser.add_argument('-q', '--votequery',
+                        dest='votequery',
+                        action='store_true',
+                        help='get vote status on a proposal by all mns')  
 
     parser.add_argument('-l', '--showall',
                         dest='showall',

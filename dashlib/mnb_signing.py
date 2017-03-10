@@ -85,7 +85,27 @@ def hwwallet_signmessage(
     purpose, coin_type, account, change = chain_path(mpath)
 
     try:
-        sig = client.sign_message(coin_name,
+        if TYPE_HW_WALLET.lower().startswith("ledgernanos"):
+            addr_path = mpath + '/' + str(spath)
+            info = client.signMessagePrepare(addr_path, serialize_for_sig)
+            print('----> check screen of nano s')
+
+            signature = client.signMessageSign()
+
+            rLength = signature[3]
+            r = signature[4 : 4 + rLength]
+            sLength = signature[4 + rLength + 1]
+            s = signature[4 + rLength + 2:]
+            if rLength == 33:
+                r = r[1:]
+            if sLength == 33:
+                s = s[1:]
+
+            work = bytes(chr(27 + 4 + (signature[0] & 0x01)), "utf-8") + r + s
+            return work.hex()
+
+        else:
+            sig = client.sign_message(coin_name,
                                   [purpose | 0x80000000,
                                    coin_type | 0x80000000,
                                    account | 0x80000000,

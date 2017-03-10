@@ -322,16 +322,19 @@ def parse_args():
                         action='store_true',
                         help='show all configured masternodes')
 
-    parser.add_argument('-m', '--maketx',
-                        dest='maketx',
-                        action='store_true',
-                        help='make signed raw tx')
-
-    parser.add_argument('-x', '--xfer',
-                        dest='xfer',
-                        action='store_true',
-                        help='broadcast signed raw tx')
-
+    if TYPE_HW_WALLET.lower().startswith("ledgernanos"):
+        pass
+    else:
+        parser.add_argument('-m', '--maketx',
+                            dest='maketx',
+                            action='store_true',
+                            help='make signed raw tx')
+    
+        parser.add_argument('-x', '--xfer',
+                            dest='xfer',
+                            action='store_true',
+                            help='broadcast signed raw tx')
+    
     if len(sys.argv) < 2:
         parser.print_help()
         print_err_exit(

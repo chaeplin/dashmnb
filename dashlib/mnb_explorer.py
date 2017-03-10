@@ -15,7 +15,7 @@ def make_request(url):
     headers = {'user-agent': USERAGET}
 
     try:
-        response = requests.get(url, headers=headers, timeout=(4, 3))
+        response = requests.get(url, headers=headers, timeout=(5, 5))
         if response.status_code == requests.codes.ok and float(
                 response.text) >= 0:
             return response.text

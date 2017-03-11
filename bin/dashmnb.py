@@ -25,7 +25,10 @@ from bitcoinrpc.authproxy import AuthServiceProxy, JSONRPCException
 def main(args):
     logo_show()
 
-    # access
+    if TYPE_HW_WALLET.lower().startswith("ledgernanos"):
+        args.maketx = False
+        args.xfer = False
+
     # access
     if 'rpcusessl' in globals() and rpcusessl:
         import ssl
@@ -326,6 +329,7 @@ def parse_args():
 
     if TYPE_HW_WALLET.lower().startswith("ledgernanos"):
         pass
+
     else:
         parser.add_argument('-m', '--maketx',
                             dest='maketx',

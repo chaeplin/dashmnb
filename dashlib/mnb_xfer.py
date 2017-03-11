@@ -8,7 +8,7 @@ from mnb_misc import *
 import simplejson as json
 
 
-def broadcast_signedrawtx(mn_config, access):
+def broadcast_signedrawtx(mn_config, access, whalemode):
     xfertxid = []
     for x in mn_config:
         alias = x.get('alias')
@@ -28,13 +28,14 @@ def broadcast_signedrawtx(mn_config, access):
                             ',',
                             ': ')))
 
-                user_input = input(
-                    '\nBroadcast signed raw tx ? [ Yes / (any key to no) ] + enter : ')
-                if user_input == 'Yes':
-                    print('\nYes, will broadcast')
-                else:
-                    print('\nNo.')
-                    continue
+                if not whalemode:
+                    user_input = input(
+                        '\nBroadcast signed raw tx ? Yes / (any key to no) : ')
+                    if user_input.lower() == 'yes':
+                        print('\nYes, will broadcast')
+                    else:
+                        print('\nNo.')
+                        continue
 
                 s = sendrawtransaction(tx, access)
                 xfertxid.append(s)

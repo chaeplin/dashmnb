@@ -183,7 +183,9 @@ def main(args):
                 access,
                 client,
                 args.anounce,
-                mpath)
+                mpath,
+                args.whalemode
+                )
 
 
     # wallet rescan
@@ -256,7 +258,7 @@ def main(args):
                             m, client, mpath)
 
     if args.xfer and signing:
-        xfertxid = broadcast_signedrawtx(mn_config, access)
+        xfertxid = broadcast_signedrawtx(mn_config, access, args.whalemode)
 
         print()
         if xfertxid is not None:
@@ -334,7 +336,12 @@ def parse_args():
                             dest='xfer',
                             action='store_true',
                             help='broadcast signed raw tx')
-    
+
+    parser.add_argument('-w', '--whale',
+                        dest='whalemode',
+                        action='store_true',
+                        help='do not ask yes or no, all yes')    
+
     if len(sys.argv) < 2:
         parser.print_help()
         print_err_exit(

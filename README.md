@@ -40,6 +40,7 @@ run dash masternode with hardware wallet / dashmnb simplify local cold wallet pa
 ###### Q : which hw wallet supported ?
     - Trezor
     - Keepkey
+    - Ledger nano s(no transaction yet)
     - dashmnb will not run without hw wallet
 
 ###### Q : what can dashmnb do
@@ -183,6 +184,7 @@ optional arguments:
 #### [Ubuntu 14.04 --> use this link](https://github.com/chaeplin/dashmnb/tree/master/others/pics/ubuntu-14.04)
 #### [Debian 8.7.1 --> use this link](https://github.com/chaeplin/dashmnb/tree/master/others/pics/debian-8.7.1)
 #### [WIndows 10 --> use this link](https://github.com/chaeplin/dashmnb/tree/master/others/pics/windows10)
+#### Mac OSX --> check 1.b Install Prerequisites (Mac oS)
 
 
 ### 1.a Install Prerequisites (Ubuntu)

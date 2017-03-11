@@ -67,8 +67,7 @@ def main(args):
         # check explorer block count
         explorer_blockcount = get_explorer_blockcount()
 
-        assert int(explorer_blockcount) == int(
-            blockcount), "blockcount mismatch exp : %s <--> dashd : %s" % (explorer_blockcount, blockcount)
+        assert int(explorer_blockcount) == int(blockcount), "blockcount mismatch exp : %s <--> dashd : %s" % (explorer_blockcount, blockcount)
 
         print()
 
@@ -86,8 +85,13 @@ def main(args):
             get_function_name(),
             err_msg)
 
-    client, signing, bip32, mpath, _ = check_hw_wallet()
-    chain_pubkey = get_chain_pubkey(client, bip32)
+    if TYPE_HW_WALLET.lower().startswith("ledgernanos"):
+        client, signing, mpath = check_hw_wallet()
+
+    else:
+        client, signing, _, mpath, _ = check_hw_wallet()
+    
+    chain_pubkey = get_chain_pubkey(client)
 
     mn_config, signing, mns, mna = checking_mn_config(
         access, signing, chain_pubkey, args.showall)
@@ -318,16 +322,19 @@ def parse_args():
                         action='store_true',
                         help='show all configured masternodes')
 
-    parser.add_argument('-m', '--maketx',
-                        dest='maketx',
-                        action='store_true',
-                        help='make signed raw tx')
-
-    parser.add_argument('-x', '--xfer',
-                        dest='xfer',
-                        action='store_true',
-                        help='broadcast signed raw tx')
-
+    if TYPE_HW_WALLET.lower().startswith("ledgernanos"):
+        pass
+    else:
+        parser.add_argument('-m', '--maketx',
+                            dest='maketx',
+                            action='store_true',
+                            help='make signed raw tx')
+    
+        parser.add_argument('-x', '--xfer',
+                            dest='xfer',
+                            action='store_true',
+                            help='broadcast signed raw tx')
+    
     if len(sys.argv) < 2:
         parser.print_help()
         print_err_exit(

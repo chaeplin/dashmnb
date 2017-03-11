@@ -38,6 +38,14 @@ try:
     assert isinstance(account_no, int)
     assert (account_no >= 0)
 
+    hw_list = ['KEEPKEY', 'TREZOR', 'LEDGERNANOS']
+    if TYPE_HW_WALLET.upper() not in hw_list:
+        err_msg = 'check TYPE_HW_WALLET in dashlib/config.py'
+        print_err_exit(
+            get_caller_name(),
+            get_function_name(),
+            err_msg)
+
 except AssertionError:
     _, _, tb = sys.exc_info()
     traceback.print_tb(tb)  # Fixed format

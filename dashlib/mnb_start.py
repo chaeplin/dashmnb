@@ -46,6 +46,9 @@ def start_masternode(
         vc = num_to_varint(len(mnbs)).hex()
         vm = ''.join(mnbs)
 
+        print('mnb_hex : ', vc + vm)
+
+
         verify = rpc_masternode("decode", vc + vm, access)
         match1 = re.search(
             '^Successfully decoded broadcast messages for (.*) masternodes, failed to decode (.*), total (.*)$',

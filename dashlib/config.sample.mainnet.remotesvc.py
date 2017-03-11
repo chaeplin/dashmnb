@@ -13,7 +13,7 @@
 account_no = 1
 
 # HW WALLET TYPE
-# Keepkey [ keepkey ], Trezor [ trezor ]
+# Keepkey [ keepkey ], Trezor [ trezor ], Ledgernanos [ ledgernanos ]
 TYPE_HW_WALLET = 'Trezor'
 
 # masternode_config

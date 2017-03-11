@@ -6,6 +6,9 @@ sys.path.append(os.path.join(os.path.dirname(__file__), '.'))
 from mnb_misc import *
 from config import *
 
+if TYPE_HW_WALLET.lower().startswith("ledgernanos"):
+    from btchip.btchip import *
+    from btchip.btchipUtils import *
 
 def chain_path(mpath):
     import re
@@ -28,7 +31,7 @@ def chain_path(mpath):
             err_msg)
 
 
-def get_chain_pubkey(client, bip32):
+def get_chain_pubkey(client):
     if not os.environ.get('DASHMNB_DEBUG', None):
 
         from progress.bar import ChargingBar
@@ -46,10 +49,17 @@ def get_chain_pubkey(client, bip32):
             if not os.environ.get('DASHMNB_DEBUG', None):
                 chargingBar.next()
             child_path = '%s%s' % (mpath + '/', str(i))
-            address = client.get_address(
-                coin_name, client.expand_path(child_path))
-            publicnode = client.get_public_node(
-                client.expand_path(child_path)).node.public_key.hex()
+
+            if TYPE_HW_WALLET.lower().startswith("ledgernanos"):
+                nodedata = client.getWalletPublicKey(child_path)
+                publicnode = compress_public_key(nodedata.get('publicKey')).hex()
+                address   = (nodedata.get('address')).decode("utf-8")
+
+            else:
+                address = client.get_address(
+                    coin_name, client.expand_path(child_path))
+                publicnode = client.get_public_node(
+                    client.expand_path(child_path)).node.public_key.hex()
 
             chain_pubkey[address] = {"spath": i, "addrpubkey": publicnode}
             printdbg('get_chain_pubkey : %s %s %s' %
@@ -187,10 +197,13 @@ def check_hw_wallet():
                     get_function_name(),
                     err_msg)
 
-    if client is not None:
+
+    elif TYPE_HW_WALLET.lower().startswith("ledgernanos"):
+        #from btchip.btchip import *
+        #from btchip.btchipUtils import *
 
         try:
-            wallet_supported_coins = list_coins(client)
+            devices = getDongle(False)
 
         except Exception as e:
             err_msg = str(e.args)
@@ -199,13 +212,47 @@ def check_hw_wallet():
                 get_function_name(),
                 err_msg)
 
-        if coin_name not in wallet_supported_coins:
-            err_msg = 'only following coins supported by wallet\n\t' + \
-                str(wallet_supported_coins)
-            print_err_exit(
-                get_caller_name(),
-                get_function_name(),
-                err_msg)
+        if not devices:
+            print('===> No HW Wallet found')
+            signing = False
+
+        else:
+            try:
+                print('===> Ledger nano s HW Wallet found')
+                client = btchip(devices)
+                signing = True
+
+            except Exception as e:
+                err_msg = str(e.args)
+                print_err_exit(
+                    get_caller_name(),
+                    get_function_name(),
+                    err_msg)
+
+
+    if client is not None:
+
+        if TYPE_HW_WALLET.lower().startswith("ledgernanos"):
+            pass
+
+        else:
+            try:
+                wallet_supported_coins = list_coins(client)
+    
+            except Exception as e:
+                err_msg = str(e.args)
+                print_err_exit(
+                    get_caller_name(),
+                    get_function_name(),
+                    err_msg)
+    
+            if coin_name not in wallet_supported_coins:
+                err_msg = 'only following coins supported by wallet\n\t' + \
+                    str(wallet_supported_coins)
+                print_err_exit(
+                    get_caller_name(),
+                    get_function_name(),
+                    err_msg)
 
     else:
         err_msg = "Can't run dashmnb without hw wallet"
@@ -214,32 +261,38 @@ def check_hw_wallet():
             get_function_name(),
             err_msg)
 
-    try:
+    if TYPE_HW_WALLET.lower().startswith("ledgernanos"):
         mpath = get_mpath()
-        bip32_path = client.expand_path(mpath)
-        xpub = bip32.serialize(
-            client.get_public_node(bip32_path).node,
-            (0x0488B21E if MAINNET else 0x043587CF))
 
-    except AssertionError as e:
-        err_msg = str(e.args)
-        print_err_exit(
-            get_caller_name(),
-            get_function_name(),
-            err_msg)
+        return client, signing, mpath
 
-    except Exception as e:
-        err_msg = str(e.args)
-        print_err_exit(
-            get_caller_name(),
-            get_function_name(),
-            err_msg)
-
-    except KeyboardInterrupt:
-        print_err_exit(
-            get_caller_name(),
-            get_function_name(),
-            "KeyboardInterrupt")
+    else:
+        try:
+            mpath = get_mpath()
+            bip32_path = client.expand_path(mpath)
+            xpub = bip32.serialize(
+                client.get_public_node(bip32_path).node,
+                (0x0488B21E if MAINNET else 0x043587CF))
+    
+        except AssertionError as e:
+            err_msg = str(e.args)
+            print_err_exit(
+                get_caller_name(),
+                get_function_name(),
+                err_msg)
+    
+        except Exception as e:
+            err_msg = str(e.args)
+            print_err_exit(
+                get_caller_name(),
+                get_function_name(),
+                err_msg)
+    
+        except KeyboardInterrupt:
+            print_err_exit(
+                get_caller_name(),
+                get_function_name(),
+                "KeyboardInterrupt")
 
     printdbg('check_hw_wallet : signing : %s' % signing)
     printdbg('check_hw_wallet : xpub[:7] : %s' % xpub[:7])

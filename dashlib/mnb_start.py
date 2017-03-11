@@ -16,7 +16,8 @@ def start_masternode(
         access,
         client,
         announce,
-        mpath):
+        mpath,
+        whalemode):
     if announce:
         print('\n[making mnbs and relay]')
     else:
@@ -83,14 +84,15 @@ def start_masternode(
                 err_msg)
 
         if announce:
+            if not whalemode:
 
-            user_input = input(
-                '\nRelay broadcast messages ? [ Yes / (any key to no) ] + enter : ')
-            if user_input == 'Yes':
-                print('Yes, will relay')
-            else:
-                print('No.')
-                return
+                user_input = input(
+                    '\nRelay broadcast messages ?  Yes / (any key to no) : ')
+                if user_input.lower() == 'yes':
+                    print('Yes, will relay')
+                else:
+                    print('No.')
+                    return
 
             relay = rpc_masternode("relay", vc + vm, access)
             match2 = re.search(

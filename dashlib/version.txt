@@ -1,1 +1,1 @@
-{"major": 0, "minor": 3, "fix": "rc8", "msgs": "query voting result"}
+{"major": 0, "minor": 4, "fix": "rc1", "msgs": "add ledger nano s(no transaction yet)"}

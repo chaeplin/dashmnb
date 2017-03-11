@@ -49,29 +49,51 @@ def main():
 
     if TYPE_HW_WALLET.lower().startswith("ledgernanos"):
         
-        print('**** ====> use following address for 1K collateral of masternode')
+        try:
 
-        for i in range(max_gab):
-            addr_path = mpath + '/' + str(i)
-            nodedata = client.getWalletPublicKey(addr_path)
-            address   = (nodedata.get('address')).decode("utf-8")
-
-            addr_balance = round(
-                Decimal(
-                    getaddressbalancewithoutexcept(
-                        address,
-                        access) / 1e8),
-                8)
+            print('**** ====> use following address for 1K collateral of masternode')
     
-            print(
-                coin_name +
-                ' address: ' +
-                '{:20}'.format(addr_path) +
-                ' ' +
-                address +
-                ' ' +
-                    '{:13.8f}'.format(addr_balance))            
-
+            for i in range(max_gab):
+                addr_path = mpath + '/' + str(i)
+                nodedata = client.getWalletPublicKey(addr_path)
+                address   = (nodedata.get('address')).decode("utf-8")
+    
+                addr_balance = round(
+                    Decimal(
+                        getaddressbalancewithoutexcept(
+                            address,
+                            access) / 1e8),
+                    8)
+        
+                print(
+                    coin_name +
+                    ' address: ' +
+                    '{:20}'.format(addr_path) +
+                    ' ' +
+                    address +
+                    ' ' +
+                        '{:13.8f}'.format(addr_balance))            
+                print()
+    
+        except AssertionError as e:
+            err_msg = str(e.args)
+            print_err_exit(
+                get_caller_name(),
+                get_function_name(),
+                err_msg)
+    
+        except Exception as e:
+            err_msg = str(e.args)
+            print_err_exit(
+                get_caller_name(),
+                get_function_name(),
+                err_msg)
+    
+        except KeyboardInterrupt:
+            print_err_exit(
+                get_caller_name(),
+                get_function_name(),
+                "KeyboardInterrupt")
 
     else:
         keypath = mpath

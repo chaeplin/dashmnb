@@ -25,7 +25,7 @@ def get_rawtxid(alias, txid, txidn, access):
         return None
 
     except Exception as e:
-        err_msg = 'Dash-QT or dashd running ?'
+        err_msg = '\n\t===> 1) check account_no\n\t===> 2)Dash-QT or dashd running ?'
         print_err_exit(
             get_caller_name(),
             get_function_name(),

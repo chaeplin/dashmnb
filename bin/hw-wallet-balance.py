@@ -73,7 +73,8 @@ def main():
                     address +
                     ' ' +
                         '{:13.8f}'.format(addr_balance))            
-                print()
+
+            print()
     
         except AssertionError as e:
             err_msg = str(e.args)

@@ -148,7 +148,7 @@ def print_mnstatus(mn_config, mns, mna):
         print_mnlist(m, ipmatch, mns_status, dashninja_cnt)
 
     if MAINNET:
-        print('\n* dn: dashninja status status : UnlistedCount / InactiveCount / ActiveCount')
+        print('\n* dn: dashninja status : UnlistedCount / InactiveCount / ActiveCount')
     else:
         print('\n* be sure to check masternode status again using online tools like dashninja\n')
 

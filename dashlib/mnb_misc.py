@@ -33,7 +33,7 @@ def logo_show():
     #f = Figlet(font='small')
     print(f.renderText('Dash Masternode with HW Wallet'))
     #print('\n\t\t\tdonation : xxxxxxxxxx')
-    print('\t\t\tby : chaeplin\n')
+    print('\t\t\tby : chaeplin XiDWe5fkVcrXBQApmCFQUxpue5iuWcbmcK\n')
     check_version()
     print('Network : ' + ('MAINNET' if MAINNET else 'TESTNET'))
     if MOVE_1K_COLLATERAL:
@@ -91,7 +91,7 @@ def print_mnlist(mnconfig, ipmatch, mnstatus, dashninja_cnt):
     from config import MAINNET
     if MAINNET:
         print(mnconfig.get('alias') + '\t' + mnconfig.get('ipport') + ':' +
-            ipmatch + '\t' + mnconfig.get('collateral_address') + ' ' + mnstatus + '\t' + dashninja_cnt)
+            ipmatch + '\t' + mnconfig.get('collateral_address') + ' ' + dashninja_cnt + ' ' + mnstatus)
     else:
         print(mnconfig.get('alias') + '\t' + mnconfig.get('ipport') + ':' +
             ipmatch + '\t' + mnconfig.get('collateral_address') + ' ' + mnstatus)        
@@ -128,7 +128,7 @@ def print_mnstatus(mn_config, mns, mna):
     print('[masternodes status]')
     if MAINNET:
         mnj = get_dashninja(mn_config)
-        print('alias\tip (m: ip/port match)\tcollateral address\t\t   status\tdashninja')
+        print('alias\tip (m: ip/port match)\tcollateral address\t\t   dn\t status')
     else:
         print('alias\tip (m: ip/port match)\tcollateral address\t\t   status')
 
@@ -138,7 +138,7 @@ def print_mnstatus(mn_config, mns, mna):
         mns_status = mns.get(m.get('collateral_txidtxidn', '-------'), '-')
 
         if MAINNET:
-            dashninja_cnt = str(mnj.get(m.get('collateral_txidtxidn')).get('InactiveCount')) + ' / ' + str(mnj.get(m.get('collateral_txidtxidn')).get('ActiveCount'))
+            dashninja_cnt = str(mnj.get(m.get('collateral_txidtxidn')).get('UnlistedCount')) + '/' + str(mnj.get(m.get('collateral_txidtxidn')).get('InactiveCount')) + '/' + str(mnj.get(m.get('collateral_txidtxidn')).get('ActiveCount'))
         
         if m.get('ipport') != mna_ip:
             ipmatch = '-'
@@ -148,9 +148,9 @@ def print_mnstatus(mn_config, mns, mna):
         print_mnlist(m, ipmatch, mns_status, dashninja_cnt)
 
     if MAINNET:
-        print('\n* dashninja status : InactiveCount / ActiveCount')
-
-    print('\n* be sure to check masternode status again using online tools like dashninja\n')
+        print('\n* dn: dashninja status status : UnlistedCount / InactiveCount / ActiveCount')
+    else:
+        print('\n* be sure to check masternode status again using online tools like dashninja\n')
 
 
 def get_function_name():

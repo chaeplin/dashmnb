@@ -1,1 +1,1 @@
-{"major": 0, "minor": 4, "fix": "rc1", "msgs": "add ledger nano s(no transaction yet)"}
+{"major": 0, "minor": 4, "fix": "rc2", "msgs": "display mn status on dashninja.pl"}

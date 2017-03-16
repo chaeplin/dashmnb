@@ -4,7 +4,6 @@ sys.path.append(os.path.join(os.path.dirname(__file__), '.'))
 
 import time
 
-
 def clear_screen():
     os.system('clear')
 
@@ -19,7 +18,7 @@ def check_version():
         (cur_version.get('minor') != git_version.get('minor')) or
             (cur_version.get('fix') != git_version.get('fix'))):
 
-        print('\t*** New version is available, ple update ! do git pull\n')
+        print('\t*** New version is available, plese update ! do git pull\n')
         if git_version.get('msgs', None):
             print('\t*** %s\n\n' % git_version.get('msgs', None))
 
@@ -88,24 +87,68 @@ def get_txidtxidn(txid, txidn):
         return txid + '-' + str(txidn)
 
 
-def print_mnlist(mnconfig, ipmatch, mnstatus):
-    print(mnconfig.get('alias') + '\t' + mnconfig.get('ipport') + ':' +
-          ipmatch + '\t' + mnconfig.get('collateral_address') + ' ' + mnstatus)
+def print_mnlist(mnconfig, ipmatch, mnstatus, dashninja_cnt):
+    from config import MAINNET
+    if MAINNET:
+        print(mnconfig.get('alias') + '\t' + mnconfig.get('ipport') + ':' +
+            ipmatch + '\t' + mnconfig.get('collateral_address') + ' ' + mnstatus + '\t' + dashninja_cnt)
+    else:
+        print(mnconfig.get('alias') + '\t' + mnconfig.get('ipport') + ':' +
+            ipmatch + '\t' + mnconfig.get('collateral_address') + ' ' + mnstatus)        
+
+def get_dashninja(mn_config):
+    import simplejson as json
+    from mnb_explorer import get_mnstatus_dashninja
+
+    vins =[]
+    for m in mn_config:
+        vin = m.get('collateral_txidtxidn', None)
+        if vin != None:
+            vins.append(vin)
+
+    status_ninja = get_mnstatus_dashninja(vins)
+    mnj = {}
+    if status_ninja.get('status') == 'OK':
+        data = status_ninja.get('data')
+        for d in data:
+            txidn = get_txidtxidn(d.get('MasternodeOutputHash'), d.get('MasternodeOutputIndex'))
+            mnj[txidn] = {
+                "ipport": d.get('MasternodeIP') + ':' + d.get('MasternodePort'),
+                "ActiveCount": d.get('ActiveCount'),
+                "InactiveCount": d.get('InactiveCount'),
+                "UnlistedCount": d.get('UnlistedCount')
+            }
+
+    return mnj
 
 
 def print_mnstatus(mn_config, mns, mna):
+    from config import MAINNET
     print()
     print('[masternodes status]')
-    print('alias\tip (m: ip/port match)\tcollateral address\t\t   status')
+    if MAINNET:
+        mnj = get_dashninja(mn_config)
+        print('alias\tip (m: ip/port match)\tcollateral address\t\t   status\tdashninja')
+    else:
+        print('alias\tip (m: ip/port match)\tcollateral address\t\t   status')
 
     for m in mn_config:
+        dashninja_cnt = '-/-'
         mna_ip = mna.get(m.get('collateral_txidtxidn', '-------'), '-')
         mns_status = mns.get(m.get('collateral_txidtxidn', '-------'), '-')
+
+        if MAINNET:
+            dashninja_cnt = str(mnj.get(m.get('collateral_txidtxidn')).get('InactiveCount')) + ' / ' + str(mnj.get(m.get('collateral_txidtxidn')).get('ActiveCount'))
+        
         if m.get('ipport') != mna_ip:
             ipmatch = '-'
         else:
             ipmatch = 'm'
-        print_mnlist(m, ipmatch, mns_status)
+
+        print_mnlist(m, ipmatch, mns_status, dashninja_cnt)
+
+    if MAINNET:
+        print('\n* dashninja status : InactiveCount / ActiveCount')
 
     print('\n* be sure to check masternode status again using online tools like dashninja\n')
 

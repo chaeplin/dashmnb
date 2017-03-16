@@ -24,3 +24,5 @@ dashlib/config.main.rpc.py
 devel_notes.txt
 
 mnconf/masternode.mainnet.ledgernanos.conf
+
+dashlib/test.py

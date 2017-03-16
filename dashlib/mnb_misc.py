@@ -114,9 +114,9 @@ def get_dashninja(mn_config):
             txidn = get_txidtxidn(d.get('MasternodeOutputHash'), d.get('MasternodeOutputIndex'))
             mnj[txidn] = {
                 "ipport": d.get('MasternodeIP') + ':' + d.get('MasternodePort'),
-                "ActiveCount": d.get('ActiveCount'),
-                "InactiveCount": d.get('InactiveCount'),
-                "UnlistedCount": d.get('UnlistedCount')
+                "ActiveCount": d.get('ActiveCount', '-'),
+                "InactiveCount": d.get('InactiveCount', '-'),
+                "UnlistedCount": d.get('UnlistedCount', '-')
             }
 
     return mnj
@@ -138,7 +138,8 @@ def print_mnstatus(mn_config, mns, mna):
         mns_status = mns.get(m.get('collateral_txidtxidn', '-------'), '-')
 
         if MAINNET:
-            dashninja_cnt = str(mnj.get(m.get('collateral_txidtxidn')).get('UnlistedCount')) + '/' + str(mnj.get(m.get('collateral_txidtxidn')).get('InactiveCount')) + '/' + str(mnj.get(m.get('collateral_txidtxidn')).get('ActiveCount'))
+            if mnj.get(m.get('collateral_txidtxidn')) != None:
+                dashninja_cnt = str(mnj.get(m.get('collateral_txidtxidn')).get('UnlistedCount')) + '/' + str(mnj.get(m.get('collateral_txidtxidn')).get('InactiveCount')) + '/' + str(mnj.get(m.get('collateral_txidtxidn')).get('ActiveCount'))
         
         if m.get('ipport') != mna_ip:
             ipmatch = '-'

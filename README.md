@@ -148,8 +148,9 @@ read [https://doc.satoshilabs.com/trezor-faq/](https://doc.satoshilabs.com/trezo
 
 ## Help
 ```
-(venv3) ~/dashmnb $ python bin/dashmnb.py
-usage: dashmnb.py [-h] [-c] [-s] [-a] [-b] [-y] [-n] [-l] [-m] [-x]
+python bin/dashmnb.py 
+usage: dashmnb.py [-h] [-c] [-s] [-a] [-b] [-y] [-n] [-f] [-q] [-l] [-m] [-x]
+                  [-w]
                   [mnalias[s] or a proposal_hash [mnalias[s] or a
                   proposal_hash ...]]
 
@@ -164,15 +165,18 @@ optional arguments:
   -b, --balance         show masternodes balance
   -y, --voteyes         vote Yes to a proposal using all mns
   -n, --voteno          vote No to a proposal using all mns
+  -f, --voteabstain     vote Abstain to a proposal using all mns
+  -q, --votequery       get vote status on a proposal by all mns
   -l, --showall         show all configured masternodes
   -m, --maketx          make signed raw tx
   -x, --xfer            broadcast signed raw tx
+  -w, --whale           do not ask yes or no, all yes
 
 
-  version  : 0.3.rc6
-  caller   : <module>
-  function : parse_args
-  ===> print help
+    version  : 0.4.rc1
+    caller   : <module>
+    function : parse_args
+    ===> print help
 
 ```
 
@@ -398,14 +402,25 @@ Dash address: 44'/5'/1'/0/3        XwUXXWL5kUzJNPDAX2wjxnQYkGjJL5AGwg
     use -n proposal_hash for no
 
 ```
-(venv3) > python bin/hw-wallet-for-mn.py -y proposal_hash
+(venv3) > python bin/dashmb.py -y proposal_hash
 
 ```
 
 
 ```
-(venv3) > python bin/hw-wallet-for-mn.py -n proposal_hash
+(venv3) > python bin/dashmb.py -n proposal_hash
 
+```
+
+
+## Whale mode
+
+    -w whalemode
+
+```
+(venv3) > python bin/dashmb.py -x -w : do not ask yes or no, all yes on transaction
+(venv3) > python bin/dashmb.py -a -w : do not ask yes or no, all yes on mn_start
+(venv3) > python bin/dashmb.py -a mnalias1 -w : do not ask yes or no, all yes on mn_start of mnalias1
 ```
 
 

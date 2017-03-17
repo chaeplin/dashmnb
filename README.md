@@ -513,8 +513,8 @@ https://www.digitalocean.com/community/tutorials/how-to-set-up-ssh-keys--2
 
 DASH: [XiDWe5fkVcrXBQApmCFQUxpue5iuWcbmcK](https://chainz.cryptoid.info/dash/address.dws?XiDWe5fkVcrXBQApmCFQUxpue5iuWcbmcK.htm)
 
-
+Buy a trezor[affiliate link]
 [![buy_a_trezor](https://raw.githubusercontent.com/chaeplin/dashmnb/b255170e3350819ada11bd1c67c525c1fdab44fb/TrezorAffAd/TrezorAffAd.jpg)](https://shop.trezor.io?a=ojec42q9faq8)
 
 
-
+/chaeplin

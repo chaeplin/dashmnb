@@ -503,10 +503,18 @@ https://www.digitalocean.com/community/tutorials/how-to-set-up-ssh-keys--2
 - masternode.conf(hosting provider sent you or you made)
 
 
-## Thankyou
+## Thanks
 - codes form https://github.com/dashpay/electrum-dash
 - ref : https://github.com/dashpay/dash/blob/v0.12.1.x/dash-docs/protocol-documentation.md
+- masternode status : https://www.dashninja.pl
 
 
+## Donations
 
 DASH: [XiDWe5fkVcrXBQApmCFQUxpue5iuWcbmcK](https://chainz.cryptoid.info/dash/address.dws?XiDWe5fkVcrXBQApmCFQUxpue5iuWcbmcK.htm)
+
+
+[![buy_a_trezor](https://raw.githubusercontent.com/chaeplin/dashmnb/b255170e3350819ada11bd1c67c525c1fdab44fb/TrezorAffAd/TrezorAffAd.jpg)](https://shop.trezor.io?a=ojec42q9faq8)
+
+
+

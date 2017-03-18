@@ -65,6 +65,9 @@ def get_chain_pubkey(client):
             printdbg('get_chain_pubkey : %s %s %s' %
                      (child_path, address, publicnode[-10:]))
 
+            if TYPE_HW_WALLET.lower().startswith("ledgernanos"):
+                time.sleep(1)
+
         if not os.environ.get('DASHMNB_DEBUG', None):
             chargingBar.next()
             chargingBar.finish()

@@ -332,11 +332,37 @@ following 4 questions are keys to make a dashlib/config.py
 
 ```   
 
-### 2.  Use python bin/hw-wallet-for-mn.py to get a list of address
+### 2. Use `python bin/hw-wallet-for-mn.py` or `python bin/tool-for-config.py [account_no] [account_no]` to get a list of address
 
         cd dashmnb
         . venv3/bin/activate
         python bin/hw-wallet-for-mn.py
+
+or
+
+        cd dashmnb
+        . venv3/bin/activate
+        python bin/tool-for-config.py 0 1 2
+        
+
+* bin/tool-for-config.py
+```
+tool to check multiple account, when not sure account_no ?
+1) first edit config.py
+edit TYPE_HW_WALLET
+
+2) close config.py
+
+3) run bin/tool-for-config.py (0 1 2 —> check account 0/1/2)
+. venv3/bin/activate
+python bin/tool-for-config.py 0 1 2
+
+—> will show 15 address / balance per account 
+```
+
+
+
+
 
 ```
 (venv3) > python bin/hw-wallet-for-mn.py 
@@ -381,7 +407,7 @@ Dash address: 44'/5'/1'/0/3        XwUXXWL5kUzJNPDAX2wjxnQYkGjJL5AGwg
 ```
 
 - Use trezor web wallet or keepkey rc clinet to compare address and send 1K Dash to an address
-- If you funds on trezor already, use trezor web wallet or keepkey rc clinet to find bip32 path
+- If you moved fund(s) on trezor or keepkey already, use trezor web wallet or keepkey rc clinet to find bip32 path
 
 
 ### 3.  copy mnconf/masternode.conf.sample to mnconf/masternode.conf and edit

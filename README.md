@@ -77,7 +77,11 @@ txs_cache_refresh_interval_hour = 0
 
 
 ###### Q : example for web wallet of Trezor ?
-check [trezor example](https://github.com/chaeplin/dashmnb/tree/master/others/pics/trezor)
+check [trezor example](https://github.com/chaeplin/dashmnb/tree/master/others/pics/trezor/README.md)
+
+###### Q : example for keepkey ?
+check [keepkey example](https://github.com/chaeplin/dashmnb/tree/master/others/pics/keepkey/README.md)
+
 
 ###### Q : spend payout
     - don't use trezor web wallet to move payout in Masternode account

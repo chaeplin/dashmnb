@@ -60,7 +60,7 @@
 * windows
 > cd dashmnb  
 > venv3\Scripts\activate.bat  
-> python bin\dashmnb.py -c  
+> python bin\dashmnb.py 
 
 * linux / mac osx
 > cd ~/dashmnb  

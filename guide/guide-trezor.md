@@ -56,4 +56,45 @@
 ## 7. trezor web wallet example
 * [trezor web wallet](https://github.com/chaeplin/dashmnb/blob/master/others/pics/trezor/README.md)
 
+## 8. help cmd
+* windows
+> cd dashmnb  
+> venv3\Scripts\activate.bat  
+> python bin\dashmnb.py -c  
+
+* linux / mac osx
+> cd ~/dashmnb  
+> . venv3/bin/activate  
+> python bin/dashmnb.py  
+
+* sample output
+> python bin/dashmnb.py   
+> usage: dashmnb.py [-h] [-c] [-s] [-a] [-b] [-y] [-n] [-f] [-q] [-l] [-m] [-x]  
+>                   [-w]  
+>                   [mnalias[s] or a proposal_hash [mnalias[s] or a  
+>                   proposal_hash ...]]  
+>   
+> positional arguments:  
+>   mnalias[s] or a proposal_hash  
+>   
+> optional arguments:  
+>   -h, --help            show this help message and exit  
+>   -c, --check           check masternode config  
+>   -s, --status          show masternode status  
+>   -a, --anounce         anounce missing masternodes  
+>   -b, --balance         show masternodes balance  
+>   -y, --voteyes         vote Yes to a proposal using all mns  
+>   -n, --voteno          vote No to a proposal using all mns  
+>   -f, --voteabstain     vote Abstain to a proposal using all mns  
+>   -q, --votequery       get vote status on a proposal by all mns  
+>   -l, --showall         show all configured masternodes  
+>   -m, --maketx          make signed raw tx  
+>   -x, --xfer            broadcast signed raw tx  
+>   -w, --whale           do not ask yes or no, all yes  
+>   
+>   
+>     version  : 0.4.rc1  
+>     caller   : <module>  
+>     function : parse_args  
+>     ===> print help  
 

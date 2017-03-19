@@ -52,3 +52,8 @@
 
 ## 6. links for configuration
 * [configuration](https://github.com/chaeplin/dashmnb#configuration)
+
+## 7. trezor web wallet example
+* [trezor web wallet](https://github.com/chaeplin/dashmnb/blob/master/others/pics/trezor/README.md)
+
+

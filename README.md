@@ -21,7 +21,7 @@ run dash masternode with hardware wallet / dashmnb simplify local cold wallet pa
 - [Runowndashd](#to-run-own-dashd--dash-qt)
 - [Vote](#vote)
 - [Support](#support)
-- [Thankyou](#thankyou)
+- [Thankyou](#Thanks)
 
 # MAINNET READY
     - starting mn(s) works
@@ -40,8 +40,19 @@ run dash masternode with hardware wallet / dashmnb simplify local cold wallet pa
 ###### Q : which hw wallet supported ?
     - Trezor
     - Keepkey
-    - Ledger nano s(no transaction yet)
+    - Ledger nano s and blue(no transaction yet)
     - dashmnb will not run without hw wallet
+
+
+###### Q : Which OS supported ?
+    - system has python version > 3.5.1
+    - Ubuntu 16.04
+    - Ubuntu 14.04
+    - Debian 8.7.1
+    - Windows 10
+    - Windows 7
+    - Mac OSX
+
 
 ###### Q : what can dashmnb do
     - dashmnb simplify local cold wallet part
@@ -52,14 +63,13 @@ run dash masternode with hardware wallet / dashmnb simplify local cold wallet pa
     - send collateral + coins(mn payouts) in hw wallet
     - ssh tunnel to use remote dashd
     - can use remote rpc service
-
-### Q : can I use multiple Account #'x' with dashmnb ?
+###### Q : can I use multiple Account #'x' with dashmnb ?
     - dashmnb support only single Account #'x'(single path)
     - can't use mixed account name(Account #1 + Account #2) together
     - can't use mixed(ex: 44'/5'/x'/0/0 + 44'/5'/y'/0/0) path together
 
 
-### Q : how to speed up config checking speed ?
+###### Q : how to speed up config checking speed ?
     - use cache option on config.py
 ```
 # if config.py and masternode.x.conf unchanged, recheck config every 7
@@ -75,7 +85,6 @@ txs_cache_refresh_interval_hour = 0
 ````
 
 
-
 ###### Q : example for web wallet of Trezor ?
 check [trezor example](https://github.com/chaeplin/dashmnb/tree/master/others/pics/trezor/README.md)
 
@@ -88,16 +97,14 @@ check [keepkey example](https://github.com/chaeplin/dashmnb/tree/master/others/p
     - it will break your masternode. trezor web wallet has no coincontrol
     - use dashmnb.py -x or  dashmnb.py -x mnalias1 mnalias2. 
 
-###### Q : how 'remote dashd/rpc service' works ?
-    - using nginx as proxy
+###### Q : how 'remote rpc service by chaeplin' works ?
+    - nginx web server is used reverse proxy
     - lua script by https://github.com/adetante/ethereum-nginx-proxy
-    - need to change version checking
-    - using ssl by default
-    - add http basic auth to nginx
-    - change Authorization header using proxy_set_header
+    - ssl is used by default
+    - http basic auth to nginx is used
+    - using nginx's proxy_set_header is used to change auth to rpc
     - rpc user name and password on config.py is only for web auth
-    - use remote rpc service
-    - use dashlib/config.sample.mainnet.remotesvc.py
+    - copy dashlib/config.sample.mainnet.remotesvc.py as dashlib/config.py to use 
 
 ###### Q : dashmnb ask PIN(or PASSPHRASE) of Trezor/Keepkey, why ?
 ![1](./tech/trezor-api.png)
@@ -192,8 +199,7 @@ optional arguments:
 #### [Ubuntu 14.04 --> use this link](https://github.com/chaeplin/dashmnb/tree/master/others/pics/ubuntu-14.04)
 #### [Debian 8.7.1 --> use this link](https://github.com/chaeplin/dashmnb/tree/master/others/pics/debian-8.7.1)
 #### [WIndows 10 --> use this link](https://github.com/chaeplin/dashmnb/tree/master/others/pics/windows10)
-#### Mac OSX --> check 1.b Install Prerequisites (Mac oS)
-
+#### Mac OSX --> check 1.b Install Prerequisites (Mac OSX)
 
 ### 1.a Install Prerequisites (Ubuntu)
 
@@ -216,7 +222,7 @@ Update system packages and ensure virtualenv is installed:
 #### if python3 is 3.4.x
 go to [Install dashmnb](#2-install-dashmnb) and install python-3.5.3 
 
-### 1.b Install Prerequisites (Mac oS)
+### 1.b Install Prerequisites (Mac OSX)
 
 Install brew and python3.5 or python3.6 
 
@@ -292,7 +298,7 @@ When you see the following err while running dashmnb first time, need system reb
 
 ### 1. copy dashlib/config.xxxx.py to dashlib/config.py and edit parameters
     
-    - copy dashlib/config.sample.mainnet.remotesvc.py to use remote rpc service by chaeplin
+    - copy dashlib/config.sample.mainnet.remotesvc.py to use `remote rpc service by chaeplin`
     - copy dashlib/config.sample.mainnet.py to run own dashd/Dash-QT
     
     - testing config.py : no output if config.py is ok
@@ -364,51 +370,6 @@ python bin/tool-for-config.py 0 1 2
 —> will show 15 address / balance per account 
 ```
 
-
-
-
-
-```
-(venv3) > python bin/hw-wallet-for-mn.py 
-    ____             __  
-   / __ \____ ______/ /_ 
-  / / / / __ `/ ___/ __ \
- / /_/ / /_/ (__  ) / / /
-/_____/\__,_/____/_/ /_/ 
-                         
-    __  ___           __                            __   
-   /  |/  /___ ______/ /____  _________  ____  ____/ /__ 
-  / /|_/ / __ `/ ___/ __/ _ \/ ___/ __ \/ __ \/ __  / _ \
- / /  / / /_/ (__  ) /_/  __/ /  / / / / /_/ / /_/ /  __/
-/_/  /_/\__,_/____/\__/\___/_/  /_/ /_/\____/\__,_/\___/ 
-                                                         
-           _ __  __       __  ___       __   _       __      ____     __ 
- _      __(_) /_/ /_     / / / / |     / /  | |     / /___ _/ / /__  / /_
-| | /| / / / __/ __ \   / /_/ /| | /| / /   | | /| / / __ `/ / / _ \/ __/
-| |/ |/ / / /_/ / / /  / __  / | |/ |/ /    | |/ |/ / /_/ / / /  __/ /_  
-|__/|__/_/\__/_/ /_/  /_/ /_/  |__/|__/     |__/|__/\__,_/_/_/\___/\__/  
-                                                                         
-
-            by : chaeplin
-
-Network : MAINNET
-===> trezor HW Wallet found
-Use the numeric keypad to describe number positions. The layout is:
-    7 8 9
-    4 5 6
-    1 2 3
-Please enter current PIN: 
-
-Passphrase required: 
-
-Confirm your Passphrase: 
-
-**** ====> use following address for 1K collateral of masternode
-Dash address: 44'/5'/1'/0/0        XiDWe5fkVcrXBQApmCFQUxpue5iuWcbmcK
-Dash address: 44'/5'/1'/0/1        XrQcbEjhncd62v58K122hzTdgdW5Z6TBmm
-Dash address: 44'/5'/1'/0/2        XnSibMiJGcoQzCcku4fhR4wWNNfFBrye9h
-Dash address: 44'/5'/1'/0/3        XwUXXWL5kUzJNPDAX2wjxnQYkGjJL5AGwg
-```
 
 - Use trezor web wallet or keepkey rc clinet to compare address and send 1K Dash to an address
 - If you moved fund(s) on trezor or keepkey already, use trezor web wallet or keepkey rc clinet to find bip32 path

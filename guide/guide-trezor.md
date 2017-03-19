@@ -32,7 +32,7 @@
 `Virtualenv is a tool to create isolated Python environments, it's perhaps the `
 `easiest way to configure a custom Python environment. `
 
-`Virtualenv allows you to add and modify Python modules without access to the`
+> `Virtualenv allows you to add and modify Python modules without access to the`
 `global installation.    `  
 
 > installation of dashmnb is simple. clone githup repo and run install script.  

@@ -66,6 +66,59 @@ def make_request_version_txt(url):
             err_msg)
 
 
+def make_insight_request(url):
+    USERAGET = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_1) AppleWebKit/602.2.14 (KHTML, like Gecko) Version/10.0.1 Safari/602.2.14'
+    headers = {'user-agent': USERAGET}
+
+    try:
+        response = requests.get(url, headers=headers, timeout=(2,5))
+        try:
+            if response.status_code == requests.codes.ok and len(response.text) > 2:
+                if isinstance(response.json(), list):
+                    return response.json()[0]
+
+                else:
+                    return response.json()
+
+        except Exception as e:
+            print(e.args[0])
+            return None
+
+    except requests.exceptions.RequestException:
+        return None
+
+
+def getinfo_insight(url):
+    getinfourl = url + '/status?q=getinfo'
+    rawjson = make_insight_request(getinfourl)
+    if rawjson:
+        blockcnt = rawjson['info'].get('blocks', 0)
+
+        return blockcnt
+
+    else:
+        return 0
+
+
+
+def get_insight_blockcount():
+    import random
+    
+    exp = [
+        "http://insight.dev.dash.org/api",
+        "https://blockchain.masternode.io/api",
+        "http://insight.dash.org/api",
+        "https://insight.dash.siampm.com/api",
+        "http://insight.masternode.io:3000/api"
+    ]
+
+    IURL = exp[random.randrange(0,len(exp))]
+
+    response = getinfo_insight(IURL)
+
+    return response
+
+
 def get_explorer_blockcount():
     if MAINNET:
         url = 'https://explorer.dash.org/chain/Dash/q/getblockcount'

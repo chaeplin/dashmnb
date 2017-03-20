@@ -68,7 +68,10 @@ def main(args):
         print('-> blockhash : %s\n' % blockhash)
 
         # check explorer block count
-        explorer_blockcount = get_explorer_blockcount()
+        if MAINNET:
+            explorer_blockcount = get_insight_blockcount()
+        else:
+            explorer_blockcount = get_explorer_blockcount()
 
         assert int(explorer_blockcount) == int(blockcount), "blockcount mismatch exp : %s <--> dashd : %s" % (explorer_blockcount, blockcount)
 

@@ -73,7 +73,7 @@ def main(args):
         else:
             explorer_blockcount = get_explorer_blockcount()
 
-        assert int(explorer_blockcount) == int(blockcount), "blockcount mismatch exp : %s <--> dashd : %s" % (explorer_blockcount, blockcount)
+        assert int(explorer_blockcount) == int(blockcount), "blockcount mismatch, try again : exp : %s <--> dashd : %s" % (explorer_blockcount, blockcount)
 
         print()
 
@@ -103,6 +103,36 @@ def main(args):
         access, signing, chain_pubkey, args.showall)
 
     print_mnstatus(mn_config, mns, mna)
+
+
+    # make a signed message for Masternode Owner/Operator badge for forum
+    if args.badge:
+        if not signing:
+            err_msg = 'need HW wallet to Sign'
+            print_err_exit(
+                get_caller_name(),
+                get_function_name(),
+                err_msg)
+
+        mnalias_for_signing = args.masternode_to_start
+        if len(mnalias_for_signing) == 0:
+            err_msg = 'select one alias of masternode'
+            print_err_exit(
+                get_caller_name(),
+                get_function_name(),
+                err_msg)
+
+        elif len(mnalias_for_signing) > 1:
+            err_msg = 'slect only one alias'
+            print_err_exit(
+                get_caller_name(),
+                get_function_name(),
+                err_msg)
+
+        for m in mn_config:
+            if m.get('alias') in mnalias_for_signing:
+                make_badge(m, mpath, client)
+
 
     # vote
     if args.voteyes or args.voteno or args.voteabstain or args.votequery:
@@ -348,6 +378,11 @@ def parse_args():
                         dest='whalemode',
                         action='store_true',
                         help='do not ask yes or no, all yes')    
+
+    parser.add_argument('-o', '--badge',
+                        dest='badge',
+                        action='store_true',
+                        help='Sign message for Masternode Owner/Operator badge')    
 
     if len(sys.argv) < 2:
         parser.print_help()

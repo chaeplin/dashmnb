@@ -32,6 +32,7 @@ from mnb_sshtunnel import *
 from mnb_start import *
 from mnb_vote import *
 from mnb_xfer import *
+from mnb_badge import *
 
 try:
     assert isinstance(MAINNET, bool)

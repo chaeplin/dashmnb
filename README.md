@@ -182,7 +182,7 @@ optional arguments:
   -m, --maketx          make signed raw tx
   -x, --xfer            broadcast signed raw tx
   -w, --whale           do not ask yes or no, all yes
-
+  -o, --badge           Sign message for Masternode Owner/Operator badge
 
     version  : 0.4.rc1
     caller   : <module>

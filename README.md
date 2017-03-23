@@ -393,13 +393,13 @@ python bin/tool-for-config.py 0 1 2
     use -n proposal_hash for no
 
 ```
-(venv3) > python bin/dashmb.py -y proposal_hash
+(venv3) > python bin/dashmnb.py -y proposal_hash
 
 ```
 
 
 ```
-(venv3) > python bin/dashmb.py -n proposal_hash
+(venv3) > python bin/dashmnb.py -n proposal_hash
 
 ```
 
@@ -409,9 +409,9 @@ python bin/tool-for-config.py 0 1 2
     -w whalemode
 
 ```
-(venv3) > python bin/dashmb.py -x -w : do not ask yes or no, all yes on transaction
-(venv3) > python bin/dashmb.py -a -w : do not ask yes or no, all yes on mn_start
-(venv3) > python bin/dashmb.py -a mnalias1 -w : do not ask yes or no, all yes on mn_start of mnalias1
+(venv3) > python bin/dashmnb.py -x -w : do not ask yes or no, all yes on transaction
+(venv3) > python bin/dashmnb.py -a -w : do not ask yes or no, all yes on mn_start
+(venv3) > python bin/dashmnb.py -a mnalias1 -w : do not ask yes or no, all yes on mn_start of mnalias1
 ```
 
 

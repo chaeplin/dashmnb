@@ -13,9 +13,12 @@ def broadcast_signedrawtx(mn_config, access, whalemode):
     for x in mn_config:
         alias = x.get('alias')
         signedrawtx = x.get('signedrawtx', None)
+        vout_addr   = x.get('receiving_address', None)
+
         if signedrawtx:
 
-            print('\nverify tx for %s' % alias)
+            print('\n--->erify tx for %s' % alias)
+            print('--->pay_to : %s' % vout_addr)
             for tx in signedrawtx:
                 r = decoderawtransaction(tx, access)
 
@@ -27,6 +30,16 @@ def broadcast_signedrawtx(mn_config, access, whalemode):
                         separators=(
                             ',',
                             ': ')))
+
+                for i in r.get('vout'):
+                    scriptPubKey_addresses = i.get('scriptPubKey').get('addresses')[0]
+                    if vout_addr != scriptPubKey_addresses:
+                        err_msg = 'pay_to address is not match with signedrawtx'
+                        print_err_exit(
+                            get_caller_name(),
+                            get_function_name(),
+                            err_msg)
+
 
                 if not whalemode:
                     user_input = input(

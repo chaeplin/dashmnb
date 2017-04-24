@@ -76,7 +76,7 @@ def main(args):
         for i in args.account_number:
             account_no = i
 
-            bip32_path = "44'/5'/" + str(account_no) + "'/0" if MAINNET else "44'/165'/" + str(account_no) + "'/0"
+            bip32_path = "44'/5'/" + str(account_no) + "'/0" if MAINNET else "44'/1'/" + str(account_no) + "'/0"
         
             if TYPE_HW_WALLET.lower().startswith("ledgernanos"):
                 

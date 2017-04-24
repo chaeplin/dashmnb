@@ -109,17 +109,17 @@ def get_mpath(default_account=False):
     # return without address_index
 
     #  Dash  : 44'/5'/account'/0/0
-    #  tDash : 44'/165'/account'/0/0
+    #  tDash : 44'/1'/account'/0/0
 
     printdbg('get_mpath : default_account : %s' % bool(default_account))
     printdbg('get_mpath : network mainnet : %s' % MAINNET)
 
     if default_account:
-        return "44'/5'/0'/0" if MAINNET else "44'/165'/0'/0"
+        return "44'/5'/0'/0" if MAINNET else "44'/1'/0'/0"
 
     else:
         return "44'/5'/" + \
-            str(account_no) + "'/0" if MAINNET else "44'/165'/" + str(account_no) + "'/0"
+            str(account_no) + "'/0" if MAINNET else "44'/1'/" + str(account_no) + "'/0"
 
 
 def list_coins(client):

@@ -7,7 +7,7 @@
 # https://github.com/bitcoin/bips/blob/master/bip-0044.mediawiki
 # purpose' / coin_type' / account' / change / address_index
 # Dash  : 44'/5'/account'/0/0
-# tDash : 44'/165'/account'/0/0
+# tDash : 44'/1'/account'/0/0
 # bip32 path
 # 1 is selected to use trezor's web wallet and Keepkey's client
 account_no = 1

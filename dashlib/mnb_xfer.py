@@ -8,12 +8,13 @@ from mnb_misc import *
 import simplejson as json
 
 
-def broadcast_signedrawtx(mn_config, access, whalemode):
+def broadcast_signedrawtx(mn_config, access, whalemode, SEND_TO_BIP32):
     xfertxid = []
     for x in mn_config:
         alias = x.get('alias')
         signedrawtx = x.get('signedrawtx', None)
         vout_addr   = x.get('receiving_address', None)
+        bip32sendto_all = x.get('bip32sendto_all', None)
 
         if signedrawtx:
 
@@ -33,13 +34,21 @@ def broadcast_signedrawtx(mn_config, access, whalemode):
 
                 for i in r.get('vout'):
                     scriptPubKey_addresses = i.get('scriptPubKey').get('addresses')[0]
-                    if vout_addr != scriptPubKey_addresses:
-                        err_msg = 'pay_to address is not match with signedrawtx'
-                        print_err_exit(
-                            get_caller_name(),
-                            get_function_name(),
-                            err_msg)
-
+                    if SEND_TO_BIP32:
+                        if scriptPubKey_addresses not in bip32sendto_all:
+                            err_msg = 'pay_to address is not match with signedrawtx'
+                            print_err_exit(
+                                get_caller_name(),
+                                get_function_name(),
+                                err_msg)                            
+                    else:
+                        if vout_addr != scriptPubKey_addresses:
+                            err_msg = 'pay_to address is not match with signedrawtx'
+                            print_err_exit(
+                                get_caller_name(),
+                                get_function_name(),
+                                err_msg)
+    
 
                 if not whalemode:
                     user_input = input(

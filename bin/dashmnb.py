@@ -232,6 +232,7 @@ def main(args):
             txs_cache_refresh_interval_hour = 0
 
     if args.balance or args.maketx or args.xfer:
+        print("---> checking balance")
 
         if SEND_TO_BIP32:
             bip32_unused = get_bip32_unused(default_receiving_address, access)
@@ -240,7 +241,7 @@ def main(args):
             bip32_unused = None
 
         for m in mn_config:
-            m["txs"], m["collateral_dashd_balance"] = get_unspent_txs(m, blockcount, access, SEND_TO_BIP32, bip32_unused)
+            m["txs"], m["collateral_dashd_balance"], m["bip32sendto_all"] = get_unspent_txs(m, blockcount, access, SEND_TO_BIP32, bip32_unused)
 
         need_wallet_rescan = print_balance(mn_config, have_unconfirmed_tx)
 
@@ -265,8 +266,6 @@ def main(args):
                 get_caller_name(),
                 get_function_name(),
                 err_msg)
-
-    sys.exit()
 
     if args.maketx or args.xfer:
 
@@ -296,7 +295,7 @@ def main(args):
                         m["signedrawtx"] = make_txs_for_hwwallet(m, client, mpath, SEND_TO_BIP32)
 
     if args.xfer and signing:
-        xfertxid = broadcast_signedrawtx(mn_config, access, args.whalemode)
+        xfertxid = broadcast_signedrawtx(mn_config, access, args.whalemode, SEND_TO_BIP32)
 
         print()
         if xfertxid is not None:

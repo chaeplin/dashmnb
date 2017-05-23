@@ -7,6 +7,7 @@ import json
 
 from config import *
 from mnb_rpc import *
+from mnb_bip32 import *
 
 
 def check_mtime_of_config(
@@ -88,7 +89,7 @@ def check_collateral_in_chain_pubkey(addrs, chain_pubkey, alias=None):
                 err_msg)
 
 
-def checking_mn_config(access, signing, chain_pubkey, showall):
+def checking_mn_config(access, signing, chain_pubkey, showall, SEND_TO_BIP32):
 
     # abs path of config.py, masternode.conf and cachetime of configcache.dat
     masternode_conf_file_abs_path = os.path.join(
@@ -141,7 +142,8 @@ def checking_mn_config(access, signing, chain_pubkey, showall):
                 access,
                 chain_pubkey,
                 cache_config_check_abs_path,
-                showall)
+                showall,
+                SEND_TO_BIP32)
 
         else:
             err_msg = 'no %s file' % masternode_conf_file
@@ -152,6 +154,10 @@ def checking_mn_config(access, signing, chain_pubkey, showall):
 
     else:
         print('\n---> checking masternode config using cache ....')
+
+    if SEND_TO_BIP32:
+        print('\t ==> address to send MN earnings : BIP32_PATH ')
+        print('\t ==> first address : %s' % bip32_getaddress(default_receiving_address, 0))
 
     with open(cache_config_check_abs_path) as data_file:
         mn_config_all = json.load(data_file)
@@ -214,7 +220,8 @@ def parse_masternode_conf(
         access,
         chain_pubkey,
         cache_config_check_abs_path,
-        showall):
+        showall,
+        SEND_TO_BIP32):
 
     i = 0
     lno = 0
@@ -245,8 +252,10 @@ def parse_masternode_conf(
         if len(s) == 6:
             raddr = s[5]
         elif len(s) == 5:
-            if len(default_receiving_address) != 0:
+            if len(default_receiving_address) != 0 and not SEND_TO_BIP32:
                 raddr = default_receiving_address
+            elif SEND_TO_BIP32:
+                raddr = 'BIP32_PATH'
             else:
                 raddr = None
 
@@ -333,13 +342,26 @@ def parse_masternode_conf(
                 get_function_name(),
                 err_msg)
 
-        if raddr is not None:
-            if not validateaddress(raddr, access):
-                err_msg = 'receiving_address error : ' + alias
+        # validateaddress xpub/tpub
+        if SEND_TO_BIP32 :
+            bip32_default_receiving_address_index_0 = bip32_getaddress(default_receiving_address, 0)
+            if not validateaddress(bip32_default_receiving_address_index_0, access):
+                err_msg = 'receiving_address xpub error : ' + alias
                 print_err_exit(
                     get_caller_name(),
                     get_function_name(),
                     err_msg)
+
+        # validateaddress receiving_address
+        else:
+            if raddr is not None:
+                if not validateaddress(raddr, access):
+                    err_msg = 'receiving_address error : ' + alias
+                    print_err_exit(
+                        get_caller_name(),
+                        get_function_name(),
+                        err_msg)
+
 
         mn_config.append({
             "alias": alias,

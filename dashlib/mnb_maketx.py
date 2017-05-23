@@ -16,7 +16,7 @@ def print_balance(mn_config, have_unconfirmed_tx):
     need_wallet_rescan = False
 
     print('[masternodes balance]')
-    print('alias\tcnt\tspn\tbalance\t\taddress to send')
+    print('alias\tcnt\tspn\tbalance\t\taddress to send MN earnings')
 
     for m in mn_config:
         alias = m.get('alias')
@@ -72,7 +72,7 @@ def check_mtime_of_tx(unspent_cache_abs_path):
     return False
 
 
-def get_unspent_txs(mnconfig, blockcount, access):
+def get_unspent_txs(mnconfig, blockcount, access, SEND_TO_BIP32, bip32_unused):
 
     collateral_address = mnconfig.get('collateral_address')
     collateral_txidtxidn = mnconfig.get('collateral_txidtxidn')
@@ -116,20 +116,37 @@ def get_unspent_txs(mnconfig, blockcount, access):
                 unspent_mine.append(m)
 
     txs = []
+
+    #mature_confirmation = 120
+    # for testing
+    mature_confirmation = 10
+
     for x in unspent_mine:
-        if (x.get('address') == collateral_address) and (
-                (blockcount - 120) > x.get('height')):
-            tx = {
-                "amount": round(Decimal(float(x.get('satoshis') / 1e8)), 8),
-                "txid": x.get('txid'),
-                "vout": x.get('outputIndex')
-            }
+        if (x.get('address') == collateral_address) and ((blockcount - mature_confirmation) > x.get('height')):
+            if SEND_TO_BIP32 and bip32_unused != None:
+                tx = {
+                    "amount": round(Decimal(float(x.get('satoshis') / 1e8)), 8),
+                    "txid": x.get('txid'),
+                    "vout": x.get('outputIndex'),
+                    "bip32sendto": bip32_unused.__next__()
+                }
+
+            else:
+
+                tx = {
+                    "amount": round(Decimal(float(x.get('satoshis') / 1e8)), 8),
+                    "txid": x.get('txid'),
+                    "vout": x.get('outputIndex')
+                }
+
             txs.append(tx)
 
-    sublist = [txs[i:i + max_unspent] for i in range(0, len(txs), max_unspent)]
+    if SEND_TO_BIP32 and bip32_unused != None:
+        return txs, balance_mine
 
-    # return unspent_mine, sublist, balance_mine
-    return sublist, balance_mine
+    else:
+        sublist = [txs[i:i + max_unspent] for i in range(0, len(txs), max_unspent)]
+        return sublist, balance_mine
 
 
 def make_inputs_for_hw_wallet(
@@ -249,14 +266,14 @@ def make_inputs_for_hw_wallet(
             'KeyboardInterrupt')
 
 
-def make_txs_for_hwwallet(mnconfig, client, mpath):
+def make_txs_for_hwwallet(mnconfig, client, mpath, SEND_TO_BIP32):
 
     txs = mnconfig.get('txs', None)
     collateral_spath = mnconfig.get('collateral_spath', None)
     receiving_address = mnconfig.get('receiving_address', None)
 
     if collateral_spath is None or receiving_address is None:
-        err_msg = 'make_inputs_for_hw_wallet receiving_address / collateral_spath : Should not None'
+        err_msg = 'make_inputs_for_hw_wallet receiving_address / collateral_spath : Should not be None'
         print_err_exit(
             get_caller_name(),
             get_function_name(),
@@ -266,14 +283,11 @@ def make_txs_for_hwwallet(mnconfig, client, mpath):
     if txs is not None:
         for tx in txs:
             if (len(tx)) >= min_unspent or MOVE_1K_COLLATERAL:
-                serialized_tx = make_inputs_for_hw_wallet(
-                    tx, receiving_address, collateral_spath, client, mpath)
+                serialized_tx = make_inputs_for_hw_wallet(tx, receiving_address, collateral_spath, client, mpath)
                 serialized_txs.append(serialized_tx)
 
             else:
-                print(
-                    '---> count of txs less than min_unspent : %s' %
-                    min_unspent)
+                print('---> count of txs less than min_unspent : %s' % min_unspent)
                 return None
     else:
         return None

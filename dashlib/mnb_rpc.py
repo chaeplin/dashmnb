@@ -242,6 +242,22 @@ def getaddressmempool(address, access):
             err_msg,
             e.args)    
 
+def getaddresstxids(address, access):
+    try:
+        params = {
+            "addresses": [address]
+        }
+        r = access.getaddresstxids(params)
+        return r
+
+    except Exception as e:
+        err_msg = 'Dash-QT or dashd running ?'
+        print_err_exit(
+            get_caller_name(),
+            get_function_name(),
+            err_msg,
+            e.args)       
+
 #def get_listunspent(min, max, address, access):
 #    try:
 #        r = access.listunspent(min, max, [address])

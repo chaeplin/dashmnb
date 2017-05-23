@@ -18,8 +18,8 @@ def broadcast_signedrawtx(mn_config, access, whalemode, SEND_TO_BIP32):
 
         if signedrawtx:
 
-            print('\n--->erify tx for %s' % alias)
-            print('--->pay_to : %s' % vout_addr)
+            print('\n---> erify tx for %s' % alias)
+            print('---> pay_to : %s' % vout_addr)
             for tx in signedrawtx:
                 r = decoderawtransaction(tx, access)
 

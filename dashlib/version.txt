@@ -1,1 +1,1 @@
-{"major": 0, "minor": 4, "fix": "rc3", "msgs": "-o : Sign message for Masternode Owner/Operator badge"}
+{"major": 0, "minor": 5, "fix": "rc1", "msgs": "mn earnings to bip32 xpub/tpub"}

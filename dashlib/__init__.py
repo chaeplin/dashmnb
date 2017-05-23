@@ -33,6 +33,7 @@ from mnb_start import *
 from mnb_vote import *
 from mnb_xfer import *
 from mnb_badge import *
+from mnb_bip32 import *
 
 try:
     assert isinstance(MAINNET, bool)
@@ -46,6 +47,12 @@ try:
             get_caller_name(),
             get_function_name(),
             err_msg)
+
+    if default_receiving_address.startswith("xpub") or default_receiving_address.startswith("tpub"):
+        SEND_TO_BIP32 = True
+    else:
+        SEND_TO_BIP32 = False
+
 
 except AssertionError:
     _, _, tb = sys.exc_info()

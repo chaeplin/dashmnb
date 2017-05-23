@@ -100,7 +100,7 @@ def main(args):
     chain_pubkey = get_chain_pubkey(client)
 
     mn_config, signing, mns, mna = checking_mn_config(
-        access, signing, chain_pubkey, args.showall)
+        access, signing, chain_pubkey, args.showall, SEND_TO_BIP32)
 
     print_mnstatus(mn_config, mns, mna)
 
@@ -232,10 +232,16 @@ def main(args):
             txs_cache_refresh_interval_hour = 0
 
     if args.balance or args.maketx or args.xfer:
+        print("---> checking balance")
+
+        if SEND_TO_BIP32:
+            bip32_unused = get_bip32_unused(default_receiving_address, access)
+
+        else:
+            bip32_unused = None
+
         for m in mn_config:
-            #m["unspent"], m["txs"], m["collateral_dashd_balance"] = get_unspent_txs(m, access)
-            m["txs"], m["collateral_dashd_balance"] = get_unspent_txs(
-                m, blockcount, access)
+            m["txs"], m["collateral_dashd_balance"], m["bip32sendto_all"] = get_unspent_txs(m, blockcount, access, SEND_TO_BIP32, bip32_unused)
 
         need_wallet_rescan = print_balance(mn_config, have_unconfirmed_tx)
 
@@ -271,30 +277,25 @@ def main(args):
                 err_msg)
 
         if signing:
-            print('[making txs]')
+            print('\n[making txs]')
+
             for m in mn_config:
-                if len(
-                    m.get('collateral_dashd_balance')) > 0 and len(
-                    m.get(
-                        'txs',
-                        None)) > 0 and m.get(
-                    'receiving_address',
-                        None) is not None:
+                if len(m.get('collateral_dashd_balance')) > 0 \
+                    and len(m.get('txs', None)) > 0 \
+                    and m.get('receiving_address', None) is not None:
+
+
                     if len(args.masternode_to_start) > 0:
                         if m.get('alias') in args.masternode_to_start:
-                            print(
-                                '---> signing txs for mn %s: ' %
-                                m.get('alias'))
-                            m["signedrawtx"] = make_txs_for_hwwallet(
-                                m, client, mpath)
+                            print('---> signing txs for mn %s: ' % m.get('alias'))
+                            m["signedrawtx"] = make_txs_for_hwwallet(m, client, mpath, SEND_TO_BIP32)
 
                     else:
                         print('---> signing txs for mn %s: ' % m.get('alias'))
-                        m["signedrawtx"] = make_txs_for_hwwallet(
-                            m, client, mpath)
+                        m["signedrawtx"] = make_txs_for_hwwallet(m, client, mpath, SEND_TO_BIP32)
 
     if args.xfer and signing:
-        xfertxid = broadcast_signedrawtx(mn_config, access, args.whalemode)
+        xfertxid = broadcast_signedrawtx(mn_config, access, args.whalemode, SEND_TO_BIP32)
 
         print()
         if xfertxid is not None:

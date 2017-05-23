@@ -33,7 +33,7 @@ def logo_show():
     #f = Figlet(font='small')
     print(f.renderText('Dash Masternode with HW Wallet'))
     #print('\n\t\t\tdonation : xxxxxxxxxx')
-    print('\t\t\tby : chaeplin XiDWe5fkVcrXBQApmCFQUxpue5iuWcbmcK\n')
+    #print('\t\t\tby : chaeplin XiDWe5fkVcrXBQApmCFQUxpue5iuWcbmcK\n')
     check_version()
     print('Network : ' + ('MAINNET' if MAINNET else 'TESTNET'))
     if MOVE_1K_COLLATERAL:
@@ -52,7 +52,7 @@ def check_mempool(mn_config, access):
     import simplejson as json
     from mnb_rpc import getaddressmempool
     for m in mn_config:
-        checkaddress = m.get('receiving_address', None)
+        checkaddress = m.get('collateral_address', None)
         if checkaddress != None:
             r = getaddressmempool(checkaddress, access)
             if len(r) > 0:

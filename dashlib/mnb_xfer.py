@@ -34,7 +34,7 @@ def broadcast_signedrawtx(mn_config, access, whalemode, SEND_TO_BIP32):
 
                 for i in r.get('vout'):
                     scriptPubKey_addresses = i.get('scriptPubKey').get('addresses')[0]
-                    if SEND_TO_BIP32:
+                    if SEND_TO_BIP32 and vout_addr == 'BIP32_PATH':
                         if scriptPubKey_addresses not in bip32sendto_all:
                             err_msg = 'pay_to address is not match with signedrawtx'
                             print_err_exit(

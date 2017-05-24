@@ -241,6 +241,7 @@ def main(args):
             bip32_unused = None
 
         for m in mn_config:
+            print("\t---> getting balance of : ", m.get('alias'))
             m["txs"], m["collateral_dashd_balance"], m["bip32sendto_all"] = get_unspent_txs(m, blockcount, access, SEND_TO_BIP32, bip32_unused)
 
         need_wallet_rescan = print_balance(mn_config, have_unconfirmed_tx)

@@ -15,14 +15,18 @@ def print_balance(mn_config, have_unconfirmed_tx):
 
     need_wallet_rescan = False
 
-    print('[masternodes balance]')
+    print('\n[masternodes balance]')
     print('alias\tcnt\tspn\tbalance\t\taddress to send MN earnings')
+
+    total_balance = 0
 
     for m in mn_config:
         alias = m.get('alias')
         unspent = m.get('collateral_dashd_balance')
         sumofunspent = sum(unspent)
         cnt = len(unspent)
+
+        total_balance = total_balance + sumofunspent
 
         spn = 0
         txs_spn = m.get('txs')
@@ -48,6 +52,8 @@ def print_balance(mn_config, have_unconfirmed_tx):
                 sumofunspent) +
             '\t' +
             str(m.get('receiving_address', '----')))
+
+    print('\n\t\t Total : ', total_balance)
 
     print('\n* cnt - count    : number of payouts(un + mature) + 1(collateral)')
     print('* spn - spenable : number of spendable payouts(mature)')
@@ -78,6 +84,7 @@ def get_unspent_txs(mnconfig, blockcount, access, SEND_TO_BIP32, bip32_unused):
 
     collateral_address = mnconfig.get('collateral_address')
     collateral_txidtxidn = mnconfig.get('collateral_txidtxidn')
+    receiving_address = mnconfig.get('receiving_address')
 
     unspent_cache_abs_path = os.path.join(
         os.path.dirname(
@@ -124,9 +131,15 @@ def get_unspent_txs(mnconfig, blockcount, access, SEND_TO_BIP32, bip32_unused):
     # for testing
     #mature_confirmation = 10
 
+    desc_displayed = False
+
     for x in unspent_mine:
         if (x.get('address') == collateral_address) and ((blockcount - mature_confirmation) > x.get('height')):
-            if SEND_TO_BIP32 and bip32_unused != None:
+            if SEND_TO_BIP32 and bip32_unused != None and receiving_address == 'BIP32_PATH':
+                if not desc_displayed:
+                    print("\t---> getting unused addresses of bip32 path")
+                    desc_displayed = True
+                    
                 bip32sendto_unused = bip32_unused.__next__()
                 tx = {
                     "amount": round(Decimal(float(x.get('satoshis') / 1e8)), 8),
@@ -147,7 +160,7 @@ def get_unspent_txs(mnconfig, blockcount, access, SEND_TO_BIP32, bip32_unused):
 
             txs.append(tx)
 
-    if SEND_TO_BIP32 and bip32_unused != None:
+    if SEND_TO_BIP32 and bip32_unused != None and receiving_address == 'BIP32_PATH':
         sublist = [txs[i:i + 1] for i in range(0, len(txs), 1)]
 
     else:
@@ -232,11 +245,15 @@ def make_inputs_for_hw_wallet(
     if txsizefee == 0:
         txsizefee = min_fee
 
+    # bip32 1 input tx
+    if SEND_TO_BIP32 and receiving_address == 'BIP32_PATH':
+        txsizefee = 2500
+
     # make output based on inputs
-    if SEND_TO_BIP32:
+    if SEND_TO_BIP32 and receiving_address == 'BIP32_PATH':
         if len(tx) == 1:
             bip32sendto = tx[0].get('bip32sendto', None)
-            if bip32sendto != None:
+            if bip32sendto != None and receiving_address == 'BIP32_PATH':
                 outputs.append(
                     proto_types.TxOutputType(
                         address=bip32sendto,
@@ -275,8 +292,8 @@ def make_inputs_for_hw_wallet(
                 script_type=proto_types.PAYTOADDRESS,
             ))
 
-    feetohuman = round(Decimal(txsizefee / 1e8), 4)
-    if SEND_TO_BIP32:
+    feetohuman = round(Decimal(txsizefee / 1e8), 6)
+    if SEND_TO_BIP32 and receiving_address == 'BIP32_PATH':
         print('\n\tsend %s\n\t%s txs to %s\n\twith fee of %s\n\ttotal amount : %s\n' % (
             amount_total - feetohuman, len(tx), bip32sendto, feetohuman, amount_total))
 

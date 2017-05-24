@@ -106,6 +106,7 @@ def get_insight_blockcount():
     
     exp = [
         "http://insight.dev.dash.org/api",
+        "https://blockchain.masternode.io/api",
         "http://insight.dash.org/api",
         "https://insight.dash.siampm.com/api",
         "http://insight.masternode.io:3000/api"

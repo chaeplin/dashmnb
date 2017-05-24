@@ -1,1 +1,1 @@
-{"major": 0, "minor": 5, "fix": "rc1", "msgs": "mn earnings to bip32 xpub/tpub"}
+{"major": 0, "minor": 5, "fix": "rc2", "msgs": "mn earnings to bip32 xpub/tpub"}

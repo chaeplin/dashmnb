@@ -233,6 +233,10 @@ def make_inputs_for_hw_wallet(
     if txsizefee == 0:
         txsizefee = min_fee
 
+    # bip32 1 input tx
+    if SEND_TO_BIP32 and receiving_address == 'BIP32_PATH':
+        txsizefee = 2500
+
     # make output based on inputs
     if SEND_TO_BIP32 and receiving_address == 'BIP32_PATH':
         if len(tx) == 1:
@@ -276,7 +280,7 @@ def make_inputs_for_hw_wallet(
                 script_type=proto_types.PAYTOADDRESS,
             ))
 
-    feetohuman = round(Decimal(txsizefee / 1e8), 4)
+    feetohuman = round(Decimal(txsizefee / 1e8), 6)
     if SEND_TO_BIP32 and receiving_address == 'BIP32_PATH':
         print('\n\tsend %s\n\t%s txs to %s\n\twith fee of %s\n\ttotal amount : %s\n' % (
             amount_total - feetohuman, len(tx), bip32sendto, feetohuman, amount_total))

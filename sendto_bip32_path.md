@@ -1,7 +1,7 @@
 ### to use bip32 xpub when transfering mn earnings
 
 * Advanced user only
-* fee is fixed to 0.0001
+* fee is fixed to 0.000025
 
 - remove receiving_address from masternode.conf if configured
 - use python trezorctl/keepkeyctl to get first address and xpub

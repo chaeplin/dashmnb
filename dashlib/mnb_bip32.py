@@ -31,7 +31,12 @@ def get_bip32_unused(xpub, access):
 
 			else:
 				first_unused = True
-				i = i - checking_gap			 
+
+				if i == 0:
+					yield child_address
+
+				else:
+					i = i - checking_gap			 
 
 		if first_unused:
 			i = i + 1

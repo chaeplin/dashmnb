@@ -23,7 +23,7 @@ def get_bip32_unused(xpub, access):
 		r = getaddresstxids(child_address, access)
 		child_usedtx_no = len(r)
 		# debug
-		print(i, child_address, child_usedtx_no)
+		#print(i, child_address, child_usedtx_no)
 
 		if child_usedtx_no == 0:
 			if first_unused:
@@ -34,7 +34,7 @@ def get_bip32_unused(xpub, access):
 
 				if i == 0:
 					yield child_address
-					
+
 				else:
 					i = i - checking_gap			 
 

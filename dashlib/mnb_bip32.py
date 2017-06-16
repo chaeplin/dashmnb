@@ -15,11 +15,26 @@ def bip32_getaddress(xpub, index_no):
     return address
 
 def get_bip32_unused(xpub, access):
+	first_unused = False
+	checking_gap = 10
 	i = 0
 	while True:
 		child_address = bip32_getaddress(xpub, i)
 		r = getaddresstxids(child_address, access)
-		if len(r) == 0:
-			yield child_address
-		i = i + 1
+		child_usedtx_no = len(r)
+		# debug
+		#print(i, child_address, child_usedtx_no)
 
+		if child_usedtx_no == 0:
+			if first_unused:
+				yield child_address
+
+			else:
+				first_unused = True
+				i = i - checking_gap			 
+
+		if first_unused:
+			i = i + 1
+
+		else:		
+			i = i + checking_gap

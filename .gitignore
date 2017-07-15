@@ -26,3 +26,5 @@ devel_notes.txt
 mnconf/masternode.mainnet.ledgernanos.conf
 
 dashlib/test.py
+
+bin/mnb.py

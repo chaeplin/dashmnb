@@ -55,8 +55,8 @@ def print_balance(mn_config, have_unconfirmed_tx):
 
     print('\n\t\t Total : ', total_balance)
 
-    print('\n* cnt - count    : number of payouts(un + mature) + 1(collateral)')
-    print('* spn - spenable : number of spendable payouts(mature)')
+    print('\n* cnt - count     : number of payouts(un + mature) + 1(collateral)')
+    print('* spn - spendable : number of spendable payouts(mature, over 100 confirmation)')
     if have_unconfirmed_tx:
         print('* can be inaccurate after a transaction(transfer/xfer), need 1 confirmation')
 

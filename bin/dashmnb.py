@@ -159,7 +159,8 @@ def main(args):
                 err_msg)
 
         proposallist = rpc_getproposals(access).keys()
-        if proposal_hash[0] in proposallist:
+        triggerlist  = rpc_gettriggers(access).keys()
+        if (proposal_hash[0] in proposallist) or (proposal_hash[0] in triggerlist):
             if args.voteyes or args.voteno or args.voteabstain:
         
                 if args.voteyes:

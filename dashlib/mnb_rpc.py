@@ -327,6 +327,19 @@ def rpc_getproposals(access):
             err_msg,
             e.args)
 
+        
+def rpc_gettriggers(access):
+    try:
+        r = access.gobject('list', 'valid', 'triggers')
+        return r
+
+    except Exception as e:
+        err_msg = 'Dash-QT or dashd running ?'
+        print_err_exit(
+            get_caller_name(),
+            get_function_name(),
+            err_msg,
+            e.args)
 
 def rpc_getcurrentvotes(proposal_hash, access):
     try:

@@ -127,7 +127,7 @@ def get_unspent_txs(mnconfig, blockcount, access, SEND_TO_BIP32, bip32_unused):
     txs = []
     bip32sendto_all = []
 
-    mature_confirmation = 120
+    mature_confirmation = 101
     # for testing
     #mature_confirmation = 10
 

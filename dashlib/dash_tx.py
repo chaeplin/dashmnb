@@ -123,6 +123,14 @@ def decoderawtx(rawtx):
                     "addrfrom": 'pay_to_pubkey'
                 }
                 addrfromall.append('pay_to_pubkey')
+
+            elif (addrn == 'pay_to_scripthash'):
+                addrcheck['pubkey'] = {
+                    "hashin": hashn + '-' + str(x.get('outpoint')['index']),
+                    "addrfrom": 'pay_to_scripthash'
+                }
+                addrfromall.append('pay_to_scripthash')
+
         else:
             addrcheck['coinbase'] = {
                 "hashin": '0000000000000000000000000000000000000000000000000000000000000000' +
@@ -222,3 +230,10 @@ if __name__ == "__main__":
         'txid') == '9f5fb5805f1c200e85ce92d5658c959329e3bac02ca5f21801ad9274f1bbc2a1-0'
     assert y.get('XubToXRwAVu3y4LuAQ6cPqfNnTGnM9uJ9w').get(
         'value') == '0.01000111'
+
+
+    x = check_rawtx('0100000001eac2334fe1c4b78f96b4331eca14bf66c639b303663164f04c3884ff9985b02500000000fc004730440220304a0866f288ae6455b45cbaf856492eb99228eed309293c044a897584cb0b8602206a8b5737d4deaa1eaecd3b3d94b87129136e58d48f60328982da3cb2b1663df801473044022040bf0a8ca4c63bf8719c85028190c7279480be0e8144b48b2d5d87ea7284965302203b4b1872ddfb6e000966cb0ff12ca9f2cc9c98f807430bb9a3f5b7b62d6a83b3014c695221022831cf0d73b49bcfeffbbf6febf3596cb15789f9179bc59e7c60677cb2ab71dd21027c7043d7b211067345209f6407b4ea2bbda217764ab93b1dabfd3e1cbc9a767f2103c2a27f02e473de3cf4f4e73056654be14f8f6dc241f6259a62c4418d53ec1cd953aeffffffff01a0860100000000001976a914c32287bbafb7673a2193632767ba612806c1a80788ac00000000')
+
+    
+    z = check_rawtx('0100000001ce4c36e472159275c055ed0174711b5548732edeae0631f92f8479259a32cb2c010000006b483045022100d3451a60f6512d5896863bc47916d2814d1271ebf0cb9e38075fafcd1ee07dad022023e7a92677b0ed685c07918e8d6144e6828b8ce17ed0d617474dbb64d384532c0121032b27b0d0933c4a5ef49698ea9d58e109a9b9797194965420d2c4d64ab9369fe9ffffffff02400d03000000000017a914cfa6bd2270391368123e38d70e6c42062ecaeb538780dd1e01000000001976a914c32287bbafb7673a2193632767ba612806c1a80788ac00000000')
+

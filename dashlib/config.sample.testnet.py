@@ -95,6 +95,7 @@ MOVE_1K_COLLATERAL = False
 MAINNET = False  # testnet
 wif_prefix = 239  # ef
 addr_prefix = 140  # 8c
+script_prefix = 19 # 13
 coin_name = 'tDash'
 min_fee = 10000  # fee for tx
 # to display err on masternode.conf

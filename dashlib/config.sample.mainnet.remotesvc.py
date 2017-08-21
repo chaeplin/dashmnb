@@ -70,6 +70,7 @@ rpcport = 8080
 MAINNET = True  # mainnet
 wif_prefix = 204  # cc
 addr_prefix = 76   # 4c
+script_prefix = 16 # 10
 coin_name = 'Dash'
 min_fee = 10000  # fee for tx
 # to display err on masternode.conf

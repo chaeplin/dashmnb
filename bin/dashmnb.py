@@ -23,7 +23,7 @@ from bitcoinrpc.authproxy import AuthServiceProxy, JSONRPCException
 
 
 def main(args):
-    logo_show()
+    logo_show(args.skip)
 
     if TYPE_HW_WALLET.lower().startswith("ledgernanos"):
         args.maketx = False
@@ -386,6 +386,11 @@ def parse_args():
                         dest='badge',
                         action='store_true',
                         help='Sign message for Masternode Owner/Operator badge')    
+
+    parser.add_argument('-k', '--skip',
+                        dest='skip',
+                        action='store_true',
+                        help='skip version checking')
 
     if len(sys.argv) < 2:
         parser.print_help()

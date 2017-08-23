@@ -14,16 +14,16 @@ def check_version():
     cur_version = get_dashmnbversion()
     git_version = get_version_txt()
 
-    if ((cur_version.get('major') != git_version.get('major')) or
-        (cur_version.get('minor') != git_version.get('minor')) or
-            (cur_version.get('fix') != git_version.get('fix'))):
+    if ((cur_version.get('major') != git_version.get('major', None)) or
+        (cur_version.get('minor') != git_version.get('minor', None)) or
+            (cur_version.get('fix') != git_version.get('fix', None))):
 
         print('\t*** New version is available, plese update ! do git pull\n')
         if git_version.get('msgs', None):
             print('\t*** %s\n\n' % git_version.get('msgs', None))
 
 
-def logo_show():
+def logo_show(skip):
 
     from pyfiglet import Figlet
     from config import MAINNET
@@ -34,7 +34,8 @@ def logo_show():
     print(f.renderText('Dash Masternode with HW Wallet'))
     #print('\n\t\t\tdonation : xxxxxxxxxx')
     #print('\t\t\tby : chaeplin XiDWe5fkVcrXBQApmCFQUxpue5iuWcbmcK\n')
-    check_version()
+    if not skip:
+        check_version()
     print('Network : ' + ('MAINNET' if MAINNET else 'TESTNET'))
     if MOVE_1K_COLLATERAL:
         print()

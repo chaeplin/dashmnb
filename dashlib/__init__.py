@@ -6,8 +6,11 @@ import traceback
 
 try:
     from config import *
-except:
-    print('please config dashlib/config.py')
+except Exception as e:
+    print(e)
+    print()
+    print("please configure dashlib/config.py")
+    print("'python dashlib/config.py' will show error")
     sys.exit()
 
 from dash_b58 import *

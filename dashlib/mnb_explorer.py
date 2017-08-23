@@ -52,7 +52,11 @@ def make_request_version_txt(url):
             return None
 
     except requests.exceptions.RequestException:
-        err_msg = 'requests.exceptions.RequestException : error on checking version, use -k to skip version check'
+        if get_caller_name() == 'get_version_txt':
+            err_msg = 'requests.exceptions.RequestException : error on checking version, use -k to skip version check'
+        else:
+            err_msg = 'requests.exceptions.RequestException'
+
         print_err_exit(
             get_caller_name(),
             get_function_name(),

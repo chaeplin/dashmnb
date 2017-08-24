@@ -121,7 +121,7 @@ def script_to_addr(script_hex):
             and _bord(script_bin[22]) == OP_EQUAL):
         
         data = script_bin[2:22]
-        vs = _bchr(script_prefix) + data
+        vs = _bchr( 16 if MAINNET else 19) + data
         check = double_sha256(vs)[0:4]
         return b58encode(vs + check)
 

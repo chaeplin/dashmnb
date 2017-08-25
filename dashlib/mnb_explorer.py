@@ -111,8 +111,7 @@ def get_insight_blockcount():
     exp = [
         "http://insight.dev.dash.org/api",
         "http://insight.dash.org/api",
-        "https://insight.dash.siampm.com/api",
-        "http://insight.masternode.io:3000/api"
+        "https://insight.dash.siampm.com/api"
     ]
 
     IURL = exp[random.randrange(0,len(exp))]

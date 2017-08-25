@@ -375,7 +375,11 @@ def rpc_voteraw(voteconf, access):
         return r
 
     except Exception as e:
-        err_msg = 'Dash-QT or dashd running ?'
+        if str.join('.', (e.args)).startswith("Error voting : GOVERNANCE_EXCEPTION_NONE:CGovernanceObject::ProcessVote -- Obsolete vote"):
+            e.args = ''
+            err_msg = 'have voted within 1 hour? try 1 hour later'
+        else:
+            err_msg = 'Dash-QT or dashd running ?'
         print_err_exit(
             get_caller_name(),
             get_function_name(),

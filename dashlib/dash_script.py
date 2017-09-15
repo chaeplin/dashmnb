@@ -37,8 +37,11 @@ def script_to_addr(script_hex):
         #script_bin = binascii.unhexlify(script_hex)
         script_bin = bytes.fromhex(script_hex)
 
+    if (_bord(script_bin[0]) == OP_RETURN):
+        return 'nulldata'
+
     # format # 5
-    if (len(script_bin) == 25
+    elif (len(script_bin) == 25
             and _bord(script_bin[0]) == OP_DUP
             and _bord(script_bin[1]) == OP_HASH160
             and _bord(script_bin[2]) == 0x14               # 20 byte
@@ -110,9 +113,6 @@ def script_to_addr(script_hex):
         vs = _bchr(addr_prefix) + data_hash
         check = double_sha256(vs)[0:4]
         return b58encode(vs + check)
-
-    elif (_bord(script_bin[0]) == OP_RETURN):
-        return 'nulldata'
 
     # scriptHash
 

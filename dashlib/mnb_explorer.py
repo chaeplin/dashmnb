@@ -109,7 +109,7 @@ def get_insight_blockcount():
     import random
     
     exp = [
-        "http://insight.dev.dash.org/api",
+        "https://insight.dashevo.org/insight-api-dash",
         "http://insight.dash.org/api",
         "https://insight.dash.siampm.com/api"
     ]

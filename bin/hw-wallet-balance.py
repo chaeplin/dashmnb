@@ -15,7 +15,7 @@ from bitcoinrpc.authproxy import AuthServiceProxy, JSONRPCException
 
 
 def main():
-    logo_show()
+    logo_show(True)
 
     # access
     if 'rpcusessl' in globals() and rpcusessl:

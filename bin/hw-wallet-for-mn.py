@@ -10,7 +10,7 @@ from dashlib import *
 
 
 def main():
-    logo_show()
+    logo_show(True)
 
 
     if TYPE_HW_WALLET.lower().startswith("ledgernanos"):

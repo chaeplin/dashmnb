@@ -67,13 +67,14 @@ def main(args):
         print('-> blockcnt  : %s' % blockcount)
         print('-> blockhash : %s\n' % blockhash)
 
-        # check explorer block count
-        if MAINNET:
-            explorer_blockcount = get_insight_blockcount()
-        else:
-            explorer_blockcount = get_explorer_blockcount()
+        if not args.skip:
+            # check explorer block count
+            if MAINNET:
+                explorer_blockcount = get_insight_blockcount()
+            else:
+                explorer_blockcount = get_explorer_blockcount()
 
-        assert int(explorer_blockcount) == int(blockcount), "blockcount mismatch, try again : exp : %s <--> dashd : %s" % (explorer_blockcount, blockcount)
+            assert int(explorer_blockcount) == int(blockcount), "blockcount mismatch, try again : exp : %s <--> dashd : %s" % (explorer_blockcount, blockcount)
 
         print()
 
@@ -390,7 +391,7 @@ def parse_args():
     parser.add_argument('-k', '--skip',
                         dest='skip',
                         action='store_true',
-                        help='skip version checking')
+                        help='skip version and explorer checking')
 
     if len(sys.argv) < 2:
         parser.print_help()

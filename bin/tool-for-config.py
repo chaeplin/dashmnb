@@ -41,23 +41,6 @@ from mnb_xfer import *
 
 from bitcoinrpc.authproxy import AuthServiceProxy, JSONRPCException
 
-MAINNET = True  # mainnet
-#MAINNET = False  # testnet
-
-
-# don't change
-USE_SSH_TUNNEL = False    # True or False
-rpcusessl = True
-rpcuser = 'dashmnb'
-rpcpassword = 'iamok'
-rpcbindip = 'test.stats.dash.org'
-max_gab = 15
-
-if MAINNET:
-    rpcport = 8080
-
-else:
-    rpcport = 587    
 
 def main(args):
 

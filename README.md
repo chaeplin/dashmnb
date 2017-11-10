@@ -157,6 +157,19 @@ read [https://doc.satoshilabs.com/trezor-faq/](https://doc.satoshilabs.com/trezo
     - The ip address is `privacy concern`
 
 
+###### Q : How to start(send mnb) a specific mn(s) ?
+
+    use -a mn_alias_1 : send `new start` on mn_alias_1 
+    use -a mn_alias_1 mn_alias_2 : send `new start` on mn_alias_1 and mn_alias_2
+
+
+```
+(venv3) > python bin/dashmnb.py -a mn_alias_1
+(venv3) > python bin/dashmnb.py -a mn_alias_1 mn_alias_2
+```
+
+
+
 ## Help
 ```
 python bin/dashmnb.py 

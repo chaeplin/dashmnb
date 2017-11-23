@@ -139,8 +139,11 @@ def get_version_txt():
 
 
 def get_mnstatus_dashninja(vins):
-    url = 'https://www.dashninja.pl/api/masternodes?testnet=0&portcheck=0&balance=0&exstatus=0&vins=' + json.dumps(vins)
-    response = make_request_version_txt(url)
-    return response
+    try:
+        url = 'https://www.dashninja.pl/api/masternodes?testnet=0&portcheck=0&balance=0&exstatus=0&vins=' + json.dumps(vins)
+        response = make_request_version_txt(url)
+        return response
+    except:
+        return None
 
 # end

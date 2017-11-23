@@ -108,20 +108,23 @@ def get_dashninja(mn_config):
             vins.append(vin)
 
     status_ninja = get_mnstatus_dashninja(vins)
-    mnj = {}
-    if status_ninja.get('status') == 'OK':
-        data = status_ninja.get('data')
-        for d in data:
-            txidn = get_txidtxidn(d.get('MasternodeOutputHash'), d.get('MasternodeOutputIndex'))
-            mnj[txidn] = {
-                "ipport": d.get('MasternodeIP') + ':' + d.get('MasternodePort'),
-                "ActiveCount": d.get('ActiveCount', '-'),
-                "InactiveCount": d.get('InactiveCount', '-'),
-                "UnlistedCount": d.get('UnlistedCount', '-')
-            }
+    if status_ninja:
+        mnj = {}
+        if status_ninja.get('status') == 'OK':
+            data = status_ninja.get('data')
+            for d in data:
+                txidn = get_txidtxidn(d.get('MasternodeOutputHash'), d.get('MasternodeOutputIndex'))
+                mnj[txidn] = {
+                    "ipport": d.get('MasternodeIP') + ':' + d.get('MasternodePort'),
+                    "ActiveCount": d.get('ActiveCount', '-'),
+                    "InactiveCount": d.get('InactiveCount', '-'),
+                    "UnlistedCount": d.get('UnlistedCount', '-')
+                }
 
-    return mnj
+        return mnj
 
+    else:
+        return None
 
 def print_mnstatus(mn_config, mns, mna):
     from config import MAINNET
@@ -129,7 +132,10 @@ def print_mnstatus(mn_config, mns, mna):
     print('[masternodes status]')
     if MAINNET:
         mnj = get_dashninja(mn_config)
-        print('alias\tip (m: ip/port match)\tcollateral address\t\t   dn\t status')
+        if mnj:
+            print('alias\tip (m: ip/port match)\tcollateral address\t\t   dn\t status')
+        else:
+            print('alias\tip (m: ip/port match)\tcollateral address\t\t   status')
     else:
         print('alias\tip (m: ip/port match)\tcollateral address\t\t   status')
 
@@ -139,8 +145,9 @@ def print_mnstatus(mn_config, mns, mna):
         mns_status = mns.get(m.get('collateral_txidtxidn', '-------'), '-')
 
         if MAINNET:
-            if mnj.get(m.get('collateral_txidtxidn')) != None:
-                dashninja_cnt = str(mnj.get(m.get('collateral_txidtxidn')).get('UnlistedCount')) + '/' + str(mnj.get(m.get('collateral_txidtxidn')).get('InactiveCount')) + '/' + str(mnj.get(m.get('collateral_txidtxidn')).get('ActiveCount'))
+            if mnj:
+                if mnj.get(m.get('collateral_txidtxidn')) != None:
+                    dashninja_cnt = str(mnj.get(m.get('collateral_txidtxidn')).get('UnlistedCount')) + '/' + str(mnj.get(m.get('collateral_txidtxidn')).get('InactiveCount')) + '/' + str(mnj.get(m.get('collateral_txidtxidn')).get('ActiveCount'))
         
         if m.get('ipport') != mna_ip:
             ipmatch = '-'

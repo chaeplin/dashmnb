@@ -1,1 +1,1 @@
-{"major": 0, "minor": 6, "fix": "0", "msgs": "support 12.2"}
+{"major": 0, "minor": 6, "fix": "1", "msgs": "fee to 1K per Kb"}

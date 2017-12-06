@@ -238,16 +238,23 @@ def make_inputs_for_hw_wallet(
                 prev_hash=binascii.unhexlify(txid),
                 prev_index=vout))
 
-    txsizefee = round((len(inputs) * 148 + 33 - 10) / 1000) * min_fee
+
+    # after dip001
+    # todo : use estimatesmartfee
+    txsizefee =  50 + (150 * len(inputs))
+
+    # old
+    #txsizefee = round((len(inputs) * 148 + 33 - 10) / 1000) * min_fee
 
     # minimal fee if input length is < 4, or fee == 0
     # if len(inputs) < 4:
-    if txsizefee == 0:
-        txsizefee = min_fee
+    #if txsizefee == 0:
+    #    txsizefee = min_fee
 
     # bip32 1 input tx
     if SEND_TO_BIP32 and receiving_address == 'BIP32_PATH':
-        txsizefee = 2500
+        txsizefee = 250
+    #    txsizefee = 2500
 
     # make output based on inputs
     if SEND_TO_BIP32 and receiving_address == 'BIP32_PATH':
